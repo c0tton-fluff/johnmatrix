@@ -210,5 +210,36 @@
 * [ ] Can you encode the payload?
 * [ ] Can you obfuscate the payload?
 
+#### Logic Flaws
+
+* [ ] Can you adjust things like a price/refund amount/points inside the post request?
+* [ ] Can you add multiple discount code's?
+
+
+
+```txt
+// Adding extra lines
+"delivery_address":"test",
+"phone":"123",
+"payment_method":"card",
+"notes":"",
+"discount":"PIZZA-10",
+"discount":"PIZZA-10",
+"discount":"PIZZA-10"
+```
+
+```txt
+// Adding inside a array
+"delivery_address":"test",
+"phone":"123",
+"payment_method":"card",
+"notes":"",
+"discount":["PIZZA-10",
+"PIZZA-10",
+"PIZZA-10",
+"PIZZA-10",
+"PIZZA-10"
+]}
+```
 ***
 
