@@ -14,18 +14,21 @@
 
 - For a moment I thought it worked!
 - It did not ...
+- Even though it was sent through, the price has not changed neither have I seen the flag
+
+![Daily](/BugForge/img/pizza-03.png)
 
 - Then an idea came up
 - What if instead of sending more discounts, I can multiply the fields to see whether that is being checked
 - I supplied an `array` of `PIZZA-10` and this gave me the flag
 
-![Daily](/BugForge/img/pizza-03.png)
+![Daily](/BugForge/img/pizza-04.png)
 
 ## MCP
 
 - Knowing what I have done already without the AI, I asked it to find a potential vulnerability within the orders
 
-![Daily](/BugForge/img/pizza-04.png)
+![Daily](/BugForge/img/pizza-05.png)
 
 - This one confused it the most as it attempted to create two python scripts attacking JWT for some reason, which I can understand in some ways but it felt to me like a little bit of hallucination
 
@@ -33,11 +36,10 @@
 
 - I gave it the idea of `How about you check whether we can make the discount code more than it is? Make it simpler, do not overcomplicate simple application`
 
-![Daily](/BugForge/img/pizza-05.png)
+![Daily](/BugForge/img/pizza-06.png)
 
 - That seems to have worked the trick!
 
-![Daily](/BugForge/img/pizza-06.png)
 ![Daily](/BugForge/img/pizza-07.png)
 
 ## Security Takeaways
