@@ -213,7 +213,7 @@
 #### Logic Flaws
 
 * [ ] Can you adjust things like a price/refund amount/points inside the post request?
-* [ ] Can you add multiple discount code's?
+* [ ] Can you add multiple discount codes?
 
 
 
