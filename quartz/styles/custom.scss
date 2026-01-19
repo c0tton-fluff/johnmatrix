@@ -13,6 +13,46 @@ body {
   background-size: 40px 40px;
 }
 
+/* Folder hero image (BugForge) */
+.folder-hero {
+  display: flex;
+  justify-content: center;
+  margin: 0.8rem auto 1.2rem;
+}
+
+.folder-hero img {
+  max-width: min(680px, 90%);
+  height: auto;
+  display: block;
+}
+
+/* Sidebar: force vertical scrollbar on the right */
+.sidebar,
+nav.sidebar {
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(120, 130, 160, 0.6) transparent !important;
+}
+
+.sidebar::-webkit-scrollbar,
+nav.sidebar::-webkit-scrollbar {
+  width: 10px;
+  display: block !important;
+}
+
+.sidebar::-webkit-scrollbar-track,
+nav.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+nav.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 130, 160, 0.6);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
 /* Home grid cards */
 .home-subtitle {
   text-align: center;
@@ -129,6 +169,32 @@ body {
       opacity: 0.4;
     }
   }
+}
+
+/* Sidebar: show vertical scrollbar */
+.sidebar,
+.explorer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 130, 160, 0.6) transparent;
+}
+
+.sidebar::-webkit-scrollbar,
+.explorer::-webkit-scrollbar {
+  width: 10px;
+  display: block !important;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.explorer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.explorer::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 130, 160, 0.6);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 // 3. TABLE OF CONTENTS (Radar Style)
@@ -741,15 +807,17 @@ ul.section-ul > li.section-li > div.section {
 
 ul.section-ul {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
-  gap: 14px 18px;
-  max-width: 900px;
+  grid-template-columns: repeat(auto-fit, 190px);
+  gap: 16px 20px;
+  width: min(100%, 900px);
   margin: 1.6rem auto 2.2rem;
-  justify-items: stretch;
+  justify-content: center;
+  justify-items: center;
 }
 
 ul.section-ul > li.section-li {
   margin: 0 !important;
+  padding: 4px 0;
 }
 
 ul.section-ul > li.section-li > div.section {
@@ -763,23 +831,56 @@ ul.section-ul > li.section-li > div.section > .desc > h3 {
 ul.section-ul > li.section-li > div.section > .desc > h3 > a {
   display: block !important;
   width: 100% !important;
+  max-width: 190px !important;
+  height: 56px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   min-width: 0 !important;
   text-align: center !important;
   white-space: normal !important;
-  line-height: 1.25 !important;
-  padding: 6px 12px !important;
-  font-size: 0.85rem !important;
+  line-height: 1.15 !important;
+  padding: 0.45rem 0.85rem !important;
+  font-size: 0.82rem !important;
+  text-wrap: balance;
+  hyphens: auto;
+  margin: 0 auto !important;
+  border-radius: 10px !important;
+  color: inherit !important;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 35, 26, 0.9),
+    rgba(26, 22, 16, 0.95)
+  ) !important;
+  border: 2px solid rgba(212, 186, 124, 0.55) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 6px 14px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
   position: relative !important;
 }
 
 ul.section-ul > li.section-li > div.section > .desc > h3 > a::before {
   content: "";
   position: absolute;
-  inset: 4px -6px -6px 6px;
+  inset: 2px;
   border-radius: inherit;
-  background: rgba(255, 158, 100, 0.03);
-  border: 1px solid rgba(255, 158, 100, 0.08);
+  background: radial-gradient(
+    circle at 20% 20%,
+    rgba(255, 205, 132, 0.18),
+    rgba(255, 255, 255, 0.02) 60%
+  );
+  border: 1px solid rgba(255, 205, 132, 0.12);
   z-index: -1;
+}
+
+ul.section-ul > li.section-li > div.section > .desc > h3 > a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(230, 204, 150, 0.95) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 12px 24px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(230, 204, 150, 0.55) !important;
 }
 
 
@@ -819,6 +920,11 @@ ul.section-ul > li.section-li a {
   border: 1px solid rgba(65, 72, 104, 0.35);
   border-radius: 10px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Hide folder item count text ("X items under this folder.") */
+.page-listing > p {
+  display: none !important;
 }
 
 /* =========================
@@ -1353,5 +1459,77 @@ pre:hover > .clipboard-button {
   input[type="checkbox"] {
     transform: scale(1.25);
     margin-right: 0.6rem;
+  }
+}
+
+/* Sidebar scrollbar override: keep visible on desktop */
+@media (min-width: 901px) {
+  .sidebar,
+  nav.sidebar {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(120, 130, 160, 0.6) transparent !important;
+  }
+
+  .sidebar::-webkit-scrollbar,
+  nav.sidebar::-webkit-scrollbar {
+    width: 10px;
+    display: block !important;
+  }
+
+  .sidebar::-webkit-scrollbar-track,
+  nav.sidebar::-webkit-scrollbar-track {
+    background: linear-gradient(
+      180deg,
+      rgba(12, 14, 22, 0.4),
+      rgba(12, 14, 22, 0.15)
+    ) !important;
+    border-radius: 999px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb,
+  nav.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(210, 190, 140, 0.55) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background-clip: padding-box;
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.35);
+  }
+
+  .sidebar::-webkit-scrollbar-thumb:hover,
+  nav.sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(230, 204, 150, 0.75) !important;
+  }
+
+  .sidebar .explorer,
+  .sidebar .explorer .overflow,
+  .sidebar .explorer .explorer-content {
+    overflow-y: auto !important;
+  }
+
+  .sidebar .explorer .explorer-content {
+    max-height: calc(100vh - 320px) !important;
+    padding-right: 2px;
+  }
+
+  .sidebar .explorer .explorer-content::-webkit-scrollbar {
+    display: block !important;
+    width: 8px;
+  }
+
+  .sidebar .explorer .explorer-content::-webkit-scrollbar-track {
+    background: rgba(8, 10, 16, 0.25);
+    border-radius: 999px;
+  }
+
+  .sidebar .explorer .explorer-content::-webkit-scrollbar-thumb {
+    background-color: rgba(210, 190, 140, 0.55);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar .explorer .explorer-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(230, 204, 150, 0.75);
   }
 }

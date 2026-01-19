@@ -123,6 +123,22 @@ function createFolderNode(
     a.dataset.for = folderPath
     a.className = "folder-title"
     a.textContent = node.displayName
+    a.addEventListener("click", () => {
+      // Collapse the folder after navigation is triggered
+      setFolderState(folderOuter, true)
+      const currentFolderState = currentExplorerState.find(
+        (item) => item.path === folderPath,
+      )
+      if (currentFolderState) {
+        currentFolderState.collapsed = true
+      } else {
+        currentExplorerState.push({
+          path: folderPath as FullSlug,
+          collapsed: true,
+        })
+      }
+      localStorage.setItem("fileTree", JSON.stringify(currentExplorerState))
+    })
     button.replaceWith(a)
   } else {
     const span = titleContainer.querySelector(".folder-title") as HTMLElement
@@ -130,9 +146,8 @@ function createFolderNode(
   }
 
   // if the saved state is collapsed or the default state is collapsed
-  const isCollapsed =
-    currentExplorerState.find((item) => item.path === folderPath)?.collapsed ??
-    opts.folderDefaultState === "collapsed"
+  const savedState = currentExplorerState.find((item) => item.path === folderPath)
+  const isCollapsed = savedState?.collapsed ?? opts.folderDefaultState === "collapsed"
 
   // if this folder is a prefix of the current path we
   // want to open it anyways
@@ -140,7 +155,8 @@ function createFolderNode(
   const folderIsPrefixOfCurrentSlug =
     simpleFolderPath === currentSlug.slice(0, simpleFolderPath.length)
 
-  if (!isCollapsed || folderIsPrefixOfCurrentSlug) {
+  const shouldForceOpen = !savedState && folderIsPrefixOfCurrentSlug
+  if (!isCollapsed || shouldForceOpen) {
     folderOuter.classList.add("open")
   }
 
