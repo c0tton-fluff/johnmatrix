@@ -17,7 +17,6 @@ tags:
 
 - As usual we can play around the page and check functionality
 - We can make a simple order and check how it works in Burp
-![](Pasted%20image%2020260119083143.png)
 
 - The fact we are given the `discount code` made me think of testing against it straight away to see if I can apply more than what was given.
 
