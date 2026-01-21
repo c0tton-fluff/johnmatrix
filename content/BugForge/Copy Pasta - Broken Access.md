@@ -1,3 +1,14 @@
+---
+title: Copy Pasta - Broken Access
+tags:
+  - bugforge
+  - broken-access-control
+  - idor
+  - password-reset
+  - api-testing
+  - burpsuite
+  - claude-mcp
+---
 
 - Welcome to today's challenge
 - I have decided to fully run it through `Claude MCP` within Burp.

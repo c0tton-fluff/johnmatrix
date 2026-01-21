@@ -1,3 +1,14 @@
+---
+title: Tanuki - XXE
+tags:
+  - bugforge
+  - xxe
+  - xml-injection
+  - file-upload
+  - burpsuite
+  - mcp
+---
+
 ## Enumeration
 
 - Usual, register and play around

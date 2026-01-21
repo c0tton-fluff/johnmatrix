@@ -1,3 +1,14 @@
+---
+title: CopyPasta
+tags:
+  - bugforge
+  - broken-access-control
+  - idor
+  - api-testing
+  - burpsuite
+  - mcp
+---
+
 Today's challenge: Broken Access Control
 
 ![Daily](/BugForge/img/copy-01.png)

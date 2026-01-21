@@ -1,3 +1,14 @@
+---
+title: Shady Oaks Financial
+tags:
+  - bugforge
+  - broken-access-control
+  - admin-panel
+  - api-enumeration
+  - burpsuite
+  - mcp
+---
+
 - Welcome to today's lab
 
 ![Daily](/BugForge/img/shady-01.png)

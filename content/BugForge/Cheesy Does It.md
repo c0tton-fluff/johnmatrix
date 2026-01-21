@@ -1,3 +1,14 @@
+---
+title: Cheesy Does It
+tags:
+  - bugforge
+  - business-logic
+  - input-validation
+  - parameter-tampering
+  - burpsuite
+  - mcp
+---
+
 - Welcome to today's tasty lab!
 - I have ordered a lot of pizzas doing this !!!
 ## Enumeration

@@ -1,3 +1,13 @@
+---
+title: Ottergram
+tags:
+  - bugforge
+  - websockets
+  - api-testing
+  - burpsuite
+  - mcp
+---
+
 - Today's lab brings us to the favourite otters :)
 - As usual, we can register and check the page out
 

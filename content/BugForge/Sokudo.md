@@ -1,3 +1,12 @@
+---
+title: Sokudo
+tags:
+  - bugforge
+  - api-enumeration
+  - endpoint-discovery
+  - burpsuite
+---
+
 - Today's challenge is a very interesting one and new to me
 - Recently, I came across a very helpful addition in testing APIs
 - Definitely worth getting it! - https://gist.github.com/jhaddix/daba27d11fdd97d9077d610dccbe91df

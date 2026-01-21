@@ -1,3 +1,13 @@
+---
+title: Tanuki
+tags:
+  - bugforge
+  - idor
+  - broken-access-control
+  - burpsuite
+  - mcp
+---
+
 Today's daily challenge is a straightforward one, but I used BurpSuite with MCP server to solve as it as I am trying to learn and understand the AI impact.
 
 ![Daily](/BugForge/img/tanuki-01.png)
