@@ -1793,3 +1793,137 @@ html, body {
     font-size: 0.7rem !important;
   }
 }
+
+/* iPhone SE and very small screens (375px and below) */
+@media (max-width: 375px) {
+  /* Tighter padding on content */
+  .center,
+  article,
+  .content,
+  .page-listing {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Smaller headings */
+  h1,
+  .article-title,
+  .page-title {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+  }
+
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 1rem !important;
+  }
+
+  /* Smaller body text */
+  p, li {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Section chips - smaller on tiny screens */
+  .section-chip {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+    min-height: 40px !important;
+  }
+
+  .section-chips {
+    gap: 6px 8px !important;
+  }
+
+  /* Stats - stack vertically */
+  .stats-header {
+    flex-direction: column !important;
+    max-width: 200px !important;
+  }
+
+  .stat-item {
+    flex: 1 1 100% !important;
+    padding: 0.5rem 0.6rem !important;
+    width: 100% !important;
+  }
+
+  .stat-item:not(:last-child)::after {
+    display: none !important;
+  }
+
+  .stat-value {
+    font-size: 1.2rem !important;
+  }
+
+  .stat-label {
+    font-size: 0.5rem !important;
+  }
+
+  /* Home grid cards */
+  .home-card {
+    padding: 0.75rem 0.85rem !important;
+  }
+
+  .home-card .card-title {
+    font-size: 0.9rem !important;
+  }
+
+  .home-card .card-desc {
+    font-size: 0.85rem !important;
+  }
+
+  /* Folder hero */
+  .folder-hero {
+    padding: 0.75rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Folder intro */
+  .folder-intro {
+    padding: 0.5rem 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Section list tiles */
+  ul.section-ul > li.section-li a {
+    font-size: 0.65rem !important;
+    padding: 0.35rem 0.4rem !important;
+    height: 34px !important;
+  }
+
+  /* Code blocks */
+  pre {
+    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  code {
+    font-size: 0.8rem !important;
+  }
+
+  /* Callouts */
+  .callout {
+    padding: 0.5rem 0.6rem !important;
+  }
+
+  /* Breadcrumbs */
+  .breadcrumb-element {
+    font-size: 0.6rem !important;
+  }
+
+  /* Tables */
+  .content table th,
+  .content table td {
+    padding: 0.3rem 0.4rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Blockquotes */
+  .content blockquote {
+    padding: 0.6rem 0.8rem !important;
+    font-size: 0.9rem !important;
+  }
+}
