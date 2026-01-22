@@ -1672,12 +1672,12 @@ html, body {
 
 /* Global mobile fixes */
 @media (max-width: 800px) {
-  /* Force text wrapping on all text elements */
-  p, li, span, a, h1, h2, h3, h4, h5, h6, td, th, blockquote {
+  /* Force text wrapping on all text elements (except tables) */
+  p, li, span, a, h1, h2, h3, h4, h5, h6, blockquote {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
-    hyphens: auto !important;
+    hyphens: none !important;
   }
 
   /* Remove problematic min-widths */
@@ -1791,6 +1791,45 @@ html, body {
 
   ul.section-ul > li.section-li a {
     font-size: 0.7rem !important;
+  }
+}
+
+/* =========================
+   TABLES: Mobile-friendly horizontal scroll (no hyphenation)
+   ========================= */
+@media (max-width: 800px) {
+  .table-container {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 1rem 0 !important;
+  }
+
+  .table-container table,
+  .content table {
+    min-width: 500px !important;
+    width: max-content !important;
+    table-layout: auto !important;
+  }
+
+  .table-container th,
+  .table-container td,
+  .content table th,
+  .content table td {
+    white-space: nowrap !important;
+    hyphens: none !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    padding: 0.4rem 0.6rem !important;
+  }
+
+  /* Allow Focus column to wrap but not hyphenate */
+  .table-container td:last-child,
+  .content table td:last-child {
+    white-space: normal !important;
+    min-width: 200px !important;
+    hyphens: none !important;
   }
 }
 
