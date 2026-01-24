@@ -173,6 +173,6 @@
 
 ## MCP
 
-- Tested very quickly, however I have Claude an idea of what to look for since I did not want to burn tokens searching many other ways
+- Tested very quickly, however I gave Claude an idea of what to look for since I did not want to burn tokens searching many other ways
 
 ![Daily](/BugForge/img/otterxss-02.png)
