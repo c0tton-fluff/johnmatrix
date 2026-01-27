@@ -8,11 +8,11 @@ tags:
   - mcp
 ---
 
-Today's daily challenge is a straightforward one, but I used BurpSuite with MCP server to solve as it as I am trying to learn and understand the AI impact.
+- Today's daily challenge is a straightforward one, but I used BurpSuite with MCP server to solve as it as I am trying to learn and understand the AI impact.
 
 ![Daily](/BugForge/img/tanuki-01.png)
 
-# Recon 
+# Enumeration 
 
 - We get a landing page, so as usual we can register
 ![Daily2](/BugForge/img/tanuki-02.png)
@@ -85,5 +85,3 @@ Today's daily challenge is a straightforward one, but I used BurpSuite with MCP 
   - Validate ownership or access rights before returning data
   - Avoid using predictable, sequential IDs where possible
   - Add logging and alerting for unusual access patterns
-
-
