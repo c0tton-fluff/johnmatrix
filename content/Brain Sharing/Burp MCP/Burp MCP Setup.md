@@ -65,18 +65,20 @@ Paste this into the file:
 
 
 ```txt
-:19876
+:19876 {
+  reverse_proxy 127.0.0.1:9876 {
+    header_up Host "127.0.0.1:9876"
+    header_up Origin "http://127.0.0.1:9876"
 
-reverse_proxy 127.0.0.1:9876 {
-  # Match Origin and Host exactly (anti-DNS rebinding)
-  header_up Host "127.0.0.1:9876"
-  header_up Origin "http://127.0.0.1:9876"
-
-  # Workaround for current Burp MCP SSE 403 bug
-  header_up -User-Agent
-  header_up -Accept
-  header_up -Accept-Encoding
-  header_up -Connection
+    header_up -User-Agent
+    header_up -Accept
+    header_up -Accept-Encoding
+    header_up -Connection
+    header_up -Referer
+    header_up -Sec-Fetch-Site
+    header_up -Sec-Fetch-Mode
+    header_up -Sec-Fetch-Dest
+  }
 }
 ```
 

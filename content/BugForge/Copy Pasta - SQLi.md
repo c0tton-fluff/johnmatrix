@@ -1,3 +1,10 @@
+---
+title: Copy Pasta - SQLi
+tags:
+  - bugforge
+  - sqli
+---
+
 - Full send today - `Claude` is having a crack at this!
 
 ![](/BugForge/img/copy1.png)
