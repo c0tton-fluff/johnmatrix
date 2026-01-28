@@ -6,6 +6,8 @@ tags:
   - api-testing
   - burpsuite
   - mcp
+  - idor
+  - broken-access-control
 ---
 
 - Today's lab brings us to the favourite otters :)

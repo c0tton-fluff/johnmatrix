@@ -1,3 +1,10 @@
+---
+title: Sokudo - BAC
+tags:
+  - bugforge
+  - broken-access-control
+---
+
 - Hi there!
 - Let me take you on a journey from start to finish of `Claude MCP` running through the tests.
 

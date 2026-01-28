@@ -1,4 +1,11 @@
 
+---
+title: Ottergram - XSS
+tags:
+  - bugforge
+  - xss
+---
+
 - Today's lab was likely the hardest for me
 - The XSS that was found took much longer as it was not the simple way of inserting it
 - I learned a lot today, understanding different approach and manually checking things I have not before

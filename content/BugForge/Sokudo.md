@@ -5,6 +5,7 @@ tags:
   - api-enumeration
   - endpoint-discovery
   - burpsuite
+  - broken-access-control
 ---
 
 - Today's challenge is a very interesting one and new to me

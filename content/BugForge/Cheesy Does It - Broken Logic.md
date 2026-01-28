@@ -1,3 +1,10 @@
+---
+title: Cheesy Does It - Broken Logic
+tags:
+  - bugforge
+  - business-logic
+---
+
 - Today's lab made me want to have more pizzas!
 - With this rate, and the broken logic today, I will have enough `dough` (you get it?) to invest in a private coach :)
 
