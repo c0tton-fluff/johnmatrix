@@ -24,7 +24,8 @@ import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import MachineCard from "../../components/MachineCard"
-import ProfileCard from "../../components/ProfileCard"
+import HomeButton from "../../components/HomeButton"
+import TopNav from "../../components/TopNav"
 
 export {
   ArticleTitle,
@@ -53,5 +54,6 @@ export {
   Flex,
   ConditionalRender,
   MachineCard,
-  ProfileCard,
+  HomeButton,
+  TopNav,
 }

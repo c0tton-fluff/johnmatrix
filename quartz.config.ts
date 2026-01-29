@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Be Useful! 💪",
+    pageTitle: "",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -40,16 +40,15 @@ const config: QuartzConfig = {
           highlight: "rgba(143, 159, 169, 0.15)",
           textHighlight: "#fff23688",
         },
-	// quartz.config.ts
 	darkMode: {
-	  light: "#12131c",      // Deep near-black background
-	  lightgray: "#2a2f45",  // Dark steel for borders
-	  gray: "#7f88a8",       // Cool gray-blue for dates/meta
-	  darkgray: "#d0ccd6",   // Soft cool off-white for body text
-	  dark: "#ffffff",       // Pure white for headers
-	  secondary: "#b47a2a",  // Brass for links/accents
-	  tertiary: "#6fa4c8",   // Muted teal-blue for hover/highlights
-	  highlight: "rgba(180, 122, 42, 0.12)",
+	  light: "#0d0d0d",      // True black background
+	  lightgray: "#1a1a1a",  // Subtle surface
+	  gray: "#666666",       // Muted gray
+	  darkgray: "#e8e6e3",   // Cream body text
+	  dark: "#ffffff",       // White headers
+	  secondary: "#e8e6e3",  // Cream accent (was cyan)
+	  tertiary: "#f5f0e8",   // Warm cream hover
+	  highlight: "rgba(245, 240, 232, 0.08)",  // Cream tint
 	},
       },
     },
@@ -67,7 +66,7 @@ const config: QuartzConfig = {
         },
         keepBackground: false,
       }),
-      Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
+      Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: true }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),

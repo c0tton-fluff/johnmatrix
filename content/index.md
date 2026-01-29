@@ -1,21 +1,53 @@
 ---
-title: Welcome to Commando Manual
+title: Keep Learning & Be Useful 💪🧠
 ---
 
-## 🧠 Keep learning ... always! 💪
+## Certifications
 
-| Certification | Year | Focus                                                                         |
-| ------------- | ---- | ----------------------------------------------------------------------------- |
-| **GFACT**     | 2023 | Core security fundamentals, networking, Linux, Windows, and security basics   |
-| **GISF**      | 2024 | Information security foundations, policy, risk, and defensive concepts        |
-| **GSEC**      | 2024 | Practical security across systems, networks, crypto, and incident handling    |
-| **GCIH**      | 2024 | Incident handling, attack techniques, and security event response             |
-| **GPYC**      | 2024 | Python for security automation, scripting, and analysis                       |
-| **GPEN**      | 2024 | Network penetration testing, exploitation, and attacker methodology           |
-| **GCIA**      | 2024 | Network traffic analysis, intrusion detection, and packet-level investigation |
-| **GCFE**      | 2025 | Windows incident response, endpoint forensics, and timeline analysis          |
-| **GCFA**      | 2025 | Advanced incident response, threat hunting, and enterprise forensics          |
+<div class="cert-grid">
+  <a href="https://www.giac.org/certifications/foundational-cybersecurity-technologies-gfact/" class="cert-card">
+    <span class="cert-code">GFACT</span>
+    <span class="cert-desc">SANS - GIAC Foundational Cybersecurity Technologies</span>
+  </a>
+  <a href="https://www.giac.org/certifications/information-security-fundamentals-gisf/" class="cert-card">
+    <span class="cert-code">GISF</span>
+    <span class="cert-desc">SANS - GIAC Information Security Fundamentals</span>
+  </a>
+  <a href="https://www.giac.org/certifications/security-essentials-gsec/" class="cert-card">
+    <span class="cert-code">GSEC</span>
+    <span class="cert-desc">SANS - GIAC Security Essentials</span>
+  </a>
+  <a href="https://www.giac.org/certifications/certified-incident-handler-gcih/" class="cert-card">
+    <span class="cert-code">GCIH</span>
+    <span class="cert-desc">SANS - GIAC Certified Incident Handler</span>
+  </a>
+  <a href="https://www.giac.org/certifications/python-coder-gpyc/" class="cert-card">
+    <span class="cert-code">GPYC</span>
+    <span class="cert-desc">SANS - GIAC Python Coder</span>
+  </a>
+  <a href="https://www.giac.org/certifications/penetration-tester-gpen/" class="cert-card">
+    <span class="cert-code">GPEN</span>
+    <span class="cert-desc">SANS - GIAC Penetration Tester</span>
+  </a>
+  <a href="https://www.giac.org/certifications/certified-intrusion-analyst-gcia/" class="cert-card">
+    <span class="cert-code">GCIA</span>
+    <span class="cert-desc">SANS - GIAC Certified Intrusion Analyst</span>
+  </a>
+  <a href="https://www.giac.org/certifications/certified-forensic-examiner-gcfe/" class="cert-card">
+    <span class="cert-code">GCFE</span>
+    <span class="cert-desc">SANS - GIAC Certified Forensic Examiner</span>
+  </a>
+  <a href="https://www.giac.org/certifications/certified-forensic-analyst-gcfa/" class="cert-card">
+    <span class="cert-code">GCFA</span>
+    <span class="cert-desc">SANS - GIAC Certified Forensic Analyst</span>
+  </a>
+</div>
 
-| Program                                                | Achieved |
-| ------------------------------------------------------ | -------- |
-| **Bachelor of Applied Cybersecurity – SANS Institute** | 2026     |
+## Education
+
+<div class="cert-grid">
+  <a href="https://www.sans.edu/cyber-security-programs/bachelors-degree/" class="cert-card cert-card-wide">
+    <span class="cert-code">Bachelor of Applied Cybersecurity</span>
+    <span class="cert-desc">SANS Technology Institute - Expected 2026</span>
+  </a>
+</div>
