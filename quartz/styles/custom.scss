@@ -1,1968 +1,899 @@
 @use "./base.scss";
 
-// 1. GLOBAL UI RESET
+// Graham Helton Ultra-Minimal Style
+// True black + cream, no gradients, dashed borders
+
+// =============================================================================
+// GLOBAL RESET
+// =============================================================================
+
 .popover { display: none !important; }
-
-body {
-  background-color: var(--light) !important;
-  color: var(--darkgray) !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  background-image: 
-    linear-gradient(rgba(65, 72, 104, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(65, 72, 104, 0.08) 1px, transparent 1px) !important;
-  background-size: 40px 40px;
-}
-
-/* Folder hero image (BugForge) - Premium styling */
-.folder-hero {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  padding: 1.5rem;
-  background: linear-gradient(145deg, rgba(12, 13, 20, 0.95), rgba(18, 19, 28, 0.9));
-  border-radius: 20px;
-  border: 1px solid rgba(90, 100, 140, 0.25);
-  box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  max-width: min(720px, 95%);
-  position: relative;
-  overflow: hidden;
-}
-
-.folder-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(230, 204, 150, 0.08), transparent 60%);
-  pointer-events: none;
-}
-
-.folder-hero img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  position: relative;
-  z-index: 1;
-}
-
-// Stats header for folder pages - Premium glassmorphism style
-.stats-header {
-  display: flex;
-  justify-content: center;
-  gap: 0;
-  margin: 0 auto 2.5rem;
-  padding: 0;
-  background: linear-gradient(135deg, rgba(18, 19, 28, 0.85), rgba(30, 32, 48, 0.75));
-  border-radius: 16px;
-  border: 1px solid rgba(230, 204, 150, 0.25);
-  max-width: fit-content;
-  backdrop-filter: blur(12px);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-  padding: 1.2rem 2rem;
-  position: relative;
-  transition: background 200ms ease;
-}
-
-.stat-item:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 20%;
-  height: 60%;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(230, 204, 150, 0.3), transparent);
-}
-
-.stat-item:hover {
-  background: rgba(230, 204, 150, 0.05);
-}
-
-.stat-value {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--secondary);
-  text-shadow: 0 0 20px rgba(230, 204, 150, 0.3);
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  opacity: 0.6;
-  font-weight: 500;
-}
-
-@media (max-width: 700px) {
-  .stats-header {
-    gap: 0;
-    flex-wrap: wrap;
-    max-width: 320px;
-  }
-  .stat-item {
-    padding: 0.9rem 1.4rem;
-    flex: 1 1 50%;
-  }
-  .stat-item:nth-child(2)::after {
-    display: none;
-  }
-  .stat-item:nth-child(1)::after,
-  .stat-item:nth-child(3)::after {
-    display: none;
-  }
-  .stat-value {
-    font-size: 1.6rem;
-  }
-}
-
-/* Sidebar: force vertical scrollbar on the right */
-.sidebar,
-nav.sidebar {
-  overflow-y: auto !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(120, 130, 160, 0.6) transparent !important;
-}
-
-.sidebar::-webkit-scrollbar,
-nav.sidebar::-webkit-scrollbar {
-  width: 10px;
-  display: block !important;
-}
-
-.sidebar::-webkit-scrollbar-track,
-nav.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb,
-nav.sidebar::-webkit-scrollbar-thumb {
-  background-color: rgba(120, 130, 160, 0.6);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-/* Home grid cards */
-.home-subtitle {
-  text-align: center;
-  opacity: 0.75;
-  margin: 0.4rem 0 2.2rem;
-}
-
-.home-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(220px, 1fr));
-  gap: 1.2rem;
-  margin: 0 auto 2.6rem;
-  max-width: 960px;
-}
-
-.home-card {
-  display: block;
-  padding: 1.1rem 1.2rem 1.05rem;
-  border-radius: 16px;
-  background: rgba(18, 19, 28, 0.6);
-  border: 1px solid rgba(90, 100, 140, 0.45);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
-}
-
-.home-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.45);
-  border-color: rgba(130, 150, 200, 0.6);
-}
-
-.home-card .card-head {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.5rem;
-}
-
-.home-card .card-icon {
-  width: 30px;
-  height: 30px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  font-size: 0.95rem;
-}
-
-.home-card .card-title {
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.home-card .card-desc {
-  opacity: 0.78;
-  margin: 0 0 0.6rem;
-}
-
-.home-card ul {
-  margin: 0;
-  padding-left: 1rem;
-  opacity: 0.8;
-}
-
-.home-card li {
-  margin: 0.2rem 0;
-}
-
-.home-card-purple { box-shadow: 0 0 0 1px rgba(151, 108, 217, 0.55), 0 18px 40px rgba(52, 36, 90, 0.35); }
-.home-card-pink { box-shadow: 0 0 0 1px rgba(235, 88, 150, 0.55), 0 18px 40px rgba(90, 36, 64, 0.35); }
-.home-card-orange { box-shadow: 0 0 0 1px rgba(240, 146, 76, 0.55), 0 18px 40px rgba(90, 52, 28, 0.35); }
-.home-card-amber { box-shadow: 0 0 0 1px rgba(230, 178, 78, 0.55), 0 18px 40px rgba(90, 68, 28, 0.35); }
-.home-card-teal { box-shadow: 0 0 0 1px rgba(98, 196, 170, 0.55), 0 18px 40px rgba(32, 70, 62, 0.35); }
-
-@media (max-width: 1000px) {
-  .home-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-    max-width: 720px;
-  }
-}
-
-@media (max-width: 720px) {
-  .home-grid {
-    grid-template-columns: 1fr;
-    max-width: 520px;
-  }
-}
-
-// 2. CLEAN SIDEBAR & TOC (ZERO BOXES / ZERO GHOSTS)
-.sidebar, .explorer, .toc, .folder-container {
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none !important; }
-  background: none !important;
-  border: none !important;
-
-  ul { 
-    list-style: none !important; 
-    padding-left: 0.8rem !important; 
-    margin: 0 !important;
-  }
-  
-  li {
-    &::marker, &::before { content: none !important; display: none !important; }
-    background: none !important;
-    
-    a::before {
-      content: "❯" !important;
-      color: var(--secondary);
-      margin-right: 10px;
-      font-size: 0.8rem;
-      opacity: 0.4;
-    }
-  }
-}
-
-/* Sidebar: show vertical scrollbar */
-.sidebar,
-.explorer {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(120, 130, 160, 0.6) transparent;
-}
-
-.sidebar::-webkit-scrollbar,
-.explorer::-webkit-scrollbar {
-  width: 10px;
-  display: block !important;
-}
-
-.sidebar::-webkit-scrollbar-track,
-.explorer::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb,
-.explorer::-webkit-scrollbar-thumb {
-  background-color: rgba(120, 130, 160, 0.6);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-// 3. TABLE OF CONTENTS (Radar Style)
-.toc {
-  border-left: 1px solid var(--lightgray) !important;
-  max-height: none !important;
-  overflow: visible !important;
-  font-size: 0.95rem !important;
-  padding: 0.5rem 0.7rem !important;
-  background: rgba(255, 255, 255, 0.02) !important;
-  border-radius: 10px !important;
-
-  ul {
-    padding-left: 0.6rem !important;
-  }
-
-  li {
-    margin: 0.2rem 0 !important;
-  }
-
-  ul > li:not(:last-child) {
-    padding-bottom: 0.2rem !important;
-    border-bottom: 1px solid rgba(65, 72, 104, 0.25) !important;
-  }
-  
-  li a.active {
-    color: var(--secondary) !important;
-    font-weight: bold;
-
-    &::before {
-      content: "●";
-      margin-right: 8px;
-      text-shadow: 0 0 10px var(--secondary);
-    }
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/* 4A. FOLDER TILES (CENTERED & COMPACT + FUNKY DATE CHIP)            */
-/* ------------------------------------------------------------------ */
-
-.folder-content li {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 16px !important;
-  margin-bottom: 12px !important;
-}
-
-/* Date chip is the first child in each folder row */
-.folder-content li > :first-child {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  min-width: 110px !important;
-  padding: 10px 12px !important;
-
-  border-radius: 12px !important;
-  border: 1px solid rgba(255, 158, 100, 0.25) !important;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255, 158, 100, 0.12),
-    rgba(255, 158, 100, 0.03)
-  ) !important;
-
-  box-shadow:
-    0 0 0 1px rgba(255, 158, 100, 0.08),
-    0 10px 24px rgba(0, 0, 0, 0.55) !important;
-
-  color: rgba(255, 220, 200, 0.85) !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.6px !important;
-  text-transform: uppercase !important;
-
-  line-height: 1.15 !important;
-  font-size: 0.9rem !important;
-
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-/* Sheen scanline */
-.folder-content li > :first-child::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: -40% -60% !important;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 158, 100, 0.18),
-    transparent
-  ) !important;
-  transform: rotate(20deg) !important;
-  opacity: 0.65 !important;
-  pointer-events: none !important;
-}
-
-/* Tile itself */
-.folder-content a {
-  display: inline-block !important;
-  padding: 10px 30px !important; 
-  margin: 0 !important;
-  min-width: 220px !important;
-  text-align: center !important;
-
-  border-radius: 8px !important;
-  border: 1px solid rgba(255, 158, 100, 0.35) !important;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255, 158, 100, 0.08),
-    rgba(255, 158, 100, 0.03)
-  ) !important;
-
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
-  text-decoration: none !important;
-  position: relative !important;
-  transition: all 180ms ease !important;
-}
-
-/* Accent bar for smaller box */
-.folder-content a::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 8px !important;
-  bottom: 8px !important;
-  width: 2px !important;
-  background: var(--secondary) !important;
-  opacity: 0.6 !important;
-}
-
-/* Hover state for tile */
-.folder-content a:hover {
-  border-color: rgba(0, 255, 120, 0.85) !important;
-  background: rgba(0, 255, 120, 0.05) !important;
-  box-shadow: 0 0 15px rgba(0, 255, 120, 0.2) !important;
-  transform: translateY(-2px) !important;
-}
-
-/* Hover linkage for date chip when row is hovered */
-.folder-content li:hover > :first-child {
-  border-color: rgba(0, 255, 120, 0.55) !important;
-
-  background: linear-gradient(
-    180deg,
-    rgba(0, 255, 120, 0.12),
-    rgba(0, 255, 120, 0.03)
-  ) !important;
-
-  box-shadow:
-    0 0 0 1px rgba(0, 255, 120, 0.15),
-    0 12px 30px rgba(0, 0, 0, 0.65) !important;
-
-  color: rgba(220, 255, 235, 0.95) !important;
-}
-
-.folder-content li:hover > :first-child::after {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 255, 120, 0.18),
-    transparent
-  ) !important;
-}
-
-/* ------------------------------------------------------------------ */
-/* 4B. SECTION LINKS (UNIFIED & CENTERED)                             */
-/* ------------------------------------------------------------------ */
-
-.section-li {
-  display: flex !important;
-  justify-content: center !important;
-}
-
-.section-li a {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px 22px !important;
-  margin-bottom: 8px !important;
-  text-align: center !important;
-
-  background:
-    radial-gradient(120% 160% at 20% 0%, rgba(255, 184, 120, 0.15), transparent 60%),
-    linear-gradient(180deg, rgba(18, 20, 26, 0.98), rgba(14, 16, 22, 0.98)) !important;
-  border: 1px solid rgba(255, 168, 84, 0.35) !important;
-  color: #ffb86b !important;
-
-  text-decoration: none !important;
-  min-width: 220px !important; 
-  border-radius: 999px !important;
-  letter-spacing: 0.25px !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 184, 120, 0.06),
-    0 8px 18px rgba(0, 0, 0, 0.45) !important;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease !important;
-
-  &::before { content: none !important; }
-}
-
-.section-li a:hover {
-  background:
-    linear-gradient(180deg, rgba(255, 194, 120, 0.96), rgba(255, 157, 64, 0.94)) !important;
-  border-color: rgba(255, 187, 120, 0.75) !important;
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.45),
-    0 0 18px rgba(255, 159, 80, 0.35) !important;
-  transform: translateY(-1px) !important;
-  color: #141414 !important;
-}
-
-/* ------------------------------------------------------------------ */
-/* 4C. SECTION CHIPS (INLINE, WRAPPED, CLICKABLE)                      */
-/* ------------------------------------------------------------------ */
-
-h2:has(+ .section-chips) {
-  text-align: center !important;
-  letter-spacing: 0.6px !important;
-}
-
-.section-chips {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 12px 14px !important;
-  justify-content: center !important;
-  margin: 1.2rem 0 1.4rem !important;
-}
-
-.section-chip {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px 22px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(255, 168, 84, 0.35) !important;
-  background:
-    radial-gradient(120% 160% at 20% 0%, rgba(255, 184, 120, 0.15), transparent 60%),
-    linear-gradient(180deg, rgba(18, 20, 26, 0.98), rgba(14, 16, 22, 0.98)) !important;
-  color: #ffb86b !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.25px !important;
-  text-transform: none !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 184, 120, 0.06),
-    0 8px 18px rgba(0, 0, 0, 0.45) !important;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease, background 160ms ease !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-.section-chip:hover {
-  border-color: rgba(255, 187, 120, 0.75) !important;
-  color: #141414 !important;
-  background:
-    linear-gradient(180deg, rgba(255, 194, 120, 0.96), rgba(255, 157, 64, 0.94)) !important;
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.45),
-    0 0 18px rgba(255, 159, 80, 0.35) !important;
-  transform: translateY(-1px) !important;
-}
-
-.section-chip:active {
-  transform: translateY(0) scale(0.98) !important;
-  box-shadow: 0 0 12px rgba(255, 159, 80, 0.25) !important;
-}
-
-.section-chip[aria-current="page"],
-.section-chip.is-active {
-  border-color: rgba(255, 170, 96, 0.95) !important;
-  color: #1b1207 !important;
-  background:
-    linear-gradient(180deg, rgba(255, 198, 122, 1), rgba(255, 148, 56, 1)) !important;
-  box-shadow:
-    0 12px 26px rgba(0, 0, 0, 0.5),
-    0 0 22px rgba(255, 145, 56, 0.45) !important;
-}
-
-.section-chip:focus-visible {
-  outline: 2px solid rgba(255, 180, 110, 0.75) !important;
-  outline-offset: 2px !important;
-}
-
-// 5. THE SUPERB HIGHLIGHTS (Gold Badges)
-code {
-  background-color: rgba(255, 158, 100, 0.1) !important; 
-  color: #ff9e64 !important; 
-  border: 1px solid rgba(255, 158, 100, 0.25) !important; 
-  padding: 0.1rem 0.4rem !important;
-  border-radius: 3px !important;
-  font-size: 85%;
-}
-
-// 6. TERMINAL CODE BLOCKS (PURE BLACK & NO HEADER)
-pre, 
-code[class*="language-"], 
-pre[class*="language-"] {
-  background-color: #000000 !important; // Forces true black background
-  background: #000000 !important;       // Secondary override
-  border: 1px solid var(--lightgray) !important;
-  padding: 1.5rem !important;
-  position: relative;
-  border-radius: 4px;
-  box-shadow: none !important; // Removes any glowing red shadows
-  
-  // This kills the "TERMINAL_OUTPUT" header
-  &::before {
-    display: none !important;
-    content: none !important;
-  }
-}
-
-// Removes the background from the inner code span
-code {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-// Specific fix for the reddish highlight often found in Quartz/Prism themes
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: #565f89 !important; // Sets comments to a muted blue/gray
-}
-// 7. BRANDING & DIVIDERS
-.sidebar img {
-  border: 1px solid var(--secondary);
-  padding: 4px;
-  background: var(--light);
-  max-width: 90%;
-  display: block;
-  margin: 0 auto 0.35rem;
-}
-
-.sidebar .page-title a {
-  color: var(--secondary) !important;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(255, 158, 100, 0.3);
-}
-
-/* Give the main column a little extra breathing room */
-.center,
-main,
-article,
-.content {
-  padding-top: 1.2rem;
-}
-
-/* Give the main content column a subtle panel to separate from the grid */
-main article,
-.content {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.03),
-    rgba(255, 255, 255, 0.01)
-  );
-  border: 1px solid rgba(65, 72, 104, 0.25);
-  border-radius: 12px;
-  padding: 1.2rem 1.4rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-hr {
-  border: none !important;
-  border-top: 1px solid rgba(65, 72, 104, 0.45) !important;
-  margin: 2.6rem auto !important;
-  max-width: 760px !important;
-  position: relative;
-  overflow: visible !important;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 158, 100, 0.08),
-    transparent
-  );
-
-  &::after {
-    content: "◆" !important;
-    position: absolute;
-    left: 50%; top: -11px;
-    color: var(--secondary);
-    background: #1a1b26; 
-    padding: 0 10px;
-  }
-}
-
-body[data-slug="index"] hr {
-  display: none !important;
-}
-
-body:has(.page-listing) hr {
-  display: none !important;
-}
-/* Wrap long code lines instead of horizontal scroll */
-pre,
-code {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* Optional: reduce horizontal scrollbar aggression */
-pre {
-  overflow-x: auto;
-}
-/* =========================
-   Explorer: ultra-minimal + glow current section
-   ========================= */
-
-.explorer {
-  font-size: 0.98rem;
-  overflow-x: hidden;
-}
-
-.explorer ul {
-  padding-left: 0.85rem;
-  margin: 0.2rem 0;
-}
-
-.explorer li {
-  margin: 0.08rem 0;
-}
-
-/* Row layout */
-.explorer li > div,
-.explorer li > a {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.16rem 0.22rem;
-  border-radius: 8px;
-
-  max-width: 100%;
-  box-sizing: border-box;
-
-  transition: color 120ms ease, background 120ms ease, box-shadow 120ms ease, transform 120ms ease;
-}
-
-/* Chevron calmness */
-.explorer svg {
-  opacity: 0.8;
-  transform: translateY(0.5px);
-  transition: opacity 120ms ease;
-}
-
-/* Kill default purple links in explorer */
-.explorer a,
-.explorer a:visited {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Hover: no shake, just clean green */
-.explorer li > div:hover,
-.explorer li > a:hover {
-  color: #35d07f !important;
-  background: rgba(53, 208, 127, 0.08);
-  box-shadow: 0 0 0 1px rgba(53, 208, 127, 0.18);
-  transform: translateX(1px);
-}
-
-.explorer li > div:hover svg,
-.explorer li > a:hover svg {
-  opacity: 1;
-}
-
-/* Current page: warm accent */
-.explorer a[aria-current="page"] {
-  color: #ffa657;
-  background: rgba(255, 166, 87, 0.08);
-  box-shadow: 0 0 0 1px rgba(255, 166, 87, 0.15);
-}
-
-/* Current section glow: highlight the nearest parent folder as you navigate
-   Works by styling folders that contain the active page link */
-.explorer li:has(a[aria-current="page"]) > div {
-  color: #35d07f !important;
-  background: rgba(53, 208, 127, 0.06);
-  box-shadow: 0 0 0 1px rgba(53, 208, 127, 0.14), 0 0 14px rgba(53, 208, 127, 0.10);
-}
-
-/* If a folder is expanded and contains the current page, make its chevron pop a touch */
-.explorer li:has(a[aria-current="page"]) > div svg {
-  opacity: 1;
-}
-
-/* Optional: top-level folders slightly stronger, nested items slightly quieter */
-.explorer > ul > li > div,
-.explorer > ul > li > a {
-  font-weight: 600;
-}
-
-.explorer ul ul li > div,
-.explorer ul ul li > a {
-  opacity: 0.92;
-}
-
-/* Header spacing */
-.explorer h2,
-.explorer .explorer-header {
-  margin: 0.3rem 0 0.2rem;
-}
-/* =========================
-   Explorer: force GREEN (no purple anywhere)
-   ========================= */
-
-/* Normal + visited links */
-.explorer a,
-.explorer a:visited {
-  color: inherit !important;
-}
-
-/* Hover links */
-.explorer a:hover,
-.explorer li > a:hover,
-.explorer li > div:hover {
-  color: #35d07f !important;
-}
-
-/* Current page link (Quartz sets this purple unless overridden) */
-.explorer a[aria-current="page"],
-.explorer a[aria-current="page"]:visited {
-  color: #35d07f !important;
-  background: rgba(53, 208, 127, 0.10) !important;
-  box-shadow: 0 0 0 1px rgba(53, 208, 127, 0.22) !important;
-}
-
-/* Current section (parent folder) label */
-.explorer li:has(a[aria-current="page"]) > div {
-  color: #35d07f !important;
-}
-
-/* Kill any underline/purple link decoration Quartz injects */
-.explorer a,
-.explorer a:hover,
-.explorer a:visited,
-.explorer a:active {
-  text-decoration: none !important;
-}
-
-/* =========================
-   Folder listing (section-ul): polish the date column
-   Targets: ul.section-ul > li.section-li > div.section > p.meta > time
-   ========================= */
-
-/* Make the row layout nicer: keep date column narrow and aligned */
-ul.section-ul > li.section-li > div.section {
-  display: grid;
-  grid-template-columns: 7.5rem 1fr auto; /* date | title | tags (if any) */
-  align-items: center;
-  column-gap: 1rem;
-}
-
-/* Date container */
-ul.section-ul > li.section-li > div.section > p.meta {
-  margin: 0 !important;
-  opacity: 0.55;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-  text-align: right;
-  white-space: nowrap;
-}
-
-/* Date value */
-ul.section-ul > li.section-li > div.section > p.meta > time {
-  display: inline-block;
-  padding: 0.12rem 0.45rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
-/* Hover: date stays subtle while the title/button can shine */
-ul.section-ul > li.section-li:hover > div.section > p.meta {
-  opacity: 0.7;
-}
-
-/* Mobile: hide the date column completely */
-@media (max-width: 800px) {
-  ul.section-ul > li.section-li > div.section {
-    grid-template-columns: 1fr auto; /* title | tags */
-  }
-
-  ul.section-ul > li.section-li > div.section > p.meta {
-    display: none !important;
-  }
-}
-
-/* =========================
-   Folder listing: REMOVE date entirely
-   ========================= */
-
-ul.section-ul > li.section-li > div.section > p.meta {
-  display: none !important;
-}
-
-ul.section-ul > li.section-li > div.section {
-  grid-template-columns: 1fr auto;
-}
-
-/* =========================
-   Folder listing: Clean simple grid
-   ========================= */
-
-ul.section-ul {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 0.75rem 0.75rem !important;
-  max-width: 620px !important;
-  margin: 0 auto 2.5rem !important;
-  padding: 0 0.5rem !important;
-  list-style: none !important;
-}
-
-ul.section-ul > li.section-li {
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-ul.section-ul > li.section-li > div.section {
-  display: block !important;
-}
-
-ul.section-ul > li.section-li > div.section > .desc > h3 {
-  margin: 0 !important;
-}
-
-/* Reset ALL link styling for folder tiles */
-ul.section-ul > li.section-li a,
-ul.section-ul > li.section-li > div.section > .desc > h3 > a {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: calc(100% - 8px) !important;
-  min-width: 0 !important;
-  height: 38px !important;
-  padding: 0.4rem 0.5rem !important;
-  margin: 4px !important;
-  font-size: 0.72rem !important;
-  font-weight: 500 !important;
-  text-align: center !important;
-  line-height: 1.15 !important;
-  text-decoration: none !important;
-  color: rgba(255, 255, 255, 0.85) !important;
-  background: rgba(30, 32, 42, 0.9) !important;
-  border: 1px solid rgba(80, 90, 120, 0.5) !important;
-  border-radius: 5px !important;
-  box-shadow: none !important;
-  transition: all 120ms ease !important;
-}
-
-ul.section-ul > li.section-li a:hover,
-ul.section-ul > li.section-li > div.section > .desc > h3 > a:hover {
-  background: rgba(40, 44, 56, 0.95) !important;
-  border-color: var(--secondary) !important;
-  color: #fff !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-@media (max-width: 550px) {
-  ul.section-ul {
-    grid-template-columns: repeat(2, 1fr) !important;
-    max-width: 380px !important;
-  }
-}
-
-@media (max-width: 360px) {
-  ul.section-ul {
-    grid-template-columns: 1fr !important;
-    max-width: 200px !important;
-  }
-}
-
-/* Folder intro block */
-.folder-intro {
-  max-width: 720px;
-  margin: 0.4rem auto 1rem;
-  padding: 0.65rem 0.9rem;
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(65, 72, 104, 0.35);
-  border-radius: 10px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
-}
-
-/* Hide folder item count text ("X items under this folder.") */
-.page-listing > p {
-  display: none !important;
-}
-
-/* =========================
-   FOLDER PAGE PREMIUM STYLING
-   Hide tags completely on folder listing
-   ========================= */
-.page-listing .section-li .tags,
-ul.section-ul .section-li .tags {
-  display: none !important;
-}
-
-/* Folder page content wrapper */
-.page-listing {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* Section title for folder pages */
-h2.section-title {
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0 auto 1.5rem;
-  padding-bottom: 0.8rem;
-  position: relative;
-  max-width: 200px;
-}
-
-h2.section-title::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(230, 204, 150, 0.5), transparent);
-}
-
-/* =========================
-   Tables: improve readability for dense lists
-   ========================= */
-
-.content table {
-  border-collapse: collapse;
-  max-width: 880px;
-  margin: 0 auto;
-}
-
-.content table th,
-.content table td {
-  padding: 0.45rem 0.6rem;
-}
-
-.content table thead th {
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  border-bottom: 1px solid rgba(65, 72, 104, 0.45);
-}
-
-.content table tbody tr {
-  border-bottom: 1px solid rgba(65, 72, 104, 0.3);
-}
-
-.content table tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-/* =========================
-   Headings: tighter editorial rhythm
-   ========================= */
-
-.content h2 {
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 1.2rem;
-  margin-top: 1.4rem;
-  margin-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(65, 72, 104, 0.4);
-  padding-bottom: 0.25rem;
-}
-
-.content h2 {
-  color: #7aa2f7 !important;
-}
-
-.content h3 {
-  color: #35d07f !important;
-}
-
-.content h3 {
-  margin-top: 1.3rem;
-  margin-bottom: 0.4rem;
-}
-
-.content h2 + p,
-.content h3 + p {
-  margin-top: 0.4rem;
-}
-
-/* Center the home page title */
-body[data-slug="index"] .article-title {
-  text-align: center;
-}
-
-body[data-slug="index"] h2,
-body[data-slug="index"] h3 {
-  text-align: center;
-}
-
-body[data-slug="index"] .content h3 {
-  margin-top: 2.6rem !important;
-}
-
-body[data-slug="index"] .content h2 {
-  margin-bottom: 2.2rem !important;
-}
-
-/* =========================
-   Breadcrumbs: compact pill style
-   ========================= */
-
-.breadcrumb-container {
-  gap: 0.35rem !important;
-}
-
-.breadcrumb-element {
-  background: transparent;
-  border: none;
-  padding: 0.1rem 0.2rem;
-  border-radius: 0;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.breadcrumb-element:last-child {
-  border-bottom: 1px solid rgba(255, 158, 100, 0.5);
-  padding-bottom: 0.15rem;
-  color: rgba(255, 220, 200, 0.9);
-}
-
-.breadcrumb-element a,
-.breadcrumb-element p {
-  margin: 0 !important;
-  color: rgba(255, 255, 255, 0.75) !important;
-  text-decoration: none !important;
-}
-
-/* Blockquotes as editorial callouts */
-.content blockquote {
-  margin: 1.2rem 0;
-  padding: 0.8rem 1rem;
-  border-left: 2px solid rgba(255, 158, 100, 0.5);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* =========================
-   Sidebar polish
-   ========================= */
-
-.sidebar {
-  padding: 1rem 0.85rem 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.sidebar .profile-card {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(255, 255, 255, 0.02)
-  );
-  border: 1px solid rgba(65, 72, 104, 0.45);
-  border-radius: 14px;
-  padding: 0.8rem;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
-}
-
-.sidebar .profile-card .card-title {
-  margin-top: 0.5rem;
-  text-align: center;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(10, 12, 18, 0.4);
-  border: 1px solid rgba(255, 158, 100, 0.25);
-  border-radius: 999px;
-}
-
-.sidebar .profile-card .profile-img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 10px 22px rgba(0, 0, 0, 0.45);
-}
-
-.sidebar .search {
-  max-width: 100%;
-  margin: 0.1rem 0 0.6rem;
-}
-
-.sidebar .search .search-button {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(65, 72, 104, 0.7);
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.search-shortcut {
-  margin-left: auto;
-  padding: 0.15rem 0.45rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(90, 100, 140, 0.4);
-  border-radius: 4px;
-  opacity: 0.6;
-  font-family: system-ui, -apple-system, sans-serif;
-}
-
-@media (max-width: 800px) {
-  .search-shortcut {
-    display: none;
-  }
-}
-
-.sidebar .explorer {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.035),
-    rgba(255, 255, 255, 0.015)
-  );
-  border: 1px solid rgba(65, 72, 104, 0.5);
-  border-radius: 16px;
-  padding: 0.6rem 0.6rem 0.7rem;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-}
-
-.sidebar .explorer ul {
-  padding-left: 0.3rem !important;
-}
-
-.sidebar .explorer .explorer-content {
-  overflow: visible !important;
-  max-height: none !important;
-}
-
-.sidebar .explorer.collapsed .explorer-content {
-  display: none !important;
-}
-
-.sidebar .explorer.collapsed .explorer-ul {
-  display: none !important;
-}
-
-.sidebar .explorer .explorer-content::-webkit-scrollbar {
-  display: none !important;
-}
-
-.sidebar .explorer .explorer-ul {
-  overflow: visible !important;
-}
-
-.sidebar {
-  overflow: visible !important;
-}
-
-.sidebar .explorer .overflow {
-  overflow: visible !important;
-}
-
-.sidebar .explorer .overflow::-webkit-scrollbar {
-  display: none !important;
-}
-
-.sidebar .explorer {
-  scrollbar-width: none !important;
-}
-
-.sidebar .explorer svg {
-  opacity: 0 !important;
-  transform: scale(0.8) translateY(0.5px) !important;
-  transition: opacity 120ms ease !important;
-  pointer-events: none !important;
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container,
-.sidebar .explorer .explorer-ul > li > a {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 7a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container::before,
-.sidebar .explorer .explorer-ul > li > a::before {
-  content: "" !important;
-  width: 14px;
-  height: 14px;
-  margin-right: 0.45rem;
-  flex: 0 0 14px;
-  background-color: var(--secondary);
-  -webkit-mask: var(--nav-icon) no-repeat center / 14px 14px;
-  mask: var(--nav-icon) no-repeat center / 14px 14px;
-  opacity: 0.75;
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container svg {
-  display: none;
-}
-
-.sidebar .explorer .explorer-ul > li > a[data-for="index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 9l9-7 9 7'/><path d='M9 22V12h6v10'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container[data-folderpath="Methodology/index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='16'/><rect x='13' y='4' width='7' height='16'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container[data-folderpath="BugForge/index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='4'/><path d='M6 12h3'/><path d='M15 12h3'/><path d='M12 5v3'/><path d='M12 16v3'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container[data-folderpath="Hacksmarter/index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3l2.5 5 5.5.5-4 3.5 1.2 5.5-5.2-3-5.2 3 1.2-5.5-4-3.5 5.5-.5z'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container[data-folderpath="Hackthebox/index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 7l9-4 9 4v10l-9 4-9-4z'/><path d='M3 7l9 4 9-4'/><path d='M12 11v10'/></svg>");
-}
-
-.sidebar .explorer .explorer-ul > li > div.folder-container[data-folderpath="Pwnedlabs/index"] {
-  --nav-icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 2v6l-4 8a4 4 0 0 0 3.6 6h4.8A4 4 0 0 0 18 16l-4-8V2'/><path d='M8 6h8'/></svg>");
-}
-
-.sidebar .explorer li > div:hover svg,
-.sidebar .explorer li > a:hover svg {
-  opacity: 0.45 !important;
-}
-.sidebar .explorer li > div,
-.sidebar .explorer li > a {
-  border-radius: 10px;
-  padding: 0.3rem 0.5rem;
-  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease;
-}
-
-.sidebar .explorer li > div:hover,
-.sidebar .explorer li > a:hover {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.sidebar .explorer li > div:hover .folder-title,
-.sidebar .explorer li > a:hover {
-  color: var(--secondary) !important;
-}
-
-.sidebar .explorer-header,
-.sidebar .explorer h2 {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.75rem;
-  color: var(--secondary) !important;
-}
-
-.sidebar .explorer a[aria-current="page"] {
-  background: rgba(209, 154, 74, 0.08);
-  box-shadow: 0 0 0 1px rgba(209, 154, 74, 0.25);
-  color: var(--secondary) !important;
-}
-
-.sidebar .explorer li:has(a[aria-current="page"]) > div {
-  background: transparent !important;
-  box-shadow: none !important;
-  color: var(--secondary) !important;
-}
-
-.sidebar .explorer li:has(a[aria-current="page"]) > div:hover {
-  background: rgba(255, 255, 255, 0.06) !important;
-  box-shadow: 0 0 0 1px rgba(209, 154, 74, 0.24) !important;
-}
-
-/* =========================
-   Callouts: card treatment
-   ========================= */
-
-.callout {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(65, 72, 104, 0.4);
-  border-radius: 12px;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
-  padding: 0.6rem 0.8rem;
-}
-
-.callout-title {
-  font-weight: 700;
-  letter-spacing: 0.2px;
-}
-
-.callout-content {
-  color: rgba(255, 255, 255, 0.78);
-}
-
-/* =========================
-   Code blocks: language tag label
-   ========================= */
-
-figure[data-rehype-pretty-code-figure] pre[data-language] {
-  padding-top: 1.6rem !important;
-}
-
-figure[data-rehype-pretty-code-figure] pre[data-language]::before {
-  content: attr(data-language);
-  position: absolute;
-  top: 0.35rem;
-  left: 0.6rem;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(65, 72, 104, 0.45);
-  border-radius: 999px;
-  padding: 0.1rem 0.4rem;
-  z-index: 2;
-}
-
-/* Subtle clipboard button */
-.clipboard-button {
-  padding: 0.2rem !important;
-  margin: 0.25rem !important;
-  border-radius: 6px !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border-color: rgba(65, 72, 104, 0.45) !important;
-  opacity: 0 !important;
-  top: 0.35rem !important;
-  right: 0.35rem !important;
-}
-
-.clipboard-button > svg {
-  width: 14px !important;
-  height: 14px !important;
-  filter: contrast(0.6) !important;
-}
-
-.clipboard-button:hover {
-  border-color: rgba(255, 158, 100, 0.5) !important;
-}
-
-pre:hover > .clipboard-button {
-  opacity: 0.6 !important;
-}
-
-/* =========================
-   MOBILE: force single column, remove left/right panels, stop overlap
-   ========================= */
-@media (max-width: 900px) {
-  /* Quartz layout containers (v4 common patterns) */
-  .page,
-  .page-layout,
-  .layout,
-  .container {
-    display: block !important;
-  }
-
-  /* Kill side columns no matter what they're called */
-  .left,
-  .right,
-  aside,
-  .sidebar,
-  .explorer,
-  .toc,
-  nav.sidebar {
-    display: none !important;
-  }
-
-  /* Make center content full width and padded */
-  .center,
-  main,
-  article,
-  .content {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 1rem 1rem 2rem !important;
-  }
-
-  /* If a header exists, make it behave */
-  header,
-  .header,
-  .topbar,
-  .navbar {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 999 !important;
-    padding: 0.6rem 0.8rem !important;
-    background: rgba(10, 12, 18, 0.85) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  /* If ProfileCard is being rendered anywhere on mobile, hide it */
-  .profile-card,
-  .profileCard,
-  [class*="profile"],
-  [class*="Profile"] {
-    display: none !important;
-  }
-
-  /* Fix huge titles on mobile */
-  h1,
-  .article-title,
-  .page-title {
-    font-size: 2rem !important;
-    line-height: 1.15 !important;
-    letter-spacing: 0 !important;
-    margin-top: 0.25rem !important;
-  }
-
-  h2 {
-    font-size: 1.4rem !important;
-    letter-spacing: 0.02em !important;
-  }
-
-  h3 {
-    font-size: 1.1rem !important;
-  }
-
-  .section-chip {
-    padding: 10px 16px !important;
-    min-height: 44px !important;
-  }
-
-  .section-chips {
-    gap: 8px 10px !important;
-  }
-
-  .folder-intro {
-    max-width: 100% !important;
-    margin: 0.6rem 0 1rem !important;
-    padding: 0.6rem 0.8rem !important;
-  }
-
-  .sidebar,
-  .explorer,
-  .toc {
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-  }
-
-  .content table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .content table thead,
-  .content table tbody,
-  .content table tr,
-  .content table th,
-  .content table td {
-    white-space: nowrap;
-  }
-
-  /* Make text readable and stop weird wrapping */
-  p,
-  li {
-    font-size: 1.05rem !important;
-    line-height: 1.6 !important;
-  }
-
-  /* Code blocks: prevent sideways scroll ruining the layout */
-  pre,
-  code {
-    white-space: pre-wrap !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  /* Checkboxes: better tap targets */
-  input[type="checkbox"] {
-    transform: scale(1.25);
-    margin-right: 0.6rem;
-  }
-}
-
-/* Sidebar scrollbar override: keep visible on desktop */
-@media (min-width: 901px) {
-  .sidebar,
-  nav.sidebar {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    scrollbar-width: thin !important;
-    scrollbar-color: rgba(120, 130, 160, 0.6) transparent !important;
-  }
-
-  .sidebar::-webkit-scrollbar,
-  nav.sidebar::-webkit-scrollbar {
-    width: 10px;
-    display: block !important;
-  }
-
-  .sidebar::-webkit-scrollbar-track,
-  nav.sidebar::-webkit-scrollbar-track {
-    background: linear-gradient(
-      180deg,
-      rgba(12, 14, 22, 0.4),
-      rgba(12, 14, 22, 0.15)
-    ) !important;
-    border-radius: 999px;
-  }
-
-  .sidebar::-webkit-scrollbar-thumb,
-  nav.sidebar::-webkit-scrollbar-thumb {
-    background-color: rgba(210, 190, 140, 0.55) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
-    background-clip: padding-box;
-    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.35);
-  }
-
-  .sidebar::-webkit-scrollbar-thumb:hover,
-  nav.sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(230, 204, 150, 0.75) !important;
-  }
-
-  .sidebar .explorer,
-  .sidebar .explorer .overflow,
-  .sidebar .explorer .explorer-content {
-    overflow-y: auto !important;
-  }
-
-  .sidebar .explorer .explorer-content {
-    max-height: calc(100vh - 320px) !important;
-    padding-right: 2px;
-  }
-
-  .sidebar .explorer .explorer-content::-webkit-scrollbar {
-    display: block !important;
-    width: 8px;
-  }
-
-  .sidebar .explorer .explorer-content::-webkit-scrollbar-track {
-    background: rgba(8, 10, 16, 0.25);
-    border-radius: 999px;
-  }
-
-  .sidebar .explorer .explorer-content::-webkit-scrollbar-thumb {
-    background-color: rgba(210, 190, 140, 0.55);
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .sidebar .explorer .explorer-content::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(230, 204, 150, 0.75);
-  }
-}
-
-/* =========================
-   MOBILE FIXES - Prevent horizontal scroll
-   ========================= */
 
 html, body {
   overflow-x: hidden !important;
   max-width: 100vw !important;
 }
 
-/* Global mobile fixes */
-@media (max-width: 800px) {
-  /* Force text wrapping on all text elements (except tables) */
-  p, li, span, a, h1, h2, h3, h4, h5, h6, blockquote {
-    overflow-wrap: break-word !important;
-    word-wrap: break-word !important;
-    word-break: break-word !important;
-    hyphens: none !important;
+body {
+  background-color: #0d0d0d !important;
+  color: #ffffff !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  background-image: none !important;
+}
+
+// Force white text globally
+p, li, span, td, th, div {
+  color: #ffffff !important;
+}
+
+// =============================================================================
+// LAYOUT - Full width top nav, centered content
+// =============================================================================
+
+// The page wrapper
+.page {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+// Body grid - simplified to single column
+.page > #quartz-body {
+  display: block !important;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+// Hide the sidebars completely
+.sidebar {
+  display: none !important;
+}
+
+// The top nav needs to break out of the content constraints
+.page-header-nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  background: #0d0d0d !important;
+}
+
+// Page header container - add top padding for fixed nav
+.page-header {
+  margin: 0 !important;
+  padding-top: 4rem !important;
+}
+
+// Center content - constrain width
+.center {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 0 2rem !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+// Footer also constrained
+footer {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 2rem !important;
+}
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e8e6e3 !important;
+  letter-spacing: 0.1em;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  line-height: 1.7;
+  color: #ffffff !important;
+}
+
+a {
+  color: #ffffff !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none !important;
+  padding: 0 !important;
+  transition: color 150ms ease;
+}
+
+a:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+// Internal links - remove background highlight
+a.internal {
+  background: none !important;
+  padding: 0 !important;
+}
+
+// =============================================================================
+// NUMBERED SECTION HEADERS (like 01 SOCIAL PLATFORMS)
+// =============================================================================
+
+.section-number {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 1rem;
+  font-weight: 400;
+}
+
+// =============================================================================
+// CERTIFICATION GRID - Graham Helton style
+// =============================================================================
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cert-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  min-height: 100px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  text-decoration: none !important;
+  text-align: center;
+  transition: border-color 150ms ease;
+  background: transparent !important;
+}
+
+.cert-card:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.cert-code {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.cert-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.cert-card-wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 600px) {
+  .cert-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Remove problematic min-widths */
-  .section-li a,
-  .folder-content a,
-  .folder-content li > :first-child {
-    min-width: 0 !important;
-    max-width: 100% !important;
+  .cert-card-wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 400px) {
+  .cert-grid {
+    grid-template-columns: 1fr;
   }
 
-  /* Home grid - single column on mobile */
-  .home-grid {
-    grid-template-columns: 1fr !important;
-    max-width: 100% !important;
-    padding: 0 1rem !important;
+  .cert-card-wide {
+    grid-column: span 1;
   }
+}
 
-  /* Stats header - wrap on mobile */
-  .stats-header {
-    max-width: 90vw !important;
-    flex-wrap: wrap !important;
-  }
+// =============================================================================
+// TABLES - Centered, minimal style with white text
+// =============================================================================
 
-  .stat-item {
-    padding: 0.8rem 1.2rem !important;
-  }
+.content table {
+  width: auto;
+  border-collapse: collapse;
+  margin: 2rem auto;
+}
 
-  /* Folder hero - full width */
-  .folder-hero {
-    max-width: 95vw !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding: 1rem !important;
-  }
+.content table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
 
-  /* Content area - allow wrapping, not clipping */
-  .center,
-  article,
-  .content,
-  .page-listing {
-    max-width: 100vw !important;
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-    box-sizing: border-box !important;
-  }
+.content table td {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+  vertical-align: top;
+  color: #ffffff;
+}
 
-  /* Tables - horizontal scroll container */
-  .content table {
+.content table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.content table tbody tr {
+  background: transparent !important;
+}
+
+// Table links - warm gold/amber accent
+.content table a {
+  color: #d4a574 !important;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.4);
+  transition: all 150ms ease;
+}
+
+.content table a:hover {
+  color: #e8c49a !important;
+  border-bottom-color: rgba(232, 196, 154, 0.6);
+}
+
+// =============================================================================
+// CODE BLOCKS
+// =============================================================================
+
+pre,
+code[class*="language-"],
+pre[class*="language-"] {
+  background-color: #000000 !important;
+  border: 1px dashed rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0 !important;
+  padding: 1.25rem !important;
+  font-size: 0.85rem;
+  box-shadow: none !important;
+}
+
+pre::before,
+pre[class*="language-"]::before {
+  display: none !important;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: none !important;
+  padding: 0.15rem 0.4rem !important;
+  border-radius: 0 !important;
+  font-size: 0.85em;
+  color: #e8e6e3 !important;
+}
+
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #666666 !important;
+}
+
+// =============================================================================
+// BLOCKQUOTES
+// =============================================================================
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0 0 0 1.5rem;
+  border-left: 1px dashed rgba(255, 255, 255, 0.3) !important;
+  background: none !important;
+  color: rgba(232, 230, 227, 0.8);
+}
+
+// =============================================================================
+// LISTS
+// =============================================================================
+
+ul, ol {
+  padding-left: 1.25rem;
+}
+
+li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+// =============================================================================
+// HORIZONTAL RULES
+// =============================================================================
+
+hr {
+  border: none !important;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2) !important;
+  margin: 3rem 0 !important;
+  background: none !important;
+}
+
+hr::after {
+  display: none !important;
+}
+
+// =============================================================================
+// BREADCRUMBS
+// =============================================================================
+
+.breadcrumb-container {
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-element {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(232, 230, 227, 0.5) !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.breadcrumb-element a {
+  color: rgba(232, 230, 227, 0.5) !important;
+  text-decoration: none !important;
+}
+
+.breadcrumb-element a:hover {
+  color: #f5f0e8 !important;
+}
+
+// =============================================================================
+// ARTICLE TITLE
+// =============================================================================
+
+.article-title {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+// Page description / subtitle
+.article-title + p,
+.content > p:first-of-type {
+  color: rgba(232, 230, 227, 0.7);
+  margin-bottom: 2rem;
+}
+
+// Home page - center title
+body[data-slug="index"] .article-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+body[data-slug="index"] .content {
+  text-align: center;
+}
+
+body[data-slug="index"] .content table {
+  text-align: left;
+}
+
+// =============================================================================
+// TAGS
+// =============================================================================
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.tag-link {
+  font-size: 0.75rem;
+  color: rgba(232, 230, 227, 0.6) !important;
+  text-decoration: none !important;
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  transition: all 150ms ease;
+}
+
+.tag-link:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #f5f0e8 !important;
+}
+
+// =============================================================================
+// FOLDER PAGES / PAGE LISTING
+// =============================================================================
+
+.page-listing {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-listing > p {
+  display: none !important;
+}
+
+// Center section headers on pages with grids (folder index pages)
+.content:has(.page-listing) h2 {
+  text-align: center;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 1.5rem;
+}
+
+
+// Flexbox layout for section items - fixed size buttons, centered orphans
+ul.section-ul {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 2rem auto !important;
+  max-width: 800px !important;
+  box-sizing: border-box !important;
+}
+
+ul.section-ul > li.section-li {
+  flex: 0 0 180px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+ul.section-ul > li.section-li > div.section {
+  display: block !important;
+}
+
+ul.section-ul > li.section-li > div.section > p.meta {
+  display: none !important;
+}
+
+ul.section-ul > li.section-li > div.section > .desc > h3 {
+  margin: 0 !important;
+}
+
+ul.section-ul > li.section-li a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem 0.5rem !important;
+  height: 70px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  background: transparent !important;
+  border: 1px dashed rgba(255, 255, 255, 0.3) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  transition: all 150ms ease !important;
+  line-height: 1.3 !important;
+  word-break: break-word !important;
+}
+
+ul.section-ul > li.section-li a:hover {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+// Hide tags in section listing
+.page-listing .section-li .tags,
+ul.section-ul .section-li .tags {
+  display: none !important;
+}
+
+// =============================================================================
+// SEARCH (Hidden but accessible)
+// =============================================================================
+
+.search {
+  display: none;
+}
+
+#search-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20vh;
+}
+
+#search-container.active {
+  display: flex;
+}
+
+// =============================================================================
+// TABLE OF CONTENTS
+// =============================================================================
+
+.toc {
+  display: none !important;
+}
+
+@media (min-width: 1200px) {
+  .toc {
     display: block !important;
-    overflow-x: auto !important;
-    max-width: 100% !important;
+    position: fixed;
+    right: 2rem;
+    top: 6rem;
+    width: 200px;
+    font-size: 0.75rem;
+    border-left: 1px dashed rgba(255, 255, 255, 0.15);
+    padding-left: 1rem;
+    background: none !important;
   }
 
-  /* Code blocks - wrap long lines */
-  pre {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
-  code {
-    max-width: 100% !important;
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
+  .toc li {
+    margin: 0.5rem 0;
   }
 
-  /* Images */
-  img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-}
-
-/* Extra small screens */
-@media (max-width: 480px) {
-  .home-grid {
-    gap: 0.75rem !important;
+  .toc a {
+    color: rgba(232, 230, 227, 0.5) !important;
+    text-decoration: none !important;
+    transition: color 150ms ease;
   }
 
-  .home-card {
-    padding: 0.9rem 1rem !important;
+  .toc a:hover,
+  .toc a.active {
+    color: #f5f0e8 !important;
   }
 
-  .stats-header {
-    gap: 0 !important;
-  }
-
-  .stat-item {
-    flex: 1 1 50% !important;
-    padding: 0.6rem 0.8rem !important;
-  }
-
-  .stat-value {
-    font-size: 1.4rem !important;
-  }
-
-  .stat-label {
-    font-size: 0.55rem !important;
-  }
-
-  h2.section-title {
-    font-size: 0.75rem !important;
-  }
-
-  ul.section-ul {
-    grid-template-columns: 1fr !important;
-    max-width: 100% !important;
-    padding: 0 0.5rem !important;
-  }
-
-  ul.section-ul > li.section-li a {
-    font-size: 0.7rem !important;
+  .toc a.active::before {
+    content: ">";
+    margin-right: 0.5rem;
   }
 }
 
-/* =========================
-   TABLES: Mobile-friendly horizontal scroll (no hyphenation)
-   ========================= */
-@media (max-width: 800px) {
-  .table-container {
-    display: block !important;
-    width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    margin: 1rem 0 !important;
-  }
+// =============================================================================
+// BACKLINKS
+// =============================================================================
 
-  .table-container table,
-  .content table {
-    min-width: 500px !important;
-    width: max-content !important;
-    table-layout: auto !important;
-  }
+.backlinks {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+}
 
-  .table-container th,
-  .table-container td,
-  .content table th,
-  .content table td {
-    white-space: nowrap !important;
-    hyphens: none !important;
-    word-break: normal !important;
-    overflow-wrap: normal !important;
-    padding: 0.4rem 0.6rem !important;
-  }
+.backlinks h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 1rem;
+}
 
-  /* Allow Focus column to wrap but not hyphenate */
-  .table-container td:last-child,
-  .content table td:last-child {
-    white-space: normal !important;
-    min-width: 200px !important;
-    hyphens: none !important;
+.backlinks ul {
+  list-style: none;
+  padding: 0;
+}
+
+.backlinks li {
+  margin: 0.5rem 0;
+}
+
+.backlinks a {
+  color: #e8e6e3 !important;
+  text-decoration: none !important;
+}
+
+.backlinks a:hover {
+  color: #f5f0e8 !important;
+}
+
+// =============================================================================
+// FOOTER
+// =============================================================================
+
+footer {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  color: rgba(232, 230, 227, 0.4);
+}
+
+footer a {
+  color: rgba(232, 230, 227, 0.6) !important;
+}
+
+footer a:hover {
+  color: #f5f0e8 !important;
+}
+
+// =============================================================================
+// CALLOUTS
+// =============================================================================
+
+.callout {
+  background: transparent !important;
+  border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0 !important;
+  padding: 1rem 1.25rem !important;
+  margin: 1.5rem 0;
+  box-shadow: none !important;
+}
+
+.callout-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.callout-content {
+  color: rgba(232, 230, 227, 0.8);
+}
+
+// =============================================================================
+// IMAGES
+// =============================================================================
+
+img {
+  max-width: 100%;
+  border-radius: 0 !important;
+}
+
+// =============================================================================
+// STATS HEADER (for folder pages)
+// =============================================================================
+
+.stats-header {
+  display: flex;
+  gap: 0;
+  margin: 2rem auto;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  background: transparent !important;
+  box-shadow: none !important;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.stat-item {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  border-right: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.stat-item:last-child {
+  border-right: none;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-top: 0.25rem;
+}
+
+// =============================================================================
+// HOME PAGE CARDS
+// =============================================================================
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.home-card {
+  padding: 1.5rem;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  background: transparent !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  transition: border-color 150ms ease;
+}
+
+.home-card:hover {
+  border-color: rgba(245, 240, 232, 0.5);
+}
+
+.home-card .card-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.home-card .card-desc {
+  color: rgba(232, 230, 227, 0.7);
+  font-size: 0.9rem;
+}
+
+// Remove colored variants
+.home-card-purple,
+.home-card-pink,
+.home-card-orange,
+.home-card-amber,
+.home-card-teal {
+  box-shadow: none !important;
+}
+
+// =============================================================================
+// MOBILE RESPONSIVE
+// =============================================================================
+
+@media (max-width: 900px) {
+  ul.section-ul > li.section-li {
+    flex: 0 0 160px !important;
   }
 }
 
-/* iPhone SE and very small screens (375px and below) */
-@media (max-width: 375px) {
-  /* Tighter padding on content */
-  .center,
-  article,
-  .content,
-  .page-listing {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+@media (max-width: 768px) {
+  .page > #quartz-body {
+    padding: 0 1rem;
   }
 
-  /* Smaller headings */
-  h1,
-  .article-title,
-  .page-title {
-    font-size: 1.6rem !important;
-    line-height: 1.2 !important;
+  h1, .article-title {
+    font-size: 1.5rem;
   }
 
   h2 {
-    font-size: 1.2rem !important;
+    font-size: 0.85rem;
   }
 
-  h3 {
-    font-size: 1rem !important;
+  ul.section-ul > li.section-li {
+    flex: 0 0 150px !important;
   }
 
-  /* Smaller body text */
-  p, li {
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-  }
-
-  /* Section chips - smaller on tiny screens */
-  .section-chip {
-    padding: 8px 12px !important;
-    font-size: 0.8rem !important;
-    min-height: 40px !important;
-  }
-
-  .section-chips {
-    gap: 6px 8px !important;
-  }
-
-  /* Stats - stack vertically */
   .stats-header {
-    flex-direction: column !important;
-    max-width: 200px !important;
+    flex-wrap: wrap;
+    width: fit-content;
   }
 
   .stat-item {
-    flex: 1 1 100% !important;
-    padding: 0.5rem 0.6rem !important;
-    width: 100% !important;
+    flex: 1 1 50%;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
   }
 
-  .stat-item:not(:last-child)::after {
-    display: none !important;
+  .stat-item:nth-child(2) {
+    border-right: none;
   }
 
-  .stat-value {
-    font-size: 1.2rem !important;
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-nav-links {
+    gap: 0.75rem;
   }
 
-  .stat-label {
-    font-size: 0.5rem !important;
+  ul.section-ul {
+    gap: 0.75rem !important;
   }
 
-  /* Home grid cards */
-  .home-card {
-    padding: 0.75rem 0.85rem !important;
+  ul.section-ul > li.section-li {
+    flex: 0 0 140px !important;
   }
 
-  .home-card .card-title {
-    font-size: 0.9rem !important;
+  .stat-item {
+    flex: 1 1 100%;
+    border-right: none;
   }
+}
 
-  .home-card .card-desc {
-    font-size: 0.85rem !important;
-  }
+// =============================================================================
+// MISC OVERRIDES - Remove any remaining gradients
+// =============================================================================
 
-  /* Folder hero */
-  .folder-hero {
-    padding: 0.75rem !important;
-    border-radius: 12px !important;
-  }
+// Kill gradient mask on overflow lists
+ul.overflow,
+ol.overflow {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
 
-  /* Folder intro */
-  .folder-intro {
-    padding: 0.5rem 0.6rem !important;
-    font-size: 0.85rem !important;
+  &.gradient-active {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
   }
+}
 
-  /* Section list tiles */
-  ul.section-ul > li.section-li a {
-    font-size: 0.65rem !important;
-    padding: 0.35rem 0.4rem !important;
-    height: 34px !important;
-  }
+// Ensure no linear gradients anywhere
+* {
+  background-image: none !important;
+}
 
-  /* Code blocks */
-  pre {
-    padding: 0.75rem !important;
-    font-size: 0.75rem !important;
-  }
+// Exception for SVG patterns/icons only
+svg, svg * {
+  background-image: initial !important;
+}
 
-  code {
-    font-size: 0.8rem !important;
-  }
+// Fix selection color
+::selection {
+  background: rgba(245, 240, 232, 0.3);
+  color: #ffffff;
+}
 
-  /* Callouts */
-  .callout {
-    padding: 0.5rem 0.6rem !important;
-  }
+// Clipboard button
+.clipboard-button {
+  background: transparent !important;
+  border: 1px dashed rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0 !important;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
 
-  /* Breadcrumbs */
-  .breadcrumb-element {
-    font-size: 0.6rem !important;
-  }
+pre:hover .clipboard-button {
+  opacity: 0.5;
+}
 
-  /* Tables */
-  .content table th,
-  .content table td {
-    padding: 0.3rem 0.4rem !important;
-    font-size: 0.85rem !important;
-  }
+.clipboard-button:hover {
+  opacity: 1 !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
 
-  /* Blockquotes */
-  .content blockquote {
-    padding: 0.6rem 0.8rem !important;
-    font-size: 0.9rem !important;
-  }
+// Graph (if used)
+.graph {
+  display: none !important;
 }
