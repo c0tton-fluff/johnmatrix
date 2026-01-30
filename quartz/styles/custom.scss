@@ -99,7 +99,7 @@ h1 {
 }
 
 h2 {
-  color: #7EC8E3 !important;  // Light blue
+  color: #f4d03f !important;  // Bright yellow
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -107,11 +107,11 @@ h2 {
   margin-top: 3rem;
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed rgba(126, 200, 227, 0.4);
+  border-bottom: 1px dashed rgba(244, 208, 63, 0.4);
 }
 
 h3 {
-  color: #C9A227 !important;  // Brass/gold
+  color: #f7dc6f !important;  // Softer yellow
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -122,6 +122,12 @@ h3 {
 p {
   line-height: 1.7;
   color: #ffffff !important;
+}
+
+// Bold text - red for emphasis
+strong, b {
+  color: #e74c3c !important;  // Red
+  font-weight: 600;
 }
 
 a {
@@ -286,14 +292,15 @@ a.internal {
 
 pre {
   background-color: #1a1a1a !important;
-  border: 1px solid rgba(126, 200, 227, 0.2) !important;
-  border-left: 3px solid #7EC8E3 !important;
+  border: 1px solid rgba(205, 165, 75, 0.2) !important;
+  border-left: 3px solid #cda54b !important;  // Brass accent
   border-radius: 0 !important;
   padding: 1.25rem !important;
   padding-left: 1.5rem !important;
   font-size: 0.85rem;
   box-shadow: none !important;
   overflow-x: auto;
+  overflow-y: hidden;  // No vertical scroll - code blocks expand to fit
 }
 
 pre::before {
@@ -303,12 +310,12 @@ pre::before {
 // Inline code (not in pre blocks)
 :not(pre) > code {
   font-family: 'JetBrains Mono', monospace !important;
-  background: rgba(126, 200, 227, 0.1) !important;
-  border: 1px solid rgba(126, 200, 227, 0.2) !important;
+  background: rgba(205, 165, 75, 0.1) !important;
+  border: 1px solid rgba(205, 165, 75, 0.3) !important;
   padding: 0.15rem 0.4rem !important;
   border-radius: 2px !important;
   font-size: 0.85em;
-  color: #7EC8E3 !important;
+  color: #cda54b !important;  // Brass
 }
 
 // Code inside pre blocks - let Shiki handle colors
@@ -316,7 +323,13 @@ pre code {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
-  // Don't override color - let Shiki syntax highlighting work
+  color: #e8e6e3;  // Fallback for unlabeled code blocks (no !important - Shiki inline styles override)
+}
+
+// Shiki wraps highlighted tokens in spans with inline styles
+// This ensures they're visible even if parent has color set
+pre code span {
+  color: inherit;
 }
 
 // =============================================================================
