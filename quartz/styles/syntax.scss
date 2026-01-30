@@ -1,17 +1,10 @@
+// Force dark theme for syntax highlighting
+// (saved-theme attr requires Darkmode component which is not in layout)
 code[data-theme*=" "] {
-  color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
-}
-
-code[data-theme*=" "] span {
-  color: var(--shiki-light);
-}
-
-[saved-theme="dark"] code[data-theme*=" "] {
   color: var(--shiki-dark);
   background-color: var(--shiki-dark-bg);
 }
 
-[saved-theme="dark"] code[data-theme*=" "] span {
+code[data-theme*=" "] span {
   color: var(--shiki-dark);
 }

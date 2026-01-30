@@ -21,8 +21,8 @@ body {
   background-image: none !important;
 }
 
-// Force white text globally
-p, li, span, td, th, div {
+// Force white text globally (no span - let Shiki syntax highlighting work)
+p, li, td, th, div {
   color: #ffffff !important;
 }
 
@@ -87,11 +87,11 @@ footer {
 // =============================================================================
 
 h1, h2, h3, h4, h5, h6 {
-  color: #ffffff !important;
   font-family: 'JetBrains Mono', monospace !important;
 }
 
 h1 {
+  color: #ffffff !important;
   font-size: 2rem;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -99,6 +99,7 @@ h1 {
 }
 
 h2 {
+  color: #7EC8E3 !important;  // Light blue
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -106,13 +107,13 @@ h2 {
   margin-top: 3rem;
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+  border-bottom: 1px dashed rgba(126, 200, 227, 0.4);
 }
 
 h3 {
+  color: #C9A227 !important;  // Brass/gold
   font-size: 0.9rem;
   font-weight: 600;
-  color: #e8e6e3 !important;
   letter-spacing: 0.1em;
   margin-top: 2rem;
   margin-bottom: 0.5rem;
@@ -279,45 +280,43 @@ a.internal {
 }
 
 // =============================================================================
-// CODE BLOCKS
+// CODE BLOCKS - Obsidian-style with accent border
+// Shiki applies inline styles, so we only style the container
 // =============================================================================
 
-pre,
-code[class*="language-"],
-pre[class*="language-"] {
-  background-color: #000000 !important;
-  border: 1px dashed rgba(255, 255, 255, 0.15) !important;
+pre {
+  background-color: #1a1a1a !important;
+  border: 1px solid rgba(126, 200, 227, 0.2) !important;
+  border-left: 3px solid #7EC8E3 !important;
   border-radius: 0 !important;
   padding: 1.25rem !important;
+  padding-left: 1.5rem !important;
   font-size: 0.85rem;
   box-shadow: none !important;
+  overflow-x: auto;
 }
 
-pre::before,
-pre[class*="language-"]::before {
+pre::before {
   display: none !important;
 }
 
-code {
+// Inline code (not in pre blocks)
+:not(pre) > code {
   font-family: 'JetBrains Mono', monospace !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: none !important;
+  background: rgba(126, 200, 227, 0.1) !important;
+  border: 1px solid rgba(126, 200, 227, 0.2) !important;
   padding: 0.15rem 0.4rem !important;
-  border-radius: 0 !important;
+  border-radius: 2px !important;
   font-size: 0.85em;
-  color: #e8e6e3 !important;
+  color: #7EC8E3 !important;
 }
 
+// Code inside pre blocks - let Shiki handle colors
 pre code {
   background: transparent !important;
+  border: none !important;
   padding: 0 !important;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: #666666 !important;
+  // Don't override color - let Shiki syntax highlighting work
 }
 
 // =============================================================================
