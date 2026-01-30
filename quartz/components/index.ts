@@ -26,6 +26,9 @@ import ConditionalRender from "./ConditionalRender"
 import MachineCard from "../../components/MachineCard"
 import HomeButton from "../../components/HomeButton"
 import TopNav from "../../components/TopNav"
+import TagFilter from "../../components/TagFilter"
+import ReadingProgress from "../../components/ReadingProgress"
+import BackToTop from "../../components/BackToTop"
 
 export {
   ArticleTitle,
@@ -56,4 +59,7 @@ export {
   MachineCard,
   HomeButton,
   TopNav,
+  TagFilter,
+  ReadingProgress,
+  BackToTop,
 }
