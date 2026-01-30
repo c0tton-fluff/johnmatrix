@@ -7,6 +7,9 @@ tags:
   - burpsuite
   - mcp
   - account-takeover
+difficulty: medium
+status: completed
+vuln: idor
 ---
 
 - Very cool lab today!

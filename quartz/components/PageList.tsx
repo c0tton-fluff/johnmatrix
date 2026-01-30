@@ -69,9 +69,11 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
       {list.map((page) => {
         const title = page.frontmatter?.title
         const tags = page.frontmatter?.tags ?? []
+        const vuln = page.frontmatter?.vuln as string | undefined
+        const allTags = vuln ? [...tags, vuln] : tags
 
         return (
-          <li class="section-li">
+          <li class="section-li" data-tags={allTags.join(",")}>
             <div class="section">
               <p class="meta">
                 {page.dates && <Date date={getDate(cfg, page)!} locale={cfg.locale} />}
