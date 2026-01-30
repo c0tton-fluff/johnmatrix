@@ -49,7 +49,6 @@ export const defaultListPageLayout: PageLayout = {
   beforeBody: [
     Component.Breadcrumbs(),
     Component.ArticleTitle(),
-    Component.TagFilter(),
   ],
   left: [
     Component.Search(),

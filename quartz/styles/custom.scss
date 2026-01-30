@@ -460,8 +460,18 @@ body[data-slug="index"] .content table {
 // FOLDER PAGES / PAGE LISTING
 // =============================================================================
 
+// Hide the title "BugForge" on folder pages that have a hero image
+body:has(.folder-hero) .article-title {
+  display: none !important;
+}
+
+// Hide breadcrumbs on folder hero pages
+body:has(.folder-hero) .breadcrumb-container {
+  display: none !important;
+}
+
 .page-listing {
-  margin-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
