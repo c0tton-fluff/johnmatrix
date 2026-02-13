@@ -1,290 +1,228 @@
+---
+title: Burp MCP Setup
+tags:
+  - mcp
+  - burp
+  - claude-code
+---
 
-# Burp MCP + Codex CLI
+# Burp MCP + Claude Code
 
-- This guide shows how to connect Burp Suite MCP Server to Codex CLI so that Codex can reason directly on your real HTTP traffic — no API keys, no scanning, no fuzzing.
+Connect Burp Suite Professional to Claude Code via a custom Go MCP server. Claude gets clean, structured access to Burp's HTTP engine, proxy history, scanner, Repeater, and Intruder — with body limits, auto HTTP/2 detection, and no blob responses.
 
-- You end up with a reasoning engine wired directly into your interception stack.
+## Architecture
 
-## What you get
+```
+Claude Code  -->  stdio  -->  burp-mcp-server (Go)  -->  SSE  -->  Burp Extension (port 9876)
+```
 
-- Passive vuln discovery
+The Go binary acts as:
+- **MCP server** (stdio) to Claude Code — exposes 7 clean tools
+- **MCP client** (SSE) to Burp's native MCP extension — calls Burp's 14+ raw tools
 
-- IDOR / auth bypass / SSRF / logic flaw detection
+This replaces the old `mcp-proxy.jar` (Java stdio proxy) which returned verbose `HttpRequestResponse{...}` blobs with no body limits.
 
-- Report writing from real Burp evidence
+## What You Get
 
-- No API keys
+- 7 clean tools replacing Burp's 14+ verbose ones
+- Auto HTTP/2 detection (tries HTTP/2 first, falls back to HTTP/1.1 on timeout/502)
+- 2KB default body limit (configurable) — no more 873KB response blobs
+- Structured JSON responses: `{statusCode, headers, body, bodySize, truncated}`
+- Proxy history with regex filter and lean summaries
+- Scanner findings as structured `{name, severity, confidence, url, issueDetail}`
 
-- Full local traffic control
+## Prerequisites
+
+- Burp Suite Professional (Community has limited MCP support)
+- Go 1.21+ (for building the binary)
+- Claude Code CLI
 
 ## Installation
 
-### 1. Install Burp MCP Server
-- Install MCP Server from Burp’s BApp Store.
+### 1. Install Burp MCP Extension
 
-Once installed, open its tab and click `Exctract server proxy jar`
+In Burp: **Extensions** > **BApp Store** > search **"MCP Server"** > Install
 
-![Daily7](/Brain%20Sharing/img/burp-01.png)
- 
-- This then downloads `mcp-proxy.jar`
+### 2. Enable MCP Server
 
-### 2. Configure Codex MCP
+Navigate to the **MCP** tab in Burp's top navigation:
+- Toggle **Enabled**
+- Default address: `127.0.0.1:9876`
+- **Uncheck** "Require approval for history access" (recommended for CTF/testing)
 
-- Go to ~/.codex.config.toml and edit that
-
-- Add this:
+### 3. Build the Custom MCP Server
 
 ```bash
-[mcp_servers.burp]
-command = "java"
-args = ["-jar", "/absolute/path/to/mcp-proxy.jar", "--sse-url", "http://127.0.0.1:19876"]
+cd ~/Documents/burp-mcp-server
+go build -o burp-mcp-server .
 ```
 
-- Make sure you remember to change the path!
+The source is at `~/Documents/burp-mcp-server/`. Structure:
 
-### 3. Install Caddy reverse proxy
-- Burp MCP currently enforces strict `Origin validation` and rejects extra headers sent by Codex, which causes handshake failures see more here.
-
-- We solve this with a local reverse proxy.
-
-### 3. Install Caddy:
-
-```bash
-brew install caddy
+```
+burp-mcp-server/
+├── cmd/
+│   ├── root.go           # CLI root command + --burp-url flag
+│   └── serve.go          # Connect to Burp SSE + start stdio server
+├── internal/
+│   ├── burp/
+│   │   ├── client.go     # SSE client wrapper with timeouts
+│   │   └── parser.go     # HttpRequestResponse unwrapper + HTTP parser
+│   └── tools/
+│       ├── send_request.go        # Unified send (HTTP/1.1 + HTTP/2)
+│       ├── get_proxy_history.go   # Proxy history with regex filter
+│       ├── get_scanner_issues.go  # Structured scanner findings
+│       ├── create_repeater_tab.go # Stage in Repeater
+│       ├── send_to_intruder.go    # Send to Intruder
+│       └── encode.go              # URL + Base64 encode/decode
+├── main.go
+└── go.mod
 ```
 
-### 4. Create the Caddyfile
+### 4. Configure Claude Code
 
-Create with `nvim` or `nano`
+Edit `~/.mcp.json`:
 
-```txt
-~/burp-mcp/Caddyfile
-```
-
-Paste this into the file:
-
-
-```txt
-:19876 {
-  reverse_proxy 127.0.0.1:9876 {
-    header_up Host "127.0.0.1:9876"
-    header_up Origin "http://127.0.0.1:9876"
-
-    header_up -User-Agent
-    header_up -Accept
-    header_up -Accept-Encoding
-    header_up -Connection
-    header_up -Referer
-    header_up -Sec-Fetch-Site
-    header_up -Sec-Fetch-Mode
-    header_up -Sec-Fetch-Dest
+```json
+{
+  "mcpServers": {
+    "burp": {
+      "command": "/Users/YOU/Documents/burp-mcp-server/burp-mcp-server",
+      "args": ["serve"],
+      "env": {
+        "BURP_MCP_URL": "http://127.0.0.1:9876/sse"
+      }
+    }
   }
 }
 ```
 
-### 5. Start everything up
+### 5. Verify
 
 ```bash
-caddy run --config ~/burp-mcp/Caddyfile &
+# Check Burp SSE is running
+curl -N http://127.0.0.1:9876/sse
+# Should return: data: /message?sessionId=...
 
-codex
+# Restart Claude Code
+claude -c
 ```
 
-### 6. Verify 
+You should see `burp_send_request`, `burp_get_proxy_history`, etc. in available tools.
 
-- When inside of codex type in `/mcp`
+## Available Tools
 
-You should receive this:
+| Tool | Description | Key Params |
+|------|-------------|------------|
+| `burp_send_request` | Send HTTP request, auto HTTP/2 detection | `raw`, `host`, `port`, `tls`, `bodyLimit`, `bodyOffset` |
+| `burp_get_proxy_history` | Proxy history with optional regex | `count`, `offset`, `regex` |
+| `burp_get_scanner_issues` | Structured scanner findings | `count`, `offset` |
+| `burp_create_repeater_tab` | Stage request in Repeater | `raw`, `host`, `port`, `tls`, `tabName` |
+| `burp_send_to_intruder` | Send to Intruder | `raw`, `host`, `port`, `tls`, `tabName` |
+| `burp_encode` | URL or Base64 encode | `content`, `type` (url/base64) |
+| `burp_decode` | URL or Base64 decode | `content`, `type` (url/base64) |
 
-![Daily7](/Brain%20Sharing/img/burp-02.png)
+## Example: CTF in 3 Requests
 
-### 7. Test it out
-
-- You can use those examples:
-
-```txt
-From Burp history, find all endpoints that use numeric IDs and lack Authorization headers.
 ```
-```txt
-Using Burp MCP, identify potential IDOR endpoints and suggest safe confirmation steps.
-```
-```txt
-From Burp data, write a vulnerability report with reproduction, impact and remediation.
+1. burp_send_request  →  GET /  →  identify Express SPA
+2. burp_send_request  →  POST /api/register  →  get JWT with role:"user"
+3. burp_send_request  →  GET /api/admin/flag  →  BAC, no role check → flag
 ```
 
-### 8. One-command launcher (optional)
-
-- Add to your ~/.zshrc (check your paths first):
-
-```bash
-burpcodex() {
-  emulate -L zsh
-  setopt pipefail
-
-  local CADDYFILE="$HOME/burp-mcp/Caddyfile"
-  local LOG="/tmp/burp-mcp-caddy.log"
-  local CADDY_PID=""
-
-  if ! command -v caddy >/dev/null 2>&1; then
-    echo "[!] caddy not found (brew install caddy)"
-    return 1
-  fi
-  if ! command -v codex >/dev/null 2>&1; then
-    echo "[!] codex not found in PATH"
-    return 1
-  fi
-  if [[ ! -f "$CADDYFILE" ]]; then
-    echo "[!] Caddyfile not found: $CADDYFILE"
-    return 1
-  fi
-
-  cleanup() {
-    # 1) Kill captured PID (if still alive)
-    if [[ -n "$CADDY_PID" ]] && kill -0 "$CADDY_PID" 2>/dev/null; then
-      kill -TERM "$CADDY_PID" 2>/dev/null
-      sleep 0.2
-      kill -KILL "$CADDY_PID" 2>/dev/null
-      wait "$CADDY_PID" 2>/dev/null
-    fi
-
-    # 2) Fallback: kill anything still listening on 19876
-    local pids
-    pids="$(lsof -ti tcp:19876 2>/dev/null | tr '\n' ' ')"
-    if [[ -n "$pids" ]]; then
-      kill -TERM $pids 2>/dev/null
-      sleep 0.2
-      kill -KILL $pids 2>/dev/null
-    fi
-  }
-
-  trap 'cleanup; return 130' INT TERM
-  trap 'cleanup' EXIT
-
-  # Start caddy
-  caddy run --config "$CADDYFILE" >"$LOG" 2>&1 &
-  CADDY_PID=$!
-  echo "[*] Caddy started (pid=$CADDY_PID) - log: $LOG"
-
-  # Run codex (foreground)
-  command codex "$@"
-
-  # Ensure cleanup even if trap didn't trigger for some reason
-  cleanup
-  trap - INT TERM EXIT
+Response format (clean JSON, not blobs):
+```json
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Powered-By": "Express"
+  },
+  "body": "{\"flag\":\"bug{...}\"}",
+  "bodySize": 48,
+  "truncated": false
 }
 ```
 
-### 9. Tips and troublshooting
+## Custom vs mcp-proxy.jar
 
+| | Custom Go Binary | mcp-proxy.jar |
+|--|-----------------|---------------|
+| Response format | Clean JSON | `HttpRequestResponse{...}` blob |
+| Body limits | 2KB default | None (873KB+ responses) |
+| HTTP version | Auto-detect with fallback | Separate tools, 502 errors |
+| Tool count | 7 | 14+ |
+| Dependencies | Single Go binary | Java 21+ |
+| Timeouts | 15s HTTP/2, 30s default | None (hangs forever) |
 
-- If Render Page crash:
+## Troubleshooting
 
-`sudo sysctl -w kernel.unprivileged_userns_clone=1`
+**Tools not appearing after restart:**
+The Go binary might be failing to connect. Test manually:
+```bash
+BURP_MCP_URL="http://127.0.0.1:9876/sse" ./burp-mcp-server serve < /dev/null 2>&1
+```
+Should print: `Connecting... Connected... ready (stdio)`
 
-- If embedded browser crash due sandbox:
+**Request hangs / AbortError:**
+The HTTP/2 attempt may timeout on HTTP/1.1-only targets. The 15s timeout + fallback handles this automatically. If it persists, check Burp's MCP tab is enabled.
 
-`find .BurpSuite -name chrome-sandbox -exec chown root:root {} \; -exec chmod 4755 {} \;`
+**Rebuilding after changes:**
+```bash
+cd ~/Documents/burp-mcp-server && go build -o burp-mcp-server .
+# Then restart Claude Code
+```
 
-- Scope with all subdomains:
+---
 
-`.*\.test\.com$`
+## General Burp Tips
 
-- Use Intruder to target specific parameters for scanning 
-  - Right click: actively scan defined insertion points 
+### Request Visibility
 
-- Configuration
-	- Project Options -> HTTP -> Redirections -> Enable JavaScript-driven
-	- User Options -> Misc -> Proxy Interception -> Always disabled
-	- Target -> Site Map -> Show all && Show only in-scope items
+| Burp Tab | MCP `send_request`? | `create_repeater_tab`? |
+|----------|-------|------|
+| Proxy > HTTP history | No (bypasses proxy) | No |
+| Repeater | No | Yes (creates tab) |
+| Logger/Logger++ | Yes | No |
+| Target > Site map | Yes | No |
 
-- XSS Validator extension
-	1) Start xss.js phantomjs $HOME/.BurpSuite/bapps/xss.js
-	2) Send Request to Intruder
-	3) Mark Position 
-	4) Import xss-payload-list from $Tools into xssValidator
-	5) Change Payload Type to Extension Generated
-	6) Change Payload Process to Invoke-Burp Extension - XSS Validator
-	7) Add Grep-Match rule as per XSS Validator
-	8) Start
+### Essential BApp Extensions
 
-- Filter the noise
+**Must-have:** Autorize, Active Scan++, Param Miner, Backslash Powered Scanner, Logger++, Hackvertor, JSON Web Tokens, JS Link Finder
 
-`https://gist.github.com/vsec7/d5518a432b70714bedad79e4963ff320`
+**Nice-to-have:** Collaborator Everywhere, Server-Side Prototype Pollution, GAP, Sensitive Discoverer
 
-- Filter the noise TLDR
-- TLS Pass Through
-	- .*\.google\.com
-	- .*\.gstatic\.com
-	- .*\.googleapis\.com
-	- .*\.pki\.goog
-	- .*\.mozilla\.com
+### Autorize (IDOR/BAC Testing)
+1. Copy cookies from low-priv user, paste in Autorize
+2. Set scope filters
+3. Toggle Autorize ON
+4. Navigate as high-priv user — Autorize replays with low-priv cookies
 
-- Send swagger to burp
+### Collaborator Alternatives
+interactsh.com, ceye.io, requestcatcher.com, canarytokens.org, webhook.site, ngrok.com, beeceptor.com
 
-`https://github.com/RhinoSecurityLabs/Swagger-EZ`
+### Noise Reduction (TLS Pass Through)
+```
+.*\.google\.com
+.*\.gstatic\.com
+.*\.googleapis\.com
+.*\.pki\.goog
+.*\.mozilla\.com
+```
 
-- Hosted: 
+### Remote Burp (VPS to Local)
+```bash
+# On local machine — tunnel VPS port 8080 to local Burp proxy
+ssh -R 8080:127.0.0.1:8080 root@VPS_IP -f -N
 
-`https://rhinosecuritylabs.github.io/Swagger-EZ/`
+# On VPS — send traffic through tunnel
+curl URL -x http://127.0.0.1:8080
+```
 
-- If some request/response breaks or slow down Burp
-	- Project options -> HTTP -> Streaming responses -> Add url and uncheck "Store streaming responses...."
+### IP Rotation
+- [fireprox](https://github.com/ustayready/fireprox) — AWS API Gateway rotation
+- [IPRotate Burp Extension](https://github.com/RhinoSecurityLabs/IPRotate_Burp_Extension)
 
-- Burp Extension rotate IP yo avoid IP restrictions
-
-`https://github.com/RhinoSecurityLabs/IPRotate_Burp_Extension`
-
-- Collab/SSRF/pingback alternative
-interactsh.com
-ceye.io
-requestcatcher.com
-canarytokens.org
-webhook.site
-ngrok.com
-pingb.in
-swin.es
-requestbin.net
-ssrftest.com
-rbnd.gl0.eu
-dnslog.cn
-beeceptor.com
-
-- Run private collaborator instance in AWS
-
-`https://github.com/Leoid/AWSBurpCollaborator`
-
-- Run your own collab server
-
-`https://github.com/yeswehack/pwn-machine`
-
-- Wordlist from burp project file
-`cat project.burp | strings | tok | sort -u > custom_wordlist.txt`
-
-- Autorize:
-	1. Copy cookies from low priv user and paste in Autorize
-	2. Set filters (scope, regex)
-	3. Set Autorize ON
-	4. Navigate as high priv user
-  
-- Turbo Intruder
-`basic.py` -> Set %s in the injection point and specify wordlist in script
-`multipleParameters.py` -> Set %s in all the injection points and specify the wordlists in script
-
-- Match and Replace
-
-`https://github.com/daffainfo/match-replace-burp`
-
-- Customize Audit Scans
-
-`Configure your audit profile` -> Issues reported -> Individual issues -> right-click on "Extension generated issues" -> "Edit detection methods"
-- Works on most of issues like SQLi
-
-- Send to local Burp from VPS
-	- In local computer
-	`ssh -R 8080:127.0.0.1:8080 root@VPS_IP -f -N`
-	- In VPS
-	`curl URL -x http://127.0.0.1:8080`
-
-- Ip rotation
-`https://github.com/ustayready/fireprox
-
+### Streaming Response Fix
+If a response breaks or slows Burp:
+Project Options > HTTP > Streaming Responses > Add URL, uncheck "Store streaming responses"
