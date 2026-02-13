@@ -125,9 +125,9 @@ You should see `burp_send_request`, `burp_get_proxy_history`, etc. in available 
 ## Example: CTF in 3 Requests
 
 ```
-1. burp_send_request  →  GET /  →  identify Express SPA
-2. burp_send_request  →  POST /api/register  →  get JWT with role:"user"
-3. burp_send_request  →  GET /api/admin/flag  →  BAC, no role check → flag
+1. burp_send_request  →  GET /  →  identify tech stack, discover endpoints
+2. burp_send_request  →  POST /api/login  →  authenticate, get session token
+3. burp_send_request  →  GET /api/admin/users  →  test access controls
 ```
 
 Response format (clean JSON, not blobs):
@@ -138,8 +138,8 @@ Response format (clean JSON, not blobs):
     "Content-Type": "application/json; charset=utf-8",
     "X-Powered-By": "Express"
   },
-  "body": "{\"flag\":\"bug{...}\"}",
-  "bodySize": 48,
+  "body": "{\"id\":1,\"username\":\"admin\",\"role\":\"superuser\"}",
+  "bodySize": 52,
   "truncated": false
 }
 ```

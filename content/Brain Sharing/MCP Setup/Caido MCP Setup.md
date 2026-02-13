@@ -128,9 +128,9 @@ Restart Claude Code and check that `caido` appears as a connected MCP server. Tr
 ## Example: CTF in 3 Requests
 
 ```
-1. caido_send_request  →  GET /  →  identify Express SPA
-2. caido_send_request  →  POST /api/register  →  get JWT with role:"user"
-3. caido_send_request  →  GET /api/admin/flag  →  BAC, no role check → flag
+1. caido_send_request  →  GET /  →  identify tech stack, discover endpoints
+2. caido_send_request  →  POST /api/login  →  authenticate, get session token
+3. caido_send_request  →  GET /api/admin/users  →  test access controls
 ```
 
 ## Caido vs Burp MCP Comparison
