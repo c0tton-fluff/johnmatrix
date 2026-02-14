@@ -103,9 +103,13 @@ Content-Type: application/json
 
 - Response: `200 "Comment updated successfully"`
 
+![Flag revealed](/BugForge/img/ottersqli-03.png)
+
 
 - Comment successfully modified without any authentication
 - The flag is revealed through this broken access control
+- Now, in Repeater, send a simple GET command to grab the comments
+  - Add your `Bearer` from before
 
 ![Flag revealed](/BugForge/img/ottersqli-04.png)
 
