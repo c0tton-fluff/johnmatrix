@@ -103,7 +103,6 @@ Content-Type: application/json
 
 - Response: `200 "Comment updated successfully"`
 
-![No-auth PUT request in Repeater](/BugForge/img/ottersqli-03.png)
 
 - Comment successfully modified without any authentication
 - The flag is revealed through this broken access control
