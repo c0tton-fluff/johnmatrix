@@ -61,11 +61,11 @@ tags:
 ### Vulnerability Classification
 - OWASP Top 10: A01 Broken Access Control / A04 Insecure Design (Business Logic)
 - Vulnerability Type: Discount stacking via input type confusion
-- CWE: CWE-20 – Improper Input Validation
+- CWE: CWE-20 - Improper Input Validation
 
 ### Proof of Concept (HTTP)
 
-```html
+```
 POST /api/orders
   Authorization: Bearer <token>
   Content-Type: application/json
@@ -85,7 +85,7 @@ POST /api/orders
   Request succeeds (`200 OK`) and discount is stacked.
 
 ### Root Cause
-- The API accepts non‑scalar input for discount and applies each entry without enforcing “one code per order” business rules.
+- The API accepts non-scalar input for discount and applies each entry without enforcing “one code per order” business rules.
 
 ### Remediation
 - Enforce strict input validation: discount must be a single string or null

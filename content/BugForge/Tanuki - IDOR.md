@@ -7,9 +7,6 @@ tags:
   - burpsuite
   - mcp
   - account-takeover
-difficulty: medium
-status: completed
-vuln: idor
 ---
 
 - Very cool lab today!
@@ -149,9 +146,9 @@ Let me also verify the read IDOR exists:
 ### Remediation
 
 - Immediate Fix:
-  ```bash
+  ```javascript
    // Before database operation, verify ownership
-   
+
   app.put('/api/profile/:username', authMiddleware, (req, res) => {
     if (req.params.username !== req.user.username) {
       return res.status(403).json({ error: 'Forbidden' });

@@ -1,3 +1,11 @@
+---
+title: Sokudo - BAC #2
+tags:
+  - bugforge
+  - broken-access-control
+  - caido-mcp
+---
+
 - Here we go again!
 
 ![](/BugForge/img/soku1.png)

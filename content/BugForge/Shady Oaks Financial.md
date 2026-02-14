@@ -51,7 +51,7 @@ tags:
 ## Security Takeaways
 ### Impact
 
-  - Non‑admin users can access admin‑only endpoints
+  - Non-admin users can access admin-only endpoints
   - Exposure of sensitive admin data (flag)
   - Confirms broken authorization at critical API paths
 
@@ -59,14 +59,14 @@ tags:
 
   - OWASP Top 10: Broken Access Control
   - Vulnerability Type: Privilege bypass on admin endpoint
-  - CWE: CWE-285 – Improper Authorization
+  - CWE: CWE-285 - Improper Authorization
 
 ### Root Cause
-  - The /api/admin/flag endpoint verifies authentication but does not enforce role‑based authorization, allowing a standard user JWT to access admin data.
+  - The /api/admin/flag endpoint verifies authentication but does not enforce role-based authorization, allowing a standard user JWT to access admin data.
 
 ### Remediation
 
   - Enforce role checks on all /api/admin/* routes
   - Separate admin routes behind dedicated middleware
   - Add automated tests for authorization boundaries
-  - Monitor and alert on access to admin endpoints by non‑admin roles
+  - Monitor and alert on access to admin endpoints by non-admin roles

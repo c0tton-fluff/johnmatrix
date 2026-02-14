@@ -1,4 +1,3 @@
-
 ---
 title: Ottergram - XSS
 tags:
@@ -13,14 +12,14 @@ tags:
 - As I usually utilise an MCP with Claude, today I only used Claude CLI mainly for finding the right payload and direction
 - Challenging but very satisfying flag find!
 
-![Daily](/BugForge/img/otterxss-01.png)
+![Ottergram XSS challenge](/BugForge/img/otterxss-01.png)
 
 
 ## Reconnaissance
 
   1. Endpoint Discovery (via Burp Proxy History)
 
-  ```html
+  ```
   GET  /api/profile/{username}   - View any user's profile
   PUT  /api/profile              - Update own profile
   GET  /api/users                - List users
@@ -36,7 +35,7 @@ tags:
 
   2. User Enumeration
 
- ```html
+ ```
   id:1 - otter_lover
   id:2 - admin (role: admin)
   id:3 - sea_otter_fan
@@ -55,11 +54,11 @@ tags:
 
 | Input Point | Test Payload | Result |
   |-------------|--------------|--------|
-  | Username (register) | `<img src=x onerror=alert(1)>` | ✅ Stored |
-  | Message content | `<script>alert(1)</script>` | ✅ Stored |
-  | Comment content | `<img/src/onerror=alert(1)>` | ✅ Stored |
-  | Profile bio | XSS payload | ✅ Stored |
-  | Profile full_name | XSS payload | ✅ Stored |
+  | Username (register) | `<img src=x onerror=alert(1)>` | Stored |
+  | Message content | `<script>alert(1)</script>` | Stored |
+  | Comment content | `<img/src/onerror=alert(1)>` | Stored |
+  | Profile bio | XSS payload | Stored |
+  | Profile full_name | XSS payload | Stored |
 
 
   ### Searching the minified JS for dangerous patterns:
@@ -83,11 +82,11 @@ tags:
   localStorage.setItem("user",...)
  ```
 
-## Attack chains 
+## Attack chains
 
 - After a while, I started understanding the Flow
 
-  1. Admin logs in → receives flag in response → stored in `localStorage`
+  1. Admin logs in - receives flag in response - stored in `localStorage`
   2. Messages are rendered with `dangerouslySetInnerHTML`
   3. XSS in message content executes when viewed
   4. Admin bot periodically checks/views messages
@@ -95,7 +94,7 @@ tags:
 ### Payload
 - My friendly Claude was able to provide me with the payload
 - This token works because:
-  -  img src=x fails to load → triggers onerror
+  -  img src=x fails to load - triggers onerror
   - Reads admin's token and flag from `localStorage`
   - Uses admin's own token to send message back to attacker (user id 4 in this case)
 
@@ -127,7 +126,7 @@ tags:
   ```
 ### Result
 
-  ```bash
+  ```json
   [{
     "sender_id": 2,
     "sender_username": "admin",
@@ -135,7 +134,7 @@ tags:
   }]
   ```
 
-## Methodology 
+## Methodology
 
   - Step 1: Map All Input Points
 	  - Test every field that accepts user input with basic XSS: `<img src=x onerror=alert(1)>`
@@ -169,7 +168,7 @@ tags:
   - Step 5: Design Exfiltration
 	  - Can't use external webhook (blocked/no internet)
 	  - Use the app's own features (messaging API)
-	  - Need admin's auth token → also in localStorage
+	  - Need admin's auth token - also in localStorage
 
 ## Key Lessons
 
@@ -182,4 +181,4 @@ tags:
 
 - Tested very quickly, however I gave Claude an idea of what to look for since I did not want to burn tokens searching many other ways
 
-![Daily](/BugForge/img/otterxss-02.png)
+![MCP XSS testing](/BugForge/img/otterxss-02.png)

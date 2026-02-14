@@ -1,3 +1,12 @@
+---
+title: Shady Oaks Financial - #2
+tags:
+  - bugforge
+  - broken-access-control
+  - mass-assignment
+  - caido-mcp
+---
+
 - Full send with `Caido MCP` today to test it on a different application.
 - We are met with familiar page, steps away from the riches!
 
@@ -55,7 +64,7 @@
   - Server blindly accepts user-supplied `role` value in upgrade request
   - No allowlist validation for permitted role values
   - Exact string matching (`administrator`) without role hierarchy
-- 
+
   **Attack Chain**:
   1. Authenticate as regular user
   2. Send `POST /api/upgrade` with `{"role":"administrator"}`

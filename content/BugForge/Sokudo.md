@@ -113,24 +113,24 @@ javascript:(function(){var scripts=document.getElementsByTagName("script"),regex
 ## Security Takeaways
 ### Impact
 
-  - Unauthorized access to admin‑only endpoints and sensitive data
-  - Privilege escalation by modifying client‑controlled JWT claims
+  - Unauthorized access to admin-only endpoints and sensitive data
+  - Privilege escalation by modifying client-controlled JWT claims
   - Demonstrates broken authorization at the API layer
 
 ### Vulnerability Classification
 
   - OWASP Top 10: Broken Access Control
   - Vulnerability Type: JWT claim manipulation / privilege escalation
-  - CWE: CWE-269 – Improper Privilege Management
+  - CWE: CWE-269 - Improper Privilege Management
 
 ### Root Cause
-  - The backend trusts client‑supplied JWT claims (e.g., role/id) without validating them against server‑side authorization logic, allowing users to escalate privileges.
+  - The backend trusts client-supplied JWT claims (e.g., role/id) without validating them against server-side authorization logic, allowing users to escalate privileges.
 
 ### Remediation
 
   - Never trust JWT claims alone for authorization decisions
-  - Re‑validate user roles/permissions server‑side on every request
+  - Re-validate user roles/permissions server-side on every request
   - Enforce strict JWT signing and verification (reject alg: none)
-  - Use least‑privilege roles and separate admin endpoints
+  - Use least-privilege roles and separate admin endpoints
 
 

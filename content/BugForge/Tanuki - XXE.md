@@ -28,7 +28,7 @@ tags:
 - It first asks a lot of questions about authorization to do this ( as I instructed it) so we can crack on right after
 
 ```bash
-Great — authorized and no auth. Here’s a safe, step‑by‑step XXE walkthrough you can follow manually. I’ll keep it minimal and reproducible.
+Great - authorized and no auth. Here’s a safe, step-by-step XXE walkthrough you can follow manually. I’ll keep it minimal and reproducible.
 
   1) Find an XML entry point
 
@@ -44,7 +44,7 @@ Great — authorized and no auth. Here’s a safe, step‑by‑step XXE walkthro
   Success looks like:
 
   - The endpoint returns a response tied to your XML content, or
-  - It errors with XML‑specific parsing messages.
+  - It errors with XML-specific parsing messages.
 
   3) Check for DTD support (baseline XXE)
   Try an inline DTD with a harmless entity to prove expansion.
@@ -74,7 +74,7 @@ Great — authorized and no auth. Here’s a safe, step‑by‑step XXE walkthro
   If /etc/hostname doesn’t show, try /etc/hosts or /etc/passwd (CTF only).
 
   5) Blind XXE (if no response reflection)
-  If content is not reflected, use an out‑of‑band (OOB) signal. For a CTF, you can set up a temporary listener on a collaborator or your own web server and load a URL
+  If content is not reflected, use an out-of-band (OOB) signal. For a CTF, you can set up a temporary listener on a collaborator or your own web server and load a URL
   entity. Example (replace with your own URL):
 
   <?xml version="1.0"?>
@@ -151,7 +151,7 @@ Great — authorized and no auth. Here’s a safe, step‑by‑step XXE walkthro
 - It also decided to give me all information how to run through Burp
 
 ```bash
-You’ve got a JSON sample — for XXE you need to find an XML import path (some apps accept both JSON and XML). Here’s how to turn that into a safe PoC if the import
+You’ve got a JSON sample - for XXE you need to find an XML import path (some apps accept both JSON and XML). Here’s how to turn that into a safe PoC if the import
   endpoint accepts XML.
 
   1) Convert your deck to XML (baseline)
@@ -176,7 +176,7 @@ You’ve got a JSON sample — for XXE you need to find an XML import path (some
   - Replace the JSON body with that XML
   - Send
 
-  If it parses, you’ll get a valid response or an XML‑related error.
+  If it parses, you’ll get a valid response or an XML-related error.
 
   2) XXE PoC (safe, visible)
   If XML is accepted, test entity expansion:
@@ -221,7 +221,7 @@ You’ve got a JSON sample — for XXE you need to find an XML import path (some
   Success indicator: the description shows host data.
 
   If the endpoint only accepts JSON, you won’t get XXE through this path. In that case, you need to find the XML parser endpoint first (import/upload, SOAP, or
-  XML‑based API).
+  XML-based API).
 ```
 
 - It has taken much longer than I expected as it could not read it all because the flag was in the `<front>` tag.
@@ -240,7 +240,7 @@ I can’t run it myself, but your evidence shows the XXE worked: the deck descri
 ### Vulnerability Classification
   - OWASP Top 10: A05 Security Misconfiguration / A01 Broken Access Control (data exposure)
   - Vulnerability Type: XML External Entity (XXE)
-  - CWE: CWE‑611 – Improper Restriction of XML External Entity Reference
+  - CWE: CWE-611 - Improper Restriction of XML External Entity Reference
 
 ### Root Cause
   - XML parser is configured to allow DTDs and external entity resolution during import.
@@ -249,4 +249,4 @@ I can’t run it myself, but your evidence shows the XXE worked: the deck descri
   - Disable DTDs and external entities in the XML parser.
   - Use a secure XML parser configuration (disallow external entity resolution and DOCTYPE).
   - Validate the import format strictly and reject any XML containing <!DOCTYPE> declarations.
-  - Add server‑side content sanitization for imported fields.
+  - Add server-side content sanitization for imported fields.

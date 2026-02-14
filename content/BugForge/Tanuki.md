@@ -12,7 +12,7 @@ tags:
 
 ![Daily](/BugForge/img/tanuki-01.png)
 
-# Enumeration 
+## Enumeration
 
 - We get a landing page, so as usual we can register
 ![Daily2](/BugForge/img/tanuki-02.png)
@@ -74,14 +74,14 @@ tags:
 
   - OWASP Top 10: Broken Access Control
   - Vulnerability Type: IDOR (Insecure Direct Object Reference)
-  - CWE: CWE-639 – Authorization Bypass Through User-Controlled Key
+  - CWE: CWE-639 - Authorization Bypass Through User-Controlled Key
 
-  Root Cause
-  The backend trusts client‑controlled identifiers (e.g. resource IDs in GET requests) without verifying that the authenticated user is allowed to access the referenced object.
+### Root Cause
+  The backend trusts client-controlled identifiers (e.g. resource IDs in GET requests) without verifying that the authenticated user is allowed to access the referenced object.
 
 ### Remediation
 
-  - Enforce server‑side authorization checks on every object access
+  - Enforce server-side authorization checks on every object access
   - Validate ownership or access rights before returning data
   - Avoid using predictable, sequential IDs where possible
   - Add logging and alerting for unusual access patterns

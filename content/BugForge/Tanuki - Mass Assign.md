@@ -6,14 +6,10 @@ tags:
   - broken-access-control
 ---
 
-# BugForge: Tanuki FlashStudy - Writeup
+- Tanuki - SRS Flash Cards
+- Vulnerability: Mass Assignment + Broken Access Control on Stats endpoint
 
-- **App:** Tanuki - SRS Flash Cards 
-- **Vulnerability:** Mass Assignment + Broken Access Control on Stats endpoint
-- **Fun:** YES!
----
-
-## Recon
+## Enumeration
 
 - I will showcase two ways as my first approach was different to another user's who submitted the flag first
 - After registering and browsing the app through Caido proxy, I extracted all API routes from the JS bundle:
@@ -102,7 +98,7 @@ curl -sk -H "Authorization: Bearer $ADMIN_TOKEN" "$TARGET/api/admin/flag"
 - This works with **any authenticated user** - no privilege escalation required
 
 ```bash
-# Any valid JWT works here — grab it from /api/register or /api/login response
+# Any valid JWT works here - grab it from /api/register or /api/login response
 USER_TOKEN="eyJhbG..."
 
 curl -sk -X PUT "$TARGET/api/stats" \

@@ -48,7 +48,7 @@ tags:
 
 ![Daily](/BugForge/img/sokudo-bac7.png)
 
-## Security Takeaway
+## Security Takeaways
 
 ### Stats Manipulation via Direct API Update
 

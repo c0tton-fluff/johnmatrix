@@ -145,7 +145,7 @@ tags:
 
 - At this point I found a small issue inside of the MCP
 
-```go
+```
 Error 1: TaskInProgressUserError
 
   Cause: The MCP tries to reuse the same replay session for concurrent requests. When one request is in-flight, subsequent requests fail.
