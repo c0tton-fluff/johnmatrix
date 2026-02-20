@@ -1,5 +1,5 @@
 ---
-title: Shady Oaks Financial - #2
+title: Shady Oaks Financial - 2
 tags:
   - bugforge
   - broken-access-control
