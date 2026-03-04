@@ -13,6 +13,7 @@ export const sharedPageComponents: SharedLayout = {
         { label: "Brain Sharing", href: "/Brain-Sharing" },
         { label: "BugForge", href: "/BugForge" },
         { label: "Hackthebox", href: "/Hackthebox" },
+        { label: "HackingHub", href: "/HackingHub" },
         { label: "Pwnedlabs", href: "/Pwnedlabs" },
       ],
     }),
