@@ -77,16 +77,36 @@ export default ((opts?: TopNavOptions) => {
   transition: color 150ms ease;
   background: none !important;
   padding: 0 !important;
+  padding-bottom: 4px !important;
+  position: relative;
+}
+
+.top-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+  transition: width 0.3s ease;
 }
 
 .top-nav-link:hover {
   color: #f5f0e8;
 }
 
+.top-nav-link:hover::after {
+  width: 100%;
+}
+
 .top-nav-link.active {
   color: #ffffff;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
-  padding-bottom: 2px;
+}
+
+.top-nav-link.active::after {
+  width: 100%;
+  border-bottom-color: rgba(255, 255, 255, 0.5);
 }
 
 .top-nav-right {
@@ -130,6 +150,74 @@ document.getElementById('top-nav-search-btn')?.addEventListener('click', () => {
     searchContainer.classList.add('active')
     const input = searchContainer.querySelector('input')
     if (input) input.focus()
+  }
+})
+
+// Scroll-reveal observer
+function observeRevealElements() {
+  const sel = '.cert-card, .section-li, .machine-card, h2, pre, .stats-header, .home-card'
+  const els = document.querySelectorAll(sel)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible')
+        observer.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.1 })
+  els.forEach((el) => {
+    if (!el.classList.contains('reveal')) el.classList.add('reveal')
+    observer.observe(el)
+  })
+
+  // HR draw-in observer
+  const hrs = document.querySelectorAll('hr')
+  const hrObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible')
+        hrObs.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.1 })
+  hrs.forEach((hr) => hrObs.observe(hr))
+
+  // Stats count-up animation
+  const statVals = document.querySelectorAll('.stat-value')
+  if (statVals.length === 0) return
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return
+      const el = e.target
+      const target = parseInt(el.textContent, 10)
+      if (isNaN(target)) return
+      statObs.unobserve(el)
+      let current = 0
+      const step = Math.max(1, Math.ceil(target / 20))
+      const interval = setInterval(() => {
+        current = Math.min(current + step, target)
+        el.textContent = String(current)
+        if (current >= target) clearInterval(interval)
+      }, 30)
+    })
+  }, { threshold: 0.5 })
+  statVals.forEach((el) => statObs.observe(el))
+}
+observeRevealElements()
+
+// SPA page transitions
+document.addEventListener('prenav', () => {
+  const center = document.querySelector('.center')
+  if (center) center.classList.add('page-exit')
+})
+
+document.addEventListener('nav', () => {
+  observeRevealElements()
+  const center = document.querySelector('.center')
+  if (center) {
+    center.classList.remove('page-exit')
+    center.classList.add('page-enter')
+    setTimeout(() => center.classList.remove('page-enter'), 300)
   }
 })
 `

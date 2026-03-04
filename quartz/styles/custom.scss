@@ -12,6 +12,7 @@
 html, body {
   overflow-x: hidden !important;
   max-width: 100vw !important;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -363,9 +364,27 @@ li {
 
 hr {
   border: none !important;
-  border-top: 1px dashed rgba(255, 255, 255, 0.2) !important;
   margin: 3rem 0 !important;
   background: none !important;
+  height: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+hr::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  transition: width 0.6s ease, left 0.6s ease;
+}
+
+hr.visible::before {
+  width: 100%;
+  left: 0;
 }
 
 hr::after {
@@ -408,6 +427,18 @@ hr::after {
   font-weight: 400;
   margin-bottom: 0.5rem;
   letter-spacing: 0.02em;
+}
+
+.article-title::after {
+  content: "_";
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+  animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 // Page description / subtitle
@@ -918,4 +949,139 @@ pre:hover .clipboard-button {
 // Graph (if used)
 .graph {
   display: none !important;
+}
+
+// =============================================================================
+// SCROLL-REVEAL ANIMATIONS
+// =============================================================================
+
+// Elements start invisible and shifted down
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+// Code blocks slide from left instead
+pre.reveal {
+  opacity: 0;
+  transform: translateX(-15px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+// Visible state
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+pre.reveal.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+// Stagger cascade for grid items (cap at 10)
+@for $i from 1 through 10 {
+  .cert-card.reveal:nth-child(#{$i}),
+  .section-li.reveal:nth-child(#{$i}) {
+    transition-delay: #{($i - 1) * 50}ms;
+  }
+}
+
+// =============================================================================
+// CARD HOVER GLOW
+// =============================================================================
+
+.cert-card:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.home-card:hover {
+  border-color: rgba(245, 240, 232, 0.5);
+}
+
+ul.section-ul > li.section-li a:hover {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+// =============================================================================
+// SPA PAGE TRANSITIONS
+// =============================================================================
+
+.center {
+  transition: opacity 150ms ease, transform 300ms ease;
+}
+
+.center.page-exit {
+  opacity: 0;
+}
+
+.center.page-enter {
+  animation: pageEnter 300ms ease forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  pre.reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .cert-card,
+  .home-card,
+  ul.section-ul > li.section-li a {
+    transition: border-color 150ms ease !important;
+  }
+
+  .center {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .center.page-exit,
+  .center.page-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .top-nav-link::after {
+    transition: none !important;
+  }
+
+  .article-title::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  hr::before {
+    width: 100% !important;
+    left: 0 !important;
+    transition: none !important;
+  }
+
+  html, body {
+    scroll-behavior: auto;
+  }
 }
