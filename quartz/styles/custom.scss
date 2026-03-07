@@ -832,6 +832,54 @@ img {
 }
 
 // =============================================================================
+// REPLAY CARDS
+// =============================================================================
+
+.replay-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.replay-card {
+  flex: 0 0 200px;
+  padding: 1.5rem 1rem;
+  min-height: 100px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  background: transparent !important;
+  text-decoration: none !important;
+  transition: border-color 150ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.replay-card:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.replay-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff !important;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.replay-card-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6) !important;
+  line-height: 1.4;
+}
+
+// =============================================================================
 // MOBILE RESPONSIVE
 // =============================================================================
 
