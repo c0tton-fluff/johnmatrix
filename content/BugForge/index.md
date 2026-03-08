@@ -8,7 +8,7 @@ title: BugForge
 
 <div class="stats-header">
   <div class="stat-item">
-    <span class="stat-value">8</span>
+    <span class="stat-value">9</span>
     <span class="stat-label">Writeups</span>
   </div>
   <div class="stat-item">
@@ -22,6 +22,10 @@ title: BugForge
   <div class="stat-item">
     <span class="stat-value">1</span>
     <span class="stat-label">Business Logic</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">2</span>
+    <span class="stat-label">XSS</span>
   </div>
 </div>
 
