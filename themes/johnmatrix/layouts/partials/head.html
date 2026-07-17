@@ -6,6 +6,11 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://plausible.io; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://plausible.io; base-uri 'self'; form-action 'self'">
 
+{{- with .Site.Params.plausibleDomain -}}
+<link rel="preconnect" href="https://plausible.io">
+<link rel="dns-prefetch" href="https://plausible.io">
+{{- end -}}
+
 {{- if .Description -}}
   <meta name="description" content="{{ .Description | plainify | htmlEscape }}">
 {{- else if .Site.Params.description -}}
