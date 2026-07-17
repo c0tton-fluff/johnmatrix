@@ -1,0 +1,57 @@
+{{ define "main" }}
+<section class="content list-content bugforge-list">
+  {{- .Content -}}
+
+  {{- $pages := where .Pages "Kind" "page" -}}
+
+  {{- $vulnMap := dict
+    "idor" "IDOR"
+    "xss" "XSS"
+    "sqli" "SQLi"
+    "xxe" "XXE"
+    "ssrf" "SSRF"
+    "rce" "RCE"
+    "bac" "BAC"
+    "broken-access-control" "BAC"
+    "business-logic" "Logic"
+    "auth-bypass" "Auth"
+    "lfi" "LFI"
+    "deserialization" "Deser"
+    "prototype-pollution" "Proto"
+    "mass-assignment" "Mass Assign"
+    "websocket" "WebSocket"
+    "cspt" "CSPT"
+    "file-upload" "Upload"
+    "template-injection" "SSTI"
+  -}}
+
+  {{- if gt (len $pages) 0 -}}
+    {{- partial "tag-filter.html" (dict "pages" $pages) -}}
+
+    <ul class="writeup-grid">
+      {{- range $pages -}}
+        {{- $vuln := "" -}}
+        {{- with .Params.tags -}}
+          {{- range . -}}
+            {{- if eq $vuln "" -}}
+              {{- $label := index $vulnMap (lower .) -}}
+              {{- if $label -}}{{- $vuln = $label -}}{{- end -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $tagStr := "" -}}
+        {{- with .Params.tags -}}{{- $tagStr = lower (delimit . ",") -}}{{- end -}}
+        <li class="writeup-card reveal" data-tags="{{ $tagStr }}">
+          <a href="{{ .RelPermalink }}">
+            {{- with $vuln -}}
+              <span class="writeup-vuln">{{ . }}</span>
+            {{- end -}}
+            <span class="writeup-title">{{ .Title }}</span>
+            <span class="writeup-arrow">&#8594;</span>
+          </a>
+        </li>
+      {{- end -}}
+    </ul>
+  {{- end -}}
+</section>
+{{ end }}

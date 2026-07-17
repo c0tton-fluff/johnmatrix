@@ -71,7 +71,7 @@
   }
 
   // ---- Staggered scroll reveal ----
-  var revealSel = '.cert-card, .section-li, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
+  var revealSel = '.cert-card, .section-li, .writeup-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
   var revealEls = document.querySelectorAll(revealSel);
   if (revealEls.length && 'IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
@@ -146,7 +146,7 @@
         var tag = btn.getAttribute('data-tag');
         filterBtns.forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
-        var items = document.querySelectorAll('.section-li');
+        var items = document.querySelectorAll('.section-li, .writeup-card');
         items.forEach(function (item) {
           if (tag === 'all') { item.classList.remove('tag-hidden'); return; }
           var itemTags = (item.getAttribute('data-tags') || '').toLowerCase();

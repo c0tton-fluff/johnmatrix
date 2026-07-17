@@ -909,12 +909,115 @@ hr {
 
 .folder-hero {
   text-align: center;
-  margin: 1rem 0 2rem;
-  img { margin: 0 auto; max-height: 96px; width: auto; border: none; border-radius: 0; }
+  margin: 0.5rem 0 1.25rem;
+  img {
+    margin: 0 auto;
+    max-width: 360px;
+    width: 60%;
+    height: auto;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.folder-intro {
+  text-align: center;
+  max-width: 540px;
+  margin: 0 auto 2.5rem;
+  color: $text-muted;
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
 body:has(.folder-hero) .article-title { display: none; }
 body:has(.folder-hero) .breadcrumb-container { display: none; }
+
+// =============================================================================
+// WRITEUP GRID (BugForge)
+// =============================================================================
+
+.writeup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.7rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  width: 100%;
+}
+
+.writeup-card {
+  margin: 0;
+  padding: 0;
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.1rem 1.2rem 1.05rem;
+    text-decoration: none;
+    color: $text;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius;
+    transition: transform 200ms $ease, border-color 200ms $ease, background 200ms $ease;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+
+    &:hover {
+      background: $surface-2;
+      border-color: $border-hover;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.writeup-vuln {
+  display: inline-block;
+  width: fit-content;
+  font-family: $header-font;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $accent;
+  background: $accent-dim;
+  border: 1px solid rgba(146, 152, 245, 0.22);
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+}
+
+.writeup-title {
+  font-family: $body-font;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: $text;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.writeup-arrow {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  color: $text-faint;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 180ms $ease, transform 180ms $ease, color 180ms $ease;
+  .writeup-card a:hover & {
+    opacity: 1;
+    transform: translateX(2px);
+    color: $accent;
+  }
+}
+
+.writeup-card.tag-hidden { display: none !important; }
+
+@media (max-width: 600px) {
+  .writeup-grid { grid-template-columns: 1fr; }
+  .folder-hero img { width: 80%; max-width: 320px; }
+}
 
 // =============================================================================
 // SECTION LISTING
@@ -1263,7 +1366,8 @@ footer {
 @for $i from 1 through 12 {
   .section-li.reveal:nth-child(#{$i}),
   .cert-card.reveal:nth-child(#{$i}),
-  .featured-card.reveal:nth-child(#{$i}) {
+  .featured-card.reveal:nth-child(#{$i}),
+  .writeup-card.reveal:nth-child(#{$i}) {
     transition-delay: #{($i - 1) * 45}ms;
   }
 }
