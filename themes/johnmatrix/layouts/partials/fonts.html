@@ -1,10 +1,4 @@
-{{- $fonts := slice
-  "JetBrains Mono"
-  "IBM Plex Sans"
--}}
-{{- range $fonts -}}
-  {{- $name := replace . " " "+" -}}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ $name }}:wght@400;500;600;700&display=swap">
-{{- end -}}
+{{- $jbm := resources.Get "fonts/jetbrains-mono-latin.woff2" | fingerprint -}}
+{{- $ibm := resources.Get "fonts/ibm-plex-sans-latin.woff2" | fingerprint -}}
+<link rel="preload" href="{{ $ibm.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ $jbm.RelPermalink }}" as="font" type="font/woff2" crossorigin>

@@ -1,1 +1,1 @@
-@use "base";@use "custom"
+@use "fonts";@use "base";@use "custom"
