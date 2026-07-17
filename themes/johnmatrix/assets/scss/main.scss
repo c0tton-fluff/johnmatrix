@@ -13,8 +13,8 @@ $border-hover: rgba(255, 255, 255, 0.18);
 $border-strong: rgba(255, 255, 255, 0.14);
 
 $text: #ededed;
-$text-muted: rgba(237, 237, 237, 0.62);
-$text-faint: rgba(237, 237, 237, 0.40);
+$text-muted: rgba(237, 237, 237, 0.68);
+$text-faint: rgba(237, 237, 237, 0.55);
 
 $accent: #9298f5;
 $accent-soft: rgba(146, 152, 245, 0.14);
@@ -493,13 +493,17 @@ hr {
   align-items: center;
   gap: 0.5rem;
   min-height: 36px;
-  font-family: $header-font;
-  font-size: 0.72rem;
+  font-family: $body-font;
+  font-size: 0.78rem;
   &:hover {
     color: $text;
     border-color: $border-hover;
     background: $surface-2;
   }
+}
+
+.top-nav-search .search-label {
+  color: $text-muted;
 }
 
 .top-nav-search .search-kbd {
@@ -509,6 +513,7 @@ hr {
   border-radius: 4px;
   color: $text-faint;
   background: $bg;
+  font-family: $header-font;
 }
 
 .top-nav-hamburger {
