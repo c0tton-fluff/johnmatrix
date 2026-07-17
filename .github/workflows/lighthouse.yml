@@ -28,9 +28,7 @@ jobs:
           lhci autorun \
             --collect.url="https://johnmatrix.org/" \
             --collect.url="https://johnmatrix.org/bugforge/sokudo-bac/" \
-            --collect.url="https://johnmatrix.org/ai-research/" \
-            --collect.numberOfRuns=1 \
-            --upload.target=temporary-public-storage
+            --collect.url="https://johnmatrix.org/ai-research/"
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         continue-on-error: true
