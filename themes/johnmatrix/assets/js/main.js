@@ -1,6 +1,21 @@
-// johnmatrix main JS - nav, reading progress, back-to top, scroll reveal, tag filter, copy
+// johnmatrix main JS - nav, scroll-aware header, reading progress, back-to-top,
+// staggered reveal, tag filter, copy buttons, command-palette search trigger
 (function () {
   'use strict';
+
+  // ---- Scroll-aware header ----
+  var topNav = document.querySelector('.top-nav');
+  if (topNav) {
+    var lastScroll = 0;
+    function onScrollHeader() {
+      var s = window.scrollY;
+      if (s > 8) topNav.classList.add('scrolled');
+      else topNav.classList.remove('scrolled');
+      lastScroll = s;
+    }
+    window.addEventListener('scroll', onScrollHeader, { passive: true });
+    onScrollHeader();
+  }
 
   // ---- Hamburger / mobile menu ----
   var hamburger = document.getElementById('top-nav-hamburger');
@@ -10,7 +25,6 @@
       var open = hamburger.classList.toggle('open');
       mobileMenu.classList.toggle('open', open);
       hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) { mobileMenu.removeAttribute('hidden'); }
     });
     mobileMenu.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
@@ -43,8 +57,8 @@
   if (backBtn) {
     var btTicking = false;
     function updateVisibility() {
-      if (window.scrollY > 500) { backBtn.classList.add('visible'); }
-      else { backBtn.classList.remove('visible'); }
+      if (window.scrollY > 500) backBtn.classList.add('visible');
+      else backBtn.classList.remove('visible');
       btTicking = false;
     }
     window.addEventListener('scroll', function () {
@@ -56,8 +70,8 @@
     updateVisibility();
   }
 
-  // ---- Scroll reveal ----
-  var revealSel = '.cert-card, .section-li, .machine-card, h2, pre, .stats-header, .home-card, .featured-card, .progress-item';
+  // ---- Staggered scroll reveal ----
+  var revealSel = '.cert-card, .section-li, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
   var revealEls = document.querySelectorAll(revealSel);
   if (revealEls.length && 'IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
@@ -67,7 +81,7 @@
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     revealEls.forEach(function (el) {
       if (!el.classList.contains('reveal')) el.classList.add('reveal');
       obs.observe(el);
@@ -113,12 +127,12 @@
         if (isNaN(target)) return;
         statObs.unobserve(el);
         var current = 0;
-        var step = Math.max(1, Math.ceil(target / 20));
+        var step = Math.max(1, Math.ceil(target / 22));
         var interval = setInterval(function () {
           current = Math.min(current + step, target);
           el.textContent = String(current);
           if (current >= target) clearInterval(interval);
-        }, 30);
+        }, 28);
       });
     }, { threshold: 0.5 });
     statVals.forEach(function (el) { statObs.observe(el); });
@@ -148,7 +162,7 @@
     });
   }
 
-  // ---- Code copy buttons ----
+  // ---- Code copy buttons (refined) ----
   document.querySelectorAll('pre > code').forEach(function (code) {
     var pre = code.closest('pre');
     if (!pre || pre.querySelector('.clipboard-button')) return;
@@ -162,16 +176,23 @@
       var text = code.textContent;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(function () {
-          pre.classList.add('copy-flash');
           btn.classList.add('copied');
-          btn.textContent = '\u2713';
+          btn.textContent = 'Copied';
           setTimeout(function () {
-            pre.classList.remove('copy-flash');
             btn.classList.remove('copied');
             btn.textContent = 'Copy';
-          }, 1500);
+          }, 1400);
         });
       }
     });
+  });
+
+  // ---- Command palette: Cmd+K / Ctrl+K to open search ----
+  var searchBtn = document.getElementById('top-nav-search-btn');
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (searchBtn) searchBtn.click();
+    }
   });
 })();

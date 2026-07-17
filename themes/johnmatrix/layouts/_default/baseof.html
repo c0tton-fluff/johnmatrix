@@ -2,6 +2,7 @@
 <html lang="{{ .Site.Language.Locale | default "en" }}" data-page-slug="{{ with .File }}{{ .Dir }}{{ end }}">
 {{- partial "head.html" . -}}
 <body data-slug="{{ partial "slug.html" . }}">
+  <div class="page-transition">
   {{- partial "reading-progress.html" . -}}
   {{- partial "header.html" . -}}
   <main class="page" id="main">
@@ -13,5 +14,6 @@
   {{- partial "back-to-top.html" . -}}
   {{- partial "search-overlay.html" . -}}
   {{- partial "scripts.html" . -}}
+</div>
 </body>
 </html>

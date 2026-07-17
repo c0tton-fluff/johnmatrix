@@ -4,6 +4,22 @@
     <h1 class="article-title">{{ .Title }}</h1>
   {{- end -}}
 
+  <div class="article-meta">
+    {{- with .Lastmod -}}
+      <span>{{ .Format "Jan 2, 2006" }}</span>
+      <span class="meta-sep">/</span>
+    {{- end -}}
+    {{- if gt .WordCount 0 -}}
+      <span>{{ .ReadingTime }} min read</span>
+      <span class="meta-sep">/</span>
+    {{- end -}}
+    {{- with .Params.tags -}}
+      {{- range first 3 . -}}
+        <span class="meta-tag">{{ . }}</span>
+      {{- end -}}
+    {{- end -}}
+  </div>
+
   {{- partial "breadcrumbs.html" . -}}
 
   {{- with .Params.tags -}}
