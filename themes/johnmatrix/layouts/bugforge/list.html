@@ -4,72 +4,35 @@
 
   {{- $pages := where .Pages "Kind" "page" -}}
 
-  {{- $vulnMap := dict
-    "idor" "IDOR"
-    "xss" "XSS"
-    "sqli" "SQLi"
-    "xxe" "XXE"
-    "ssrf" "SSRF"
-    "rce" "RCE"
-    "bac" "BAC"
-    "broken-access-control" "BAC"
-    "business-logic" "Logic"
-    "auth-bypass" "Auth"
-    "lfi" "LFI"
-    "deserialization" "Deser"
-    "prototype-pollution" "Proto"
-    "mass-assignment" "Mass Assign"
-    "websocket" "WebSocket"
-    "cspt" "CSPT"
-    "file-upload" "Upload"
-    "template-injection" "SSTI"
-  -}}
-
   {{- if gt (len $pages) 0 -}}
-    {{- partial "tag-filter.html" (dict "pages" $pages) -}}
+  <div class="bugforge-search-wrap">
+    <input type="search" class="bugforge-search" id="bugforge-search" placeholder="Search writeups..." autocomplete="off" aria-label="Search writeups" />
+    <span class="bugforge-count" id="bugforge-count">{{ len $pages }} writeups</span>
+  </div>
 
-    <table class="pub-list">
-      <thead>
-        <tr>
-          <th class="pub-col-title">Title</th>
-          <th class="pub-col-date">Date</th>
-          <th class="pub-col-cat">Category</th>
-          <th class="pub-col-sev">Severity</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{- range $pages -}}
-          {{- $vuln := "" -}}
-          {{- with .Params.tags -}}
-            {{- range . -}}
-              {{- if eq $vuln "" -}}
-                {{- $label := index $vulnMap (lower .) -}}
-                {{- if $label -}}{{- $vuln = $label -}}{{- end -}}
-              {{- end -}}
-            {{- end -}}
+  <div class="bugforge-grid" id="bugforge-grid">
+    {{- range $pages -}}
+      {{- $tagStr := "" -}}
+      {{- $tagDisplay := slice -}}
+      {{- with .Params.tags -}}
+        {{- $tagStr = lower (delimit . ",") -}}
+        {{- range . -}}
+          {{- if ne (lower .) "bugforge" -}}
+            {{- $tagDisplay = $tagDisplay | append . -}}
           {{- end -}}
-          {{- $tagStr := "" -}}
-          {{- with .Params.tags -}}{{- $tagStr = lower (delimit . ",") -}}{{- end -}}
-          {{- $sev := "" -}}
-          {{- with .Params.severity -}}{{- $sev = lower . -}}{{- end -}}
-          <tr class="pub-row reveal" data-tags="{{ $tagStr }}">
-            <td class="pub-title">
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-              {{- with .Params.cve -}}
-                <span class="pub-cve">{{ . }}</span>
-              {{- end -}}
-            </td>
-            <td class="pub-date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time></td>
-            <td class="pub-cat">{{ $vuln }}</td>
-            <td class="pub-sev">
-              {{- if $sev -}}
-                <span class="sev-dot {{ $sev }}" title="{{ $sev | humanize }}"></span>
-              {{- end -}}
-            </td>
-          </tr>
         {{- end -}}
-      </tbody>
-    </table>
+      {{- end -}}
+      <a href="{{ .RelPermalink }}" class="bugforge-card reveal" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
+        <span class="bugforge-card-title">{{ .Title }}</span>
+        <span class="bugforge-card-tags">{{ delimit $tagDisplay " · " }}</span>
+        <span class="bugforge-card-arrow" aria-hidden="true">&#8594;</span>
+      </a>
+    {{- end -}}
+  </div>
+
+  <div class="bugforge-no-results" id="bugforge-no-results" hidden>
+    <span class="bugforge-no-results-text">No writeups found. Try a different search.</span>
+  </div>
   {{- end -}}
 </section>
 {{ end }}

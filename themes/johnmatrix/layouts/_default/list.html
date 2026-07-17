@@ -9,8 +9,9 @@
   {{- .Content -}}
 
   {{- $pages := where .Pages "Kind" "page" -}}
+  {{- $hasLinks := gt (len (findRE "<a " .Content)) 0 -}}
 
-  {{- if gt (len $pages) 0 -}}
+  {{- if and (gt (len $pages) 0) (not $hasLinks) -}}
     {{- partial "tag-filter.html" (dict "pages" $pages) -}}
 
     <h2 class="section-title">{{ if eq .Type "tags" }}Tagged{{ else }}All Pages{{ end }}</h2>
