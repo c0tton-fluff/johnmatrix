@@ -408,102 +408,140 @@ hr {
 }
 
 // =============================================================================
-// PUBLICATION LIST (Anthropic PublicationList pattern)
+// BUGFORGE SEARCH + CARD GRID
 // =============================================================================
 
-.pub-list {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0 2rem;
-  font-size: 0.9rem;
+.bugforge-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+}
 
-  thead th {
-    font-size: 0.68rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: $text-faint;
-    text-align: left;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid $border-strong;
-    font-family: $header-font;
+.bugforge-search {
+  flex: 1;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  color: $text;
+  font-family: $header-font;
+  font-size: 0.88rem;
+  padding: 0.7rem 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 150ms $ease, box-shadow 150ms $ease;
+  &:focus {
+    border-color: $accent;
+    box-shadow: 0 0 0 3px rgba(118, 185, 0, 0.08);
   }
-  thead th.pub-col-date { width: 100px; }
-  thead th.pub-col-cat { width: 120px; }
-  thead th.pub-col-sev { width: 80px; text-align: center; }
+  &::placeholder { color: $text-faint; }
+}
 
-  tbody tr {
-    transition: background 120ms $ease;
-    &:hover { background: rgba(118, 185, 0, 0.03); }
-  }
+.bugforge-count {
+  font-family: $header-font;
+  font-size: 0.72rem;
+  color: $text-faint;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
 
-  tbody td {
-    padding: 0.85rem 0;
-    border-bottom: 1px solid $border;
-    vertical-align: middle;
-    color: $text;
-    font-family: $body-font;
-    font-size: 0.9rem;
-  }
+.bugforge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.7rem;
+  margin: 0 0 2rem;
+}
 
-  tbody tr:last-child td { border-bottom: none; }
+.bugforge-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.3rem 1.4rem 1.2rem;
+  border: 1px solid $border;
+  border-radius: $radius;
+  background: $surface;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 250ms $ease, border-color 250ms $ease, background 250ms $ease, box-shadow 250ms $ease;
 
-  .pub-title a {
-    color: $text;
-    font-weight: 500;
-    font-family: $body-font;
-    text-decoration: none;
-    background: none;
-    transition: color 150ms $ease;
-    &:hover { color: $accent; background: none; }
-  }
-
-  .pub-cve {
-    display: block;
-    font-family: $header-font;
-    font-size: 0.72rem;
-    color: $text-faint;
-    margin-top: 0.15rem;
-  }
-
-  .pub-date {
-    font-family: $header-font;
-    font-size: 0.78rem;
-    color: $text-muted;
-    white-space: nowrap;
-  }
-
-  .pub-cat {
-    font-family: $header-font;
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: $text-faint;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: $accent;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 250ms $ease;
   }
 
-  .pub-sev {
-    text-align: center;
+  &:hover {
+    border-color: $border-hover;
+    background: $surface-2;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    &::before { transform: scaleY(1); }
+
+    .bugforge-card-title { color: $accent; }
+    .bugforge-card-arrow { opacity: 1; transform: translateX(0); }
+    .bugforge-card-tags { color: $text-muted; }
   }
 }
 
-.sev-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  vertical-align: middle;
+.bugforge-card-title {
+  font-family: $body-font;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $text;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  transition: color 200ms $ease;
+  padding-right: 1.5rem;
 }
-.sev-dot.critical { background: $sev-critical; box-shadow: 0 0 6px rgba(239, 68, 68, 0.4); }
-.sev-dot.high { background: $sev-high; }
-.sev-dot.medium { background: $sev-medium; }
-.sev-dot.low { background: $sev-low; }
-.sev-dot.info { background: $text-faint; }
 
-.pub-row.tag-hidden { display: none !important; }
+.bugforge-card-tags {
+  font-family: $header-font;
+  font-size: 0.68rem;
+  color: $text-faint;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  transition: color 200ms $ease;
+}
+
+.bugforge-card-arrow {
+  position: absolute;
+  top: 1.3rem;
+  right: 1.3rem;
+  color: $accent;
+  font-size: 0.95rem;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 200ms $ease, transform 200ms $ease;
+}
+
+.bugforge-card.bugforge-hidden {
+  display: none;
+}
+
+.bugforge-no-results {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.bugforge-no-results-text {
+  font-family: $header-font;
+  font-size: 0.85rem;
+  color: $text-faint;
+}
 
 @media (max-width: 600px) {
-  .pub-list thead th.pub-col-date,
-  .pub-list tbody td.pub-date { display: none; }
+  .bugforge-grid { grid-template-columns: 1fr; }
+  .bugforge-search-wrap { flex-direction: column; gap: 0.5rem; align-items: stretch; }
+  .bugforge-count { text-align: right; }
 }
 
 // =============================================================================
@@ -1628,13 +1666,14 @@ footer {
   &.visible { opacity: 1; transform: translateY(0); }
 }
 
-@for $i from 1 through 12 {
+@for $i from 1 through 20 {
   .section-li.reveal:nth-child(#{$i}),
   .cert-card.reveal:nth-child(#{$i}),
   .featured-card.reveal:nth-child(#{$i}),
   .recent-card.reveal:nth-child(#{$i}),
-  .pub-row.reveal:nth-child(#{$i}) {
-    transition-delay: #{($i - 1) * 45}ms;
+  .pub-row.reveal:nth-child(#{$i}),
+  .bugforge-card.reveal:nth-child(#{$i}) {
+    transition-delay: #{($i - 1) * 35}ms;
   }
 }
 

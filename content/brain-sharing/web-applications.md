@@ -6,6 +6,7 @@ tags:
   - web
 aliases:
   - "/Methodology/Web-Applications"
+  - "/methodology/web-applications/"
 ---
 Structured approach to web application penetration testing. Ordered by signal strength -- test what's most likely to yield critical findings first, eliminate noise last.
 

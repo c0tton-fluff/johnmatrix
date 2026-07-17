@@ -71,7 +71,7 @@
   }
 
   // ---- Staggered scroll reveal ----
-  var revealSel = '.cert-card, .section-li, .pub-row, .recent-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
+  var revealSel = '.cert-card, .section-li, .pub-row, .recent-card, .bugforge-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
   var revealEls = document.querySelectorAll(revealSel);
   if (revealEls.length && 'IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
@@ -217,5 +217,32 @@
         if (target) spy.observe(target);
       });
     }
+  }
+
+  // ---- BugForge search filter ----
+  var bfSearch = document.getElementById('bugforge-search');
+  var bfGrid = document.getElementById('bugforge-grid');
+  var bfCount = document.getElementById('bugforge-count');
+  var bfNoResults = document.getElementById('bugforge-no-results');
+  if (bfSearch && bfGrid) {
+    var bfCards = bfGrid.querySelectorAll('.bugforge-card');
+    var bfTotal = bfCards.length;
+    bfSearch.addEventListener('input', function () {
+      var q = bfSearch.value.trim().toLowerCase();
+      var visible = 0;
+      bfCards.forEach(function (card) {
+        var title = card.getAttribute('data-title') || '';
+        var tags = card.getAttribute('data-tags') || '';
+        var match = !q || title.indexOf(q) !== -1 || tags.indexOf(q) !== -1;
+        if (match) {
+          card.classList.remove('bugforge-hidden');
+          visible++;
+        } else {
+          card.classList.add('bugforge-hidden');
+        }
+      });
+      if (bfCount) bfCount.textContent = visible + (visible === 1 ? ' writeup' : ' writeups');
+      if (bfNoResults) bfNoResults.hidden = visible > 0;
+    });
   }
 })();

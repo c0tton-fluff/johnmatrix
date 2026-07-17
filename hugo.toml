@@ -45,7 +45,6 @@ paginate = 50
   bugforge = "/bugforge/:slugorcontentbasename/"
   ai-research = "/ai-research/:slugorcontentbasename/"
   brain-sharing = "/brain-sharing/:slugorcontentbasename/"
-  methodology = "/methodology/:slugorcontentbasename/"
 
 [taxonomies]
   tag = "tags"
@@ -54,11 +53,6 @@ paginate = 50
   name = "Home"
   url = "/"
   weight = 1
-
-[[menu.main]]
-  name = "Methodology"
-  url = "/methodology/"
-  weight = 2
 
 [[menu.main]]
   name = "Brain Sharing"

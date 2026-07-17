@@ -24,3 +24,4 @@ MCP (Model Context Protocol) servers give AI assistants structured access to ext
 ## Guides
 
 - **[The AI-Era Security Engineer](/brain-sharing/ai-era-security-engineering/)** -> practical guide for security professionals building, specifying, and reviewing code in the age of AI-assisted development.
+- **[Web Application Testing](/brain-sharing/web-applications/)** -> structured pentest methodology ordered by signal strength. Recon, auth, access control, injection, logic, infrastructure.
