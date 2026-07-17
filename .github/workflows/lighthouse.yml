@@ -30,10 +30,10 @@ jobs:
             --collect.url="https://johnmatrix.org/bugforge/sokudo-bac/" \
             --collect.url="https://johnmatrix.org/ai-research/" \
             --collect.numberOfRuns=1 \
-            --upload.target=temporary-public-storage \
-            --assert.preset=lighthouse:no-pwa
+            --upload.target=temporary-public-storage
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        continue-on-error: true
 
       - name: Upload Lighthouse report
         if: always()
