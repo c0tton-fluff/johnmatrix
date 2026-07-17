@@ -15,8 +15,9 @@
   var searchInstance = null;
 
   function openSearch() {
-    searchContainer.classList.add('active');
+    searchContainer.removeAttribute('hidden');
     searchContainer.setAttribute('aria-hidden', 'false');
+    searchContainer.classList.add('active');
     if (searchInput) searchInput.focus();
     document.body.style.overflow = 'hidden';
     if (!pagefindLoaded) loadPagefind();
@@ -26,6 +27,7 @@
     searchContainer.classList.remove('active');
     searchContainer.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    setTimeout(function () { searchContainer.setAttribute('hidden', 'hidden'); }, 200);
   }
 
   function loadPagefind() {

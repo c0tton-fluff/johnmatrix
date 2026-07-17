@@ -20,9 +20,9 @@
   {{- end -}}
 
   {{- if $res -}}
-    {{- $webp := $res.Resize (printf "%dx0 webp q82" 1100) -}}
-    {{- $webp2x := $res.Resize (printf "%dx0 webp q75" 2200) -}}
-    {{- $png := $res.Resize (printf "%dx0" 1100) -}}
+    {{- $webp := $res.Resize (printf "%dx0 webp q72" 1000) -}}
+    {{- $webp2x := $res.Resize (printf "%dx0 webp q65" 2000) -}}
+    {{- $png := $res.Resize (printf "%dx0 q80" 1000) -}}
     {{- $w := $png.Width -}}
     {{- $h := $png.Height -}}
     <picture>
