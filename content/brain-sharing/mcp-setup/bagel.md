@@ -8,6 +8,7 @@ tags:
   - secrets
 aliases:
   - "/Brain-Sharing/MCP-Setup/Bagel"
+  - "/brain-sharing/mcp-setup/bagel/"
 ---
 Dev workstation security scanner from BoostSecurity. Checks Git config, SSH keys, npm settings, shell history, cloud credentials, IDE plugins, GitHub CLI, and AI tool configs for security gaps. Privacy-first -- only metadata leaves the machine.
 

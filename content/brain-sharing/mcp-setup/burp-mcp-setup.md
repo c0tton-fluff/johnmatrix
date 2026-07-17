@@ -7,6 +7,7 @@ tags:
   - go
 aliases:
   - "/Brain-Sharing/MCP-Setup/Burp-MCP-Setup"
+  - "/brain-sharing/mcp-setup/burp-mcp-setup/"
 ---
 MCP server and standalone CLI for Burp Suite Professional. Gives AI assistants structured access to Burp's HTTP engine, proxy history, scanner, Repeater, and Intruder -- with body limits, batch operations, and race condition support.
 

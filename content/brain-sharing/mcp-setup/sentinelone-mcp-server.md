@@ -8,6 +8,7 @@ tags:
   - dfir
 aliases:
   - "/Brain-Sharing/MCP-Setup/SentinelOne-MCP-Server"
+  - "/brain-sharing/mcp-setup/sentinelone-mcp-server/"
 ---
 MCP server for SentinelOne EDR. Query threats, manage agents, run Deep Visibility hunts, and check hash reputation from AI assistants. Stdlib-only Go binary - zero external dependencies.
 

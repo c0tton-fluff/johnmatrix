@@ -8,6 +8,7 @@ tags:
   - vdp
 aliases:
   - "/Brain-Sharing/MCP-Setup/HackerOne-MCP"
+  - "/brain-sharing/mcp-setup/hackerone-mcp/"
 ---
 MCP server for HackerOne triage teams. Full read/write access to reports, triage workflows, severity ratings, assignments, and program management -- all from your AI assistant. Single Go binary, zero external dependencies.
 

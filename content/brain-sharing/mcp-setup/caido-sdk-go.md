@@ -7,6 +7,7 @@ tags:
   - graphql
 aliases:
   - "/Brain-Sharing/MCP-Setup/Caido-SDK-Go"
+  - "/brain-sharing/mcp-setup/caido-sdk-go/"
 ---
 Community Go SDK for the Caido web proxy. Type-safe GraphQL client with domain-specific packages for requests, intercept, replay, findings, scopes, and more. Powers the Caido MCP server.
 
@@ -110,7 +111,7 @@ Operators: `eq`, `neq`, `cont`, `ncont`, `gte`, `lte`, `gt`, `lt`. Combine with 
 
 ## Relationship to MCP Server
 
-The [Caido MCP Server](/brain-sharing/mcp-setup/caido-mcp-setup/) is the primary consumer of this SDK. If you're building custom Go tooling against Caido (scripts, integrations, CI pipelines), use the SDK directly. If you want AI assistant access, use the MCP server which wraps the SDK with tool definitions and credential management.
+The [Caido MCP Server](/brain-sharing/caido-mcp-setup/) is the primary consumer of this SDK. If you're building custom Go tooling against Caido (scripts, integrations, CI pipelines), use the SDK directly. If you want AI assistant access, use the MCP server which wraps the SDK with tool definitions and credential management.
 
 | Use case | Use |
 |----------|-----|

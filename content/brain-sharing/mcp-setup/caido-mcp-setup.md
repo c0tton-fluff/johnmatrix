@@ -7,8 +7,9 @@ tags:
   - go
 aliases:
   - "/Brain-Sharing/MCP-Setup/Caido-MCP-Setup"
+  - "/brain-sharing/mcp-setup/caido-mcp-setup/"
 ---
-MCP server and CLI for the [Caido](https://caido.io) web proxy. Browse, replay, and analyze HTTP traffic from AI assistants or your terminal. Built on the community [Go SDK](/brain-sharing/mcp-setup/caido-sdk-go/) with 66 tools and 6 read-only resources, OAuth + static token auth, HTTPQL filtering, session cookie jars, batch operations, WebSocket inspection, race condition testing, and full Caido feature coverage.
+MCP server and CLI for the [Caido](https://caido.io) web proxy. Browse, replay, and analyze HTTP traffic from AI assistants or your terminal. Built on the community [Go SDK](/brain-sharing/caido-sdk-go/) with 66 tools and 6 read-only resources, OAuth + static token auth, HTTPQL filtering, session cookie jars, batch operations, WebSocket inspection, race condition testing, and full Caido feature coverage.
 
 Source: [c0tton-fluff/caido-mcp-server](https://github.com/c0tton-fluff/caido-mcp-server)
 

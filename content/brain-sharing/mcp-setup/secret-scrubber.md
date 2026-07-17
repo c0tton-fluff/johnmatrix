@@ -8,6 +8,7 @@ tags:
   - ai-tools
 aliases:
   - "/Brain-Sharing/MCP-Setup/Secret-Scrubber"
+  - "/brain-sharing/mcp-setup/secret-scrubber/"
 ---
 Find and scrub secrets from AI CLI session logs. AWS keys, SSH private keys, GitHub tokens, JWTs, Bearer tokens, cloud credentials -- replaced with `[REDACTED-<type>]` markers while preserving conversation context. Zero dependencies, stdlib-only Python.
 
@@ -19,7 +20,7 @@ AI coding assistants like Claude Code and OpenAI Codex log full conversation tra
 
 These logs are backed up to cloud storage, synced across devices, and persisted indefinitely. The secrets inside them are a lateral movement goldmine for anyone who gains access to a developer workstation.
 
-[Bagel](/brain-sharing/mcp-setup/bagel/) detects the exposure. Secret Scrubber removes it.
+[Bagel](/brain-sharing/bagel/) detects the exposure. Secret Scrubber removes it.
 
 ## Real Results
 
@@ -92,5 +93,5 @@ Files are read into memory, scrubbed, and written back atomically.
 
 ## See Also
 
-- **[Bagel](/brain-sharing/mcp-setup/bagel/)** -- workstation scanner that detects credential exposure across dev tools
+- **[Bagel](/brain-sharing/bagel/)** -- workstation scanner that detects credential exposure across dev tools
 - **[Bagel fork with `bagel scrub`](https://github.com/c0tton-fluff/bagel)** -- Go implementation of this scrubber integrated directly into Bagel as a native command. Same 21 patterns, concurrent file processing, single binary. Use this if you want scan + scrub in one tool.
