@@ -1,7 +1,59 @@
 {{ define "main" }}
-<article class="content single-content">
+{{- $toc := .TableOfContents -}}
+{{- $hasTOC := gt (len (findRE "<li" $toc)) 0 -}}
+{{- if $hasTOC -}}
+<div class="post-layout">
+  <article class="post-main single-content">
+    {{- if not (eq .Title "") -}}
+      <h1 class="article-title">{{ .Title }}</h1>
+    {{- end -}}
+
+    {{- with .Params.cve -}}
+      <h2 class="cve-subtitle">{{ . }}</h2>
+    {{- end -}}
+
+    <div class="article-meta">
+      {{- with .Lastmod -}}
+        <span>{{ .Format "Jan 2, 2006" }}</span>
+        <span class="meta-sep">/</span>
+      {{- end -}}
+      {{- if gt .WordCount 0 -}}
+        <span>{{ .ReadingTime }} min read</span>
+        <span class="meta-sep">/</span>
+      {{- end -}}
+      {{- with .Params.tags -}}
+        {{- range first 3 . -}}
+          <span class="meta-tag">{{ . }}</span>
+        {{- end -}}
+      {{- end -}}
+    </div>
+
+    {{- partial "breadcrumbs.html" . -}}
+
+    {{- with .Params.tags -}}
+      <div class="tags">
+        {{- range . -}}
+          <a class="tag-link" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">#{{ . }}</a>
+        {{- end -}}
+      </div>
+    {{- end -}}
+
+    {{- .Content -}}
+  </article>
+
+  <aside class="toc-rail" aria-label="Table of contents">
+    <span class="toc-title">On this page</span>
+    {{- $toc -}}
+  </aside>
+</div>
+{{- else -}}
+<article class="center single-content">
   {{- if not (eq .Title "") -}}
     <h1 class="article-title">{{ .Title }}</h1>
+  {{- end -}}
+
+  {{- with .Params.cve -}}
+    <h2 class="cve-subtitle">{{ . }}</h2>
   {{- end -}}
 
   <div class="article-meta">
@@ -31,11 +83,8 @@
   {{- end -}}
 
   {{- .Content -}}
-
-  {{- if gt .WordCount 200 -}}
-    {{- partial "toc.html" . -}}
-  {{- end -}}
 </article>
+{{- end -}}
 
 <script type="application/ld+json">
 {

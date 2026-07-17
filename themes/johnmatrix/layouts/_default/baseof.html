@@ -5,10 +5,17 @@
   <div class="page-transition">
   {{- partial "reading-progress.html" . -}}
   {{- partial "header.html" . -}}
+  {{- if .IsHome -}}
+  <div class="status-line">
+    <span class="status-item"><span class="status-dot"></span> signal: online</span>
+    <span class="status-sep">//</span>
+    <span class="status-item">engagements: open</span>
+    <span class="status-sep">//</span>
+    <span class="status-item hide-mobile">last op: 2026-07-15</span>
+  </div>
+  {{- end -}}
   <main class="page" id="main">
-    <div class="center" id="center">
-      {{- block "main" . }}{{ end -}}
-    </div>
+    {{- block "main" . }}{{ end -}}
   </main>
   {{- partial "footer.html" . -}}
   {{- partial "back-to-top.html" . -}}

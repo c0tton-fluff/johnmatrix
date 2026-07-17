@@ -1,7 +1,11 @@
 {{- $jbm := resources.Get "fonts/jetbrains-mono-latin.woff2" | fingerprint -}}
 {{- $ibm := resources.Get "fonts/ibm-plex-sans-latin.woff2" | fingerprint -}}
+{{- $serif := resources.Get "fonts/ibm-plex-serif-latin.woff2" | fingerprint -}}
+{{- $serifItalic := resources.Get "fonts/ibm-plex-serif-italic-latin.woff2" | fingerprint -}}
+{{- $serifBold := resources.Get "fonts/ibm-plex-serif-bold-latin.woff2" | fingerprint -}}
 <link rel="preload" href="{{ $ibm.RelPermalink }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ $jbm.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ $serif.RelPermalink }}" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face {
   font-family: "JetBrains Mono";
@@ -17,6 +21,30 @@
   font-weight: 400 700;
   font-display: swap;
   src: url("{{ $ibm.RelPermalink }}") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $serif.RelPermalink }}") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $serifItalic.RelPermalink }}") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("{{ $serifBold.RelPermalink }}") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>

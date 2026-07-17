@@ -71,7 +71,7 @@
   }
 
   // ---- Staggered scroll reveal ----
-  var revealSel = '.cert-card, .section-li, .writeup-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
+  var revealSel = '.cert-card, .section-li, .pub-row, .recent-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
   var revealEls = document.querySelectorAll(revealSel);
   if (revealEls.length && 'IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
@@ -146,7 +146,7 @@
         var tag = btn.getAttribute('data-tag');
         filterBtns.forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
-        var items = document.querySelectorAll('.section-li, .writeup-card');
+        var items = document.querySelectorAll('.section-li, .writeup-card, .pub-row');
         items.forEach(function (item) {
           if (tag === 'all') { item.classList.remove('tag-hidden'); return; }
           var itemTags = (item.getAttribute('data-tags') || '').toLowerCase();
@@ -195,4 +195,27 @@
       if (searchBtn) searchBtn.click();
     }
   });
+
+  // ---- Scrollspy TOC (sticky right-rail) ----
+  var tocRail = document.querySelector('.toc-rail');
+  if (tocRail && 'IntersectionObserver' in window) {
+    var tocLinks = tocRail.querySelectorAll('a[href^="#"]');
+    if (tocLinks.length) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var id = e.target.getAttribute('id');
+            tocLinks.forEach(function (l) { l.classList.remove('active'); });
+            var activeLink = tocRail.querySelector('a[href="#' + id + '"]');
+            if (activeLink) activeLink.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      tocLinks.forEach(function (link) {
+        var targetId = link.getAttribute('href').slice(1);
+        var target = document.getElementById(targetId);
+        if (target) spy.observe(target);
+      });
+    }
+  }
 })();
