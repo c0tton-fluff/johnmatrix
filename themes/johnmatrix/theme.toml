@@ -1,0 +1,11 @@
+name = "johnmatrix"
+license = "MIT"
+licenselink = ""
+description = "Custom Hugo theme for johnmatrix.org - brass/gold terminal aesthetic, dark-first, PageSpeed-optimized."
+homepage = "https://johnmatrix.org"
+tags = ["minimal", "dark", "terminal", "security", "blog"]
+features = ["responsive", "search", "syntax-highlighting", "page-bundles"]
+min_version = "0.121.0"
+
+[author]
+  name = "johnmatrix"

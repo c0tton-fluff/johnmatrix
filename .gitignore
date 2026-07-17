@@ -1,0 +1,23 @@
+# Hugo build output
+public/
+resources/_assets/
+
+# Hugo
+.hugo_build.lock
+
+# Pagefind
+public/pagefind/
+
+# OS
+.DS_Store
+.DS_Store?
+
+# Editor
+.vscode/
+.idea/
+
+# Node (for Pagefind in CI only, not local)
+node_modules/
+
+# Migration artifacts (one-off, not part of site)
+MIGRATION-MANIFEST.md

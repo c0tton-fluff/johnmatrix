@@ -1,0 +1,11 @@
+<footer>
+  <div class="footer-links">
+    {{- with .Site.Params.github -}}
+      <a href="{{ . }}" rel="noopener noreferrer">GitHub</a>
+    {{- end -}}
+  </div>
+  <div class="footer-meta">
+    <span>{{ with .Site.Params.plausibleDomain }}{{ end }}{{ .Site.Title }}</span>
+    <span>{{ now.Format "2006" }}</span>
+  </div>
+</footer>

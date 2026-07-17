@@ -1,0 +1,28 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0d0d0d">
+
+  {{- if .Description -}}
+    <meta name="description" content="{{ .Description | plainify | htmlEscape }}">
+  {{- else if .Site.Params.description -}}
+    <meta name="description" content="{{ .Site.Params.description | htmlEscape }}">
+  {{- end -}}
+
+  <title>{{ block "title" . }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}{{ end }}</title>
+
+  {{- partial "fonts.html" . -}}
+  {{- partial "seo.html" . -}}
+
+  {{- $css := resources.Get "scss/main.scss" | toCSS | minify | fingerprint -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+  {{- with .Site.Params.plausibleDomain -}}
+    {{- partial "plausible.html" (dict "domain" .) -}}
+  {{- end -}}
+
+  {{- if hugo.IsProduction -}}
+    <link rel="canonical" href="{{ .Permalink }}">
+  {{- end -}}
+</head>

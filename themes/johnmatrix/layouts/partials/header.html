@@ -1,0 +1,29 @@
+<nav class="top-nav" aria-label="Primary">
+  <div class="top-nav-links">
+    {{- $current := .Permalink -}}
+    {{- range .Site.Menus.main -}}
+      {{- $isHome := eq .URL "/" -}}
+      {{- $isActive := or (eq $.Permalink .URL) (and (not $isHome) (strings.HasPrefix $.Permalink .URL)) -}}
+      {{- if $isHome -}}{{- $isActive = eq $.Permalink .URL -}}{{- end -}}
+      <a href="{{ .URL | relLangURL }}" class="top-nav-link{{ if $isActive }} active{{ end }}">{{ .Name }}</a>
+    {{- end -}}
+  </div>
+  <div class="top-nav-right">
+    <button class="top-nav-search" id="top-nav-search-btn" aria-label="Search" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </button>
+    <button class="top-nav-hamburger" id="top-nav-hamburger" aria-label="Menu" aria-expanded="false" type="button">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    {{- range .Site.Menus.main -}}
+      {{- $isHome := eq .URL "/" -}}
+      {{- $isActive := or (eq $.Permalink .URL) (and (not $isHome) (strings.HasPrefix $.Permalink .URL)) -}}
+      {{- if $isHome -}}{{- $isActive = eq $.Permalink .URL -}}{{- end -}}
+      <a href="{{ .URL | relLangURL }}" class="mobile-menu-link{{ if $isActive }} active{{ end }}">{{ .Name }}</a>
+    {{- end -}}
+  </div>
+</nav>

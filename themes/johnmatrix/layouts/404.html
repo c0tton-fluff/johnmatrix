@@ -1,0 +1,20 @@
+{{ define "main" }}
+<article class="content">
+  <div class="terminal-404">
+    <div class="terminal-404-window">
+      <div class="terminal-404-bar">
+        <span class="terminal-404-dot" style="background:#e74c3c"></span>
+        <span class="terminal-404-dot" style="background:#f4d03f"></span>
+        <span class="terminal-404-dot" style="background:#2ecc71"></span>
+        <span class="t404-dim">-- bash --</span>
+      </div>
+      <div class="terminal-404-body">
+        <div><span class="t404-prompt">$</span> <span class="t404-cmd">curl {{ .Site.BaseURL }}{{ .RelPermalink }}</span></div>
+        <div><span class="t404-err">404</span> <span class="t404-dim">-- not found -- resource does not exist or has been moved</span></div>
+        <div style="margin-top:1rem"><span class="t404-prompt">$</span> <span class="t404-dim">check the URL, or head back home.</span></div>
+        <a href="{{ .Site.BaseURL }}" class="t404-link">cd ~</a>
+      </div>
+    </div>
+  </div>
+</article>
+{{ end }}

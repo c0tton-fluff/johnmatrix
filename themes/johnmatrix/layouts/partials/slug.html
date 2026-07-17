@@ -1,0 +1,11 @@
+{{- $slug := "" -}}
+{{- with .File -}}
+  {{- $slug = .Dir -}}
+  {{- if eq $slug "" -}}
+    {{- $slug = "index" -}}
+  {{- else -}}
+    {{- $slug = trim $slug "/" -}}
+    {{- if eq $slug "" -}}{{- $slug = "index" -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $slug -}}

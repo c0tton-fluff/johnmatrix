@@ -1,0 +1,85 @@
+baseURL = "https://johnmatrix.org/"
+locale = "en-us"
+title = "johnmatrix"
+theme = "johnmatrix"
+enableGitInfo = true
+enableRobotsTXT = true
+summaryLength = 32
+paginate = 50
+
+[params]
+  description = "Purple Teamer. AI security, offensive tooling, breaking things, sharing everything."
+  plausibleDomain = "johnmatrix.org"
+  accentBrass = "#cda54b"
+  accentYellow = "#f4d03f"
+  headerFont = "JetBrains Mono"
+  bodyFont = "IBM Plex Sans"
+  codeFont = "JetBrains Mono"
+  github = "https://github.com/c0tton-fluff"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.goldmark.parser]
+  wrapStandAloneImageWithinFigure = false
+
+[markup.highlight]
+  style = "dracula"
+  lineNos = false
+  noClasses = false
+  codeFences = true
+  guessSyntax = true
+  tabWidth = 2
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+  ordered = false
+
+[frontmatter]
+  date = [":git", "lastmod", ":fileModTime"]
+  lastmod = [":git", "lastmod", ":fileModTime"]
+  publishDate = [":git", "lastmod", ":fileModTime"]
+
+[permalinks]
+  bugforge = "/bugforge/:slugorcontentbasename/"
+  ai-research = "/ai-research/:slugorcontentbasename/"
+  brain-sharing = "/brain-sharing/:slugorcontentbasename/"
+  methodology = "/methodology/:slugorcontentbasename/"
+
+[taxonomies]
+  tag = "tags"
+
+[[menu.main]]
+  name = "Home"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  name = "Methodology"
+  url = "/methodology/"
+  weight = 2
+
+[[menu.main]]
+  name = "Brain Sharing"
+  url = "/brain-sharing/"
+  weight = 3
+
+[[menu.main]]
+  name = "BugForge"
+  url = "/bugforge/"
+  weight = 4
+
+[[menu.main]]
+  name = "AI Research"
+  url = "/ai-research/"
+  weight = 5
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
+
+[minify]
+  disableXML = true

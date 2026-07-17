@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale | default "en" }}" data-page-slug="{{ with .File }}{{ .Dir }}{{ end }}">
+{{- partial "head.html" . -}}
+<body data-slug="{{ partial "slug.html" . }}">
+  {{- partial "reading-progress.html" . -}}
+  {{- partial "header.html" . -}}
+  <main class="page" id="main">
+    <div class="center" id="center">
+      {{- block "main" . }}{{ end -}}
+    </div>
+  </main>
+  {{- partial "footer.html" . -}}
+  {{- partial "back-to-top.html" . -}}
+  {{- partial "search-overlay.html" . -}}
+  {{- partial "scripts.html" . -}}
+</body>
+</html>

@@ -1,0 +1,12 @@
+{{- $main := resources.Get "js/main.js" | minify | fingerprint -}}
+<script defer src="{{ $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}"></script>
+
+{{- if .IsHome -}}
+  {{- $hero := resources.Get "js/terminal-hero.js" | minify | fingerprint -}}
+  <script defer src="{{ $hero.RelPermalink }}" integrity="{{ $hero.Data.Integrity }}"></script>
+{{- end -}}
+
+{{- if ne .Kind "taxonomy" -}}
+  {{- $search := resources.Get "js/search.js" | minify | fingerprint -}}
+  <script defer src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
+{{- end -}}

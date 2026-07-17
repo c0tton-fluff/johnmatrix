@@ -1,0 +1,19 @@
+{{- with .File -}}
+{{- $dir := .Dir -}}
+{{- $parts := split $dir "/" -}}
+{{- $crumbs := slice -}}
+{{- $accum := "" -}}
+{{- range $parts -}}
+  {{- if eq . "" -}}{{- continue -}}{{- end -}}
+  {{- $accum = path.Join $accum . -}}
+  {{- $crumbs = $crumbs | append (dict "name" (humanize (replace . "-" " ")) "url" (printf "/%s/" $accum)) -}}
+{{- end -}}
+{{- if gt (len $crumbs) 0 -}}
+<nav class="breadcrumb-container" aria-label="Breadcrumb">
+  {{- range $idx, $c := $crumbs -}}
+    {{- if gt $idx 0 }}<span class="breadcrumb-sep">/</span>{{ end -}}
+    <span class="breadcrumb-element"><a href="{{ $c.url }}">{{ $c.name }}</a></span>
+  {{- end -}}
+</nav>
+{{- end -}}
+{{- end -}}

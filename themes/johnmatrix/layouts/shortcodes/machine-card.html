@@ -1,0 +1,52 @@
+{{- $difficulty := .Get "difficulty" -}}
+{{- $status := .Get "status" -}}
+{{- $platform := .Get "platform" -}}
+{{- $vuln := .Get "vuln" -}}
+
+{{- $diffColor := "#ffffff" -}}
+{{- if $difficulty -}}
+  {{- $d := lower $difficulty -}}
+  {{- if eq $d "easy" }}{{- $diffColor = "#2ecc71" -}}
+  {{- else if eq $d "medium" }}{{- $diffColor = "#f39c12" -}}
+  {{- else if eq $d "hard" }}{{- $diffColor = "#e74c3c" -}}
+  {{- else if eq $d "insane" }}{{- $diffColor = "#9b59b6" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $statusIcon := "" -}}
+{{- if $status -}}
+  {{- $s := lower $status -}}
+  {{- if eq $s "completed" }}{{- $statusIcon = "\u2713" -}}
+  {{- else if eq $s "in-progress" }}{{- $statusIcon = "\u25d0" -}}
+  {{- else if eq $s "todo" }}{{- $statusIcon = "\u25cb" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $glow := printf "box-shadow: 0 0 10px %s40, 0 0 20px %s20;" $diffColor $diffColor -}}
+
+<div class="machine-card" style="{{ if $difficulty }}{{ $glow | safeCSS }}{{ end }}">
+  {{- with $platform -}}
+    <div class="machine-card-item">
+      <span class="machine-card-label">Platform</span>
+      <span class="machine-card-value platform">{{ . }}</span>
+    </div>
+  {{- end -}}
+  {{- with $difficulty -}}
+    <div class="machine-card-item">
+      <span class="machine-card-label">Difficulty</span>
+      <span class="machine-card-value difficulty" style="color: {{ $diffColor }}; text-shadow: 0 0 8px {{ $diffColor }}80;">{{ . }}</span>
+    </div>
+  {{- end -}}
+  {{- with $status -}}
+    <div class="machine-card-item">
+      <span class="machine-card-label">Status</span>
+      <span class="machine-card-value status">{{ $statusIcon }} {{ . }}</span>
+    </div>
+  {{- end -}}
+  {{- with $vuln -}}
+    <div class="machine-card-item">
+      <span class="machine-card-label">Vuln Type</span>
+      <span class="machine-card-value vuln">{{ . }}</span>
+    </div>
+  {{- end -}}
+</div>

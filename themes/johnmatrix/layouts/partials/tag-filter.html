@@ -1,0 +1,21 @@
+{{- $pages := .pages -}}
+{{- $vulnTags := slice "idor" "xss" "sqli" "xxe" "ssrf" "rce" "bac" "business-logic" "auth-bypass" "lfi" "deserialization" "prototype-pollution" "mass-assignment" "websocket" "cspt" -}}
+{{- $available := slice -}}
+{{- range $pages -}}
+  {{- with .Params.tags -}}
+    {{- range . -}}
+      {{- $t := lower . -}}
+      {{- if and (in $vulnTags $t) (not (in $available $t)) -}}
+        {{- $available = $available | append $t -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $available) 0 -}}
+<div class="tag-filter">
+  <button class="tag-filter-btn active" data-tag="all" type="button">All</button>
+  {{- range sort $available -}}
+    <button class="tag-filter-btn" data-tag="{{ . }}" type="button">{{ upper . }}</button>
+  {{- end -}}
+</div>
+{{- end -}}

@@ -1,0 +1,30 @@
+{{ define "main" }}
+<section class="content list-content">
+  {{- if not (eq .Title "") -}}
+    <h1 class="article-title">{{ .Title }}</h1>
+  {{- end -}}
+
+  {{- partial "breadcrumbs.html" . -}}
+
+  {{- .Content -}}
+
+  {{- $pages := where .Pages "Kind" "page" -}}
+
+  {{- if gt (len $pages) 0 -}}
+    {{- partial "tag-filter.html" (dict "pages" $pages) -}}
+
+    <h2 class="section-title">{{ if eq .Type "tags" }}Tagged{{ else }}All Pages{{ end }}</h2>
+    <ul class="section-ul">
+      {{- range $pages -}}
+        {{- $tagStr := "" -}}
+        {{- with .Params.tags -}}{{- $tagStr = lower (delimit . ",") -}}{{- end -}}
+        <li class="section-li reveal" data-tags="{{ $tagStr }}">
+          <a href="{{ .RelPermalink }}">
+            <span>{{ .Title }}</span>
+          </a>
+        </li>
+      {{- end -}}
+    </ul>
+  {{- end -}}
+</section>
+{{ end }}

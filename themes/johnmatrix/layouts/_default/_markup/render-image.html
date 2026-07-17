@@ -1,0 +1,35 @@
+{{- $src := .Destination -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+{{- $page := .Page -}}
+
+{{- $isExternal := or (strings.HasPrefix $src "http://") (strings.HasPrefix $src "https://") (strings.HasPrefix $src "//") -}}
+{{- $isData := strings.HasPrefix $src "data:" -}}
+
+{{- if or $isExternal $isData -}}
+  {{- $titleAttr := "" -}}
+  {{- with $title -}}{{- $titleAttr = printf ` title="%s"` . -}}{{- end -}}
+  <img src="{{ $src }}" alt="{{ $alt }}"{{ $titleAttr | safeHTMLAttr }} loading="lazy" decoding="async">
+{{- else -}}
+  {{- $res := $page.Resources.GetMatch $src -}}
+  {{- if not $res -}}
+    {{- $res = $page.Resources.GetMatch (strings.TrimPrefix "/" $src) -}}
+  {{- end -}}
+  {{- if not $res -}}
+    {{- $res = resources.GetMatch $src -}}
+  {{- end -}}
+
+  {{- if $res -}}
+    {{- $webp := $res.Resize (printf "%dx0 webp q82" 1100) -}}
+    {{- $webp2x := $res.Resize (printf "%dx0 webp q75" 2200) -}}
+    {{- $png := $res.Resize (printf "%dx0" 1100) -}}
+    {{- $w := $png.Width -}}
+    {{- $h := $png.Height -}}
+    <picture>
+      <source type="image/webp" srcset="{{ $webp.RelPermalink }} 1x, {{ $webp2x.RelPermalink }} 2x">
+      <img src="{{ $png.RelPermalink }}" alt="{{ $alt }}" width="{{ $w }}" height="{{ $h }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+    </picture>
+  {{- else -}}
+    <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+  {{- end -}}
+{{- end -}}
