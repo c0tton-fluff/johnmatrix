@@ -87,7 +87,12 @@ jobs:
         run: |
           npx --yes http-server public -p 8080 --silent &
           npx --yes wait-on http://localhost:8080/ --timeout 60000
-          lhci autorun
+          # Explicit collect/assert so lhci uses collect.url (autorun
+          # auto-detects ./public as a staticDistDir and ignores the URLs).
+          # `lhci assert` exit code is the deploy gate; upload is best-effort.
+          lhci collect
+          lhci assert
+          lhci upload || true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
