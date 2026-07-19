@@ -3,6 +3,8 @@ name: Deploy Hugo to GitHub Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -47,11 +49,63 @@ jobs:
         with:
           path: public
 
+  # Quality gate: build the site, serve it locally, and assert Lighthouse
+  # category scores before anything is allowed to deploy. Runs on PRs too so
+  # it can gate merges. Auditing the local build (not live prod) means a bad
+  # build is caught here instead of after it is already public.
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "latest"
+          extended: true
+
+      # localhost baseURL so absolute asset + canonical URLs resolve against
+      # the local server on the same port Lighthouse audits.
+      - name: Build Hugo (local audit build)
+        run: hugo --minify --baseURL "http://localhost:8080/"
+
+      - name: Build Pagefind index
+        run: npx pagefind --site public
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.13.x
+
+      - name: Serve build and run Lighthouse (assertions gate)
+        run: |
+          npx --yes http-server public -p 8080 --silent &
+          npx --yes wait-on http://localhost:8080/ --timeout 60000
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 30
+
   deploy:
+    # Only deploy on push to main / manual dispatch, never on pull_request.
+    if: github.event_name != 'pull_request'
     permissions:
       pages: write
       id-token: write
-    needs: build
+    needs: [build, lighthouse]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
