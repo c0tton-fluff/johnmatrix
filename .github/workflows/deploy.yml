@@ -87,13 +87,13 @@ jobs:
         run: |
           npx --yes http-server public -p 8080 --silent &
           npx --yes wait-on http://localhost:8080/ --timeout 60000
-          # Pass --config explicitly: lhci does not reliably auto-discover
-          # lighthouserc.json, and autorun otherwise auto-detects ./public as a
-          # staticDistDir and drops collect.url (applying no assertions).
+          # Pass --config explicitly and run collect/assert separately: `lhci
+          # autorun` auto-detects ./public as a staticDistDir and drops
+          # collect.url (applying no assertions - a silent fake-green gate).
           # `lhci assert` exit code is the deploy gate; upload is best-effort.
-          lhci collect --config=./lighthouserc.json
-          lhci assert --config=./lighthouserc.json
-          lhci upload --config=./lighthouserc.json || true
+          lhci collect --config=./.lighthouserc.json
+          lhci assert --config=./.lighthouserc.json
+          lhci upload --config=./.lighthouserc.json || true
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
