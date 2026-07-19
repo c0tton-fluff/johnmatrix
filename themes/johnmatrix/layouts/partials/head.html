@@ -22,8 +22,8 @@
 {{- partial "fonts.html" . -}}
 {{- partial "seo.html" . -}}
 
-{{- $css := resources.Get "scss/main.scss" | css.Sass | minify | fingerprint -}}
-<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- $css := resources.Get "scss/main.scss" | css.Sass | minify -}}
+<style>{{ $css.Content | safeCSS }}</style>
 
 {{- with .Site.Params.plausibleDomain -}}
   {{- partial "plausible.html" (dict "domain" .) -}}

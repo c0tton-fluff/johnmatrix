@@ -16,7 +16,7 @@ title: Keep Learning & Be Useful
 ## Featured
 
 <div class="featured-grid">
-  <a href="/methodology/" class="featured-card">
+  <a href="/brain-sharing/web-applications/" class="featured-card">
     <span class="featured-icon">&#9776;</span>
     <div class="featured-body">
       <span class="featured-title">Methodology</span>
