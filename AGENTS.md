@@ -12,9 +12,9 @@ Hugo site. `hugo` builds to `public/`; `hugo server` for local preview. Do not h
 
 ## CI: Lighthouse deploy gate (read before touching `.github/` or `lighthouserc.json`)
 
-`.github/workflows/deploy.yml` builds Hugo, then a `lighthouse` job serves the built site on a fixed `localhost:8080` and asserts scores. `deploy` has `needs: [build, lighthouse]`, so a failing audit BLOCKS the deploy (the built change never goes live). It runs on `pull_request` too (deploy skipped there) so the gate can protect merges. The single config is `lighthouserc.json` (no dot) at repo root; the workflow passes it explicitly via `--config=./lighthouserc.json`.
+`.github/workflows/deploy.yml` builds Hugo, then a `lighthouse` job serves the built site on a fixed `localhost:8080` and reports Lighthouse category scores. It is ADVISORY, not a deploy gate: `deploy` has `needs: [build]` only, and the assertions are `warn` level, so a low score never blocks a deploy - it just shows in the job log / uploaded artifact. The single config is `lighthouserc.json` (no dot) at repo root; the workflow passes it explicitly via `--config=./lighthouserc.json`.
 
-Current assertion policy (in `lighthouserc.json`): 5 URLs, `numberOfRuns: 3`, and ALL four categories (performance, accessibility, best-practices, seo) are hard `error` gates at `>=0.95`.
+Current policy (in `lighthouserc.json`): 5 URLs, `numberOfRuns: 3`, all four categories (performance, accessibility, best-practices, seo) at `warn`/`>=0.95`. History: this started as a hard `error` gate, but a `0.95` bar blocked deploys over a 2-point SEO dip on a link-heavy list page (`/bugforge/` = 0.93), so it was made advisory. If you want a real blocking gate again, flip the relevant categories back to `error`, add `lighthouse` back to `deploy.needs`, and set a threshold each audited page actually clears (list pages score lower on SEO than articles).
 
 Hard-learned gotchas (each cost real debugging time):
 - ONE config file only, and mind the dotfile. lhci auto-discovers `.lighthouserc.json` (dotfile) with priority over `lighthouserc.json` (no dot). This repo had BOTH at one point and the no-dot one was silently dead. It is now consolidated into `lighthouserc.json` (no dot) with the workflow pointing `--config` at it. Do not re-introduce a `.lighthouserc.json`.
