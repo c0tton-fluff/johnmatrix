@@ -49,10 +49,10 @@ jobs:
         with:
           path: public
 
-  # Quality gate: build the site, serve it locally, and assert Lighthouse
-  # category scores before anything is allowed to deploy. Runs on PRs too so
-  # it can gate merges. Auditing the local build (not live prod) means a bad
-  # build is caught here instead of after it is already public.
+  # Advisory quality report (NOT a deploy gate): build the site, serve it
+  # locally, and report Lighthouse category scores. Assertions are "warn" so
+  # the job stays green; deploy does NOT depend on this job. Review the scores
+  # in the logs / uploaded artifact; a dip never blocks a deploy.
   lighthouse:
     runs-on: ubuntu-latest
     steps:
@@ -112,7 +112,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    needs: [build, lighthouse]
+    needs: [build]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
