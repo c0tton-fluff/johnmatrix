@@ -1,11 +1,13 @@
 <footer>
   <div class="footer-links">
+    <a href="/about/">About</a>
     {{- with .Site.Params.github -}}
       <a href="{{ . }}" rel="noopener noreferrer">GitHub</a>
     {{- end -}}
+    <a href="{{ "/index.xml" | relURL }}" type="application/rss+xml">RSS</a>
   </div>
   <div class="footer-meta">
-    <span>{{ with .Site.Params.plausibleDomain }}{{ end }}{{ .Site.Title }}</span>
-    <span>{{ now.Format "2006" }}</span>
+    <span class="footer-signoff"><span class="footer-prompt">$</span> exit</span>
+    <span>{{ .Site.Title }} — {{ now.Format "2006" }}</span>
   </div>
 </footer>

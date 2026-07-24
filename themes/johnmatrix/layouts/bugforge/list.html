@@ -5,6 +5,8 @@
   {{- $pages := where .Pages "Kind" "page" -}}
 
   {{- if gt (len $pages) 0 -}}
+    <p class="shell-line"><span class="shell-prompt">root@johnmatrix:~$</span> ls ./bugforge/ | wc -l <span class="shell-out">→ {{ len $pages }}</span></p>
+
   <div class="bugforge-search-wrap">
     <input type="search" class="bugforge-search" id="bugforge-search" placeholder="Search writeups..." autocomplete="off" aria-label="Search writeups" />
     <span class="bugforge-count" id="bugforge-count">{{ len $pages }} writeups</span>
@@ -22,7 +24,18 @@
           {{- end -}}
         {{- end -}}
       {{- end -}}
-      <a href="{{ .RelPermalink }}" class="bugforge-card reveal" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
+      {{- $sev := "" -}}
+      {{- with .Params.tags -}}
+        {{- $t := lower (delimit . " ") -}}
+        {{- if or (strings.Contains $t "account-takeover") (strings.Contains $t "sqli") (strings.Contains $t "rce") -}}
+          {{- $sev = "sev-critical" -}}
+        {{- else if or (strings.Contains $t "ssrf") (strings.Contains $t "xss") (strings.Contains $t "broken-access-control") (strings.Contains $t "idor") -}}
+          {{- $sev = "sev-high" -}}
+        {{- else if or (strings.Contains $t "open-redirect") (strings.Contains $t "business-logic") -}}
+          {{- $sev = "sev-medium" -}}
+        {{- end -}}
+      {{- end -}}
+      <a href="{{ .RelPermalink }}" class="bugforge-card reveal {{ $sev }}" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
         <span class="bugforge-card-title">{{ .Title }}</span>
         <span class="bugforge-card-tags">{{ delimit $tagDisplay " · " }}</span>
         <span class="bugforge-card-arrow" aria-hidden="true">&#8594;</span>

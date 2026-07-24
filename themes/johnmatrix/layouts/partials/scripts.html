@@ -10,3 +10,6 @@
   {{- $search := resources.Get "js/search.js" | minify | fingerprint -}}
   <script defer src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
 {{- end -}}
+
+{{- $cli := resources.Get "js/cli.js" | minify | fingerprint -}}
+<script defer src="{{ $cli.RelPermalink }}" integrity="{{ $cli.Data.Integrity }}"></script>

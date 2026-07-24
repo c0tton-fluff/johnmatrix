@@ -15,6 +15,9 @@
   var searchInstance = null;
 
   function openSearch() {
+    searchInput.value = '';
+    commandResults.hidden = true;
+    searchResults.style.display = '';
     searchContainer.removeAttribute('hidden');
     searchContainer.setAttribute('aria-hidden', 'false');
     searchContainer.classList.add('active');
@@ -57,6 +60,85 @@
     if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       e.preventDefault();
       openSearch();
+    }
+  });
+
+  // ---- Command palette mode: input starting with ">" ----
+  var commandResults = document.getElementById('command-results');
+  if (!commandResults || !searchInput) return;
+
+  var COMMANDS = [
+    { name: 'cd ~',            desc: 'go home',              url: '/' },
+    { name: 'cd bugforge',     desc: '40 challenge writeups', url: '/bugforge/' },
+    { name: 'cd ai-research',  desc: 'offensive AI research', url: '/ai-research/' },
+    { name: 'cd brain-sharing',desc: 'guides and tooling',    url: '/brain-sharing/' },
+    { name: 'whoami',          desc: 'about johnmatrix',      url: '/about/' },
+    { name: 'ls',              desc: 'list all sections',     url: null },
+    { name: 'help',            desc: 'show commands',         url: null }
+  ];
+
+  var cmdSelected = 0;
+
+  function renderCommands(query) {
+    var q = query.slice(1).trim().toLowerCase();
+    var matches = COMMANDS.filter(function (c) {
+      return !q || c.name.toLowerCase().indexOf(q) !== -1;
+    });
+
+    if (q === 'ls') {
+      commandResults.innerHTML = COMMANDS.filter(function (c) {
+        return c.name.indexOf('cd ') === 0 || c.name === 'whoami';
+      }).map(function (c) {
+        return '<a class="cmd-row" href="' + c.url + '">' +
+          '<span class="cmd-name">' + c.url + '</span>' +
+          '<span class="cmd-desc">' + c.desc + '</span></a>';
+      }).join('');
+      return;
+    }
+    if (q === 'help') {
+      commandResults.innerHTML = COMMANDS.map(function (c) {
+        return '<div class="cmd-row cmd-row-static">' +
+          '<span class="cmd-name">&gt;' + c.name + '</span>' +
+          '<span class="cmd-desc">' + c.desc + '</span></div>';
+      }).join('');
+      return;
+    }
+
+    cmdSelected = 0;
+    commandResults.innerHTML = matches.map(function (c, i) {
+      var inner = '<span class="cmd-name">&gt;' + c.name + '</span>' +
+                  '<span class="cmd-desc">' + c.desc + '</span>';
+      return c.url
+        ? '<a class="cmd-row' + (i === 0 ? ' active' : '') + '" href="' + c.url + '" data-cmd-idx="' + i + '">' + inner + '</a>'
+        : '<div class="cmd-row cmd-row-static">' + inner + '</div>';
+    }).join('') || '<div class="cmd-row cmd-row-static"><span class="cmd-desc">command not found — try &gt;help</span></div>';
+    commandResults.setAttribute('data-matches', matches.filter(function (c) { return c.url; }).map(function (c) { return c.url; }).join('|'));
+  }
+
+  searchInput.addEventListener('input', function () {
+    var v = searchInput.value;
+    var cmdMode = v.charAt(0) === '>';
+    commandResults.hidden = !cmdMode;
+    searchResults.style.display = cmdMode ? 'none' : '';
+    if (cmdMode) renderCommands(v);
+  });
+
+  searchInput.addEventListener('keydown', function (e) {
+    if (commandResults.hidden) return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var urls = (commandResults.getAttribute('data-matches') || '').split('|').filter(Boolean);
+      var target = urls[cmdSelected];
+      if (target) window.location.href = target;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var rows = commandResults.querySelectorAll('a.cmd-row');
+      if (!rows.length) return;
+      cmdSelected = e.key === 'ArrowDown'
+        ? Math.min(cmdSelected + 1, rows.length - 1)
+        : Math.max(cmdSelected - 1, 0);
+      rows.forEach(function (r, i) { r.classList.toggle('active', i === cmdSelected); });
     }
   });
 })();

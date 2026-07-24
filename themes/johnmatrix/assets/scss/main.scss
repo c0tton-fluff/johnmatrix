@@ -1718,3 +1718,279 @@ footer {
   footer { padding: 2rem 1.1rem; }
   .folder-hero img { width: 85%; max-width: 380px; }
 }
+
+// =============================================================================
+// STATUS LINK (1.2)
+// =============================================================================
+
+.status-link {
+  color: inherit;
+  border-bottom: 1px dotted $border-hover;
+  &:hover { color: $accent-hover; border-bottom-color: $accent; }
+}
+
+// =============================================================================
+// FOOTER SIGNOFF (1.3)
+// =============================================================================
+
+.footer-signoff {
+  font-family: $code-font;
+  font-size: 0.8rem;
+  color: $text-faint;
+}
+
+.footer-prompt { color: $accent; }
+
+// =============================================================================
+// LATEST WRITING FEED (2.2)
+// =============================================================================
+
+.latest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.latest-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid $border;
+  font-size: 0.95rem;
+
+  &:last-child { border-bottom: none; }
+}
+
+.latest-date {
+  font-family: $code-font;
+  font-size: 0.78rem;
+  color: $text-faint;
+  flex-shrink: 0;
+}
+
+.latest-section {
+  font-family: $code-font;
+  font-size: 0.78rem;
+  color: $accent;
+  flex-shrink: 0;
+}
+
+.latest-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .latest-row { flex-wrap: wrap; gap: 0.2rem 0.7rem; }
+  .latest-title { white-space: normal; }
+}
+
+// =============================================================================
+// BOOT LOG (3.1)
+// =============================================================================
+
+.boot-log {
+  font-family: $code-font;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: $text-faint;
+  margin: 0 auto 1.4rem;
+  max-width: 34rem;
+  text-align: left;
+  min-height: 0;
+
+  div::first-letter { color: $accent; }
+
+  &:empty { display: none; }
+}
+
+// =============================================================================
+// COMMAND PALETTE (3.2)
+// =============================================================================
+
+#command-results {
+  font-family: $code-font;
+  font-size: 0.85rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.cmd-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0.9rem;
+  color: $text;
+  border-left: 2px solid transparent;
+
+  &.active, &:hover {
+    background: $accent-dim;
+    border-left-color: $accent;
+    color: $accent-hover;
+  }
+}
+
+.cmd-row-static { color: $text-muted; cursor: default; }
+.cmd-name { color: inherit; }
+.cmd-desc { color: $text-faint; font-size: 0.78rem; }
+
+// =============================================================================
+// CLI EASTER EGG (3.3)
+// =============================================================================
+
+#cli-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+
+  &[hidden] { display: none; }
+}
+
+#cli-window {
+  width: 100%;
+  max-width: 620px;
+  background: $surface;
+  border: 1px solid $border-strong;
+  border-radius: $radius;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+#cli-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.6rem 0.9rem;
+  background: $surface-2;
+  border-bottom: 1px solid $border;
+}
+
+.cli-dot { width: 11px; height: 11px; border-radius: 50%; }
+.cli-title {
+  margin-left: auto;
+  font-family: $code-font;
+  font-size: 0.75rem;
+  color: $text-faint;
+}
+
+#cli-body {
+  font-family: $code-font;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: $text;
+  padding: 1rem;
+  min-height: 200px;
+  max-height: 46vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.cli-echo { color: $accent; }
+.cli-ok { color: $success; }
+.cli-err { color: $danger; }
+
+#cli-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid $border;
+}
+
+.cli-prompt { font-family: $code-font; color: $accent; }
+
+#cli-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: $text;
+  font-family: $code-font;
+  font-size: 0.84rem;
+  caret-color: $accent;
+}
+
+// =============================================================================
+// SHELL-PROMPT SECTION HEADERS (3.4)
+// =============================================================================
+
+.shell-line {
+  font-family: $code-font;
+  font-size: 0.85rem;
+  color: $text-muted;
+  margin: 0.5rem 0 1.75rem;
+}
+
+.shell-prompt { color: $accent; margin-right: 0.4rem; }
+.shell-out { color: $text-faint; }
+
+// =============================================================================
+// CARD DEPTH & SEVERITY ACCENTS (3.5)
+// =============================================================================
+
+.bugforge-card {
+  border-left: 2px solid transparent;
+
+  &.sev-critical { border-left-color: $sev-critical; }
+  &.sev-high     { border-left-color: $sev-high; }
+  &.sev-medium   { border-left-color: $sev-medium; }
+}
+
+.featured-card, .bugforge-card {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, $accent, transparent);
+    transition: left 500ms $ease;
+  }
+
+  &:hover::after { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-card::after, .bugforge-card::after { display: none; }
+}
+
+@media (min-width: 720px) {
+  .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// =============================================================================
+// 404 ASCII + KBD (3.6)
+// =============================================================================
+
+.t404-ascii {
+  color: $accent;
+  font-size: 0.7rem;
+  line-height: 1.25;
+  margin: 0 0 1.2rem;
+  overflow-x: auto;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.t404-kbd {
+  font-family: $code-font;
+  font-size: 0.75rem;
+  color: $text-muted;
+  border: 1px solid $border-strong;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+}

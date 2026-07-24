@@ -6,12 +6,15 @@
   {{- partial "reading-progress.html" . -}}
   {{- partial "header.html" . -}}
   {{- if .IsHome -}}
+  {{- $latest := first 1 .Site.RegularPages.ByDate.Reverse -}}
   <div class="status-line">
     <span class="status-item"><span class="status-dot"></span> signal: online</span>
     <span class="status-sep">//</span>
     <span class="status-item">engagements: open</span>
     <span class="status-sep">//</span>
-    <span class="status-item hide-mobile">last op: 2026-07-15</span>
+    {{- with index $latest 0 -}}
+      <span class="status-item hide-mobile">last op: <a class="status-link" href="{{ .RelPermalink }}">{{ .Date.Format "2006-01-02" }}</a></span>
+    {{- end -}}
   </div>
   {{- end -}}
   <main class="page" id="main">

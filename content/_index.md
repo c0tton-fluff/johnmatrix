@@ -3,6 +3,7 @@ title: Keep Learning & Be Useful
 ---
 
 <div class="hero-intro">
+  <div class="boot-log" id="boot-log" aria-hidden="true"></div>
   <div class="terminal-line">
     <span class="terminal-prompt">$</span>
     <span class="terminal-text" id="terminal-text"></span>
@@ -16,14 +17,6 @@ title: Keep Learning & Be Useful
 ## Featured
 
 <div class="featured-grid">
-  <a href="/brain-sharing/web-applications/" class="featured-card">
-    <span class="featured-icon">&#9776;</span>
-    <div class="featured-body">
-      <span class="featured-title">Methodology</span>
-      <span class="featured-desc">Web app testing methodology, technique reference, and tooling notes.</span>
-    </div>
-    <span class="featured-arrow">&#8594;</span>
-  </a>
   <a href="/bugforge/" class="featured-card">
     <span class="featured-icon">&#9881;</span>
     <div class="featured-body">

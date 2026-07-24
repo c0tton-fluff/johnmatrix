@@ -1,51 +1,78 @@
-// Terminal hero typewriter - only loaded on home page
+// Terminal hero - systemd-style boot sequence, plays once per session
 (function () {
   'use strict';
-  var el = document.getElementById('terminal-text');
-  if (!el) return;
+  var textEl = document.getElementById('terminal-text');
+  var logEl = document.getElementById('boot-log');
+  if (!textEl) return;
 
-  var commands = [
-    'phantom detect bac --dir engagements/target',
-    'nmap -sC -sV 10.10.10.x',
-    'burp-go send POST /api/auth',
-    'sqlmap --batch --dbs'
+  var BOOT_LINES = [
+    '[  OK  ] Reached target Network.',
+    '[  OK  ] Mounted /dev/brain.',
+    '[  OK  ] Loaded 40 writeups from /var/bugforge.',
+    '[  OK  ] Started phantom.service - offensive tooling daemon.',
+    '[  OK  ] Reached target Multi-User System.'
   ];
 
-  var cmdIdx = 0;
-  var charIdx = 0;
-  var deleting = false;
-  var timer = null;
+  var COMMAND = 'phantom detect bac --dir engagements/target';
+  var SKIP_KEY = 'jm-booted';
+  var reducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function tick() {
-    var current = commands[cmdIdx];
-    if (!deleting) {
-      el.textContent = current.substring(0, charIdx + 1);
-      charIdx++;
-      if (charIdx >= current.length) {
-        deleting = true;
-        timer = setTimeout(tick, 2500);
-        return;
+  function typeCommand(done) {
+    var i = 0;
+    (function tick() {
+      textEl.textContent = COMMAND.substring(0, i + 1);
+      i++;
+      if (i < COMMAND.length) {
+        setTimeout(tick, 55 + Math.random() * 35);
+      } else if (done) {
+        done();
       }
-      timer = setTimeout(tick, 55 + Math.random() * 35);
-    } else {
-      el.textContent = current.substring(0, charIdx);
-      charIdx--;
-      if (charIdx < 0) {
-        deleting = false;
-        charIdx = 0;
-        cmdIdx = (cmdIdx + 1) % commands.length;
-        timer = setTimeout(tick, 500);
-        return;
-      }
-      timer = setTimeout(tick, 25);
-    }
+    })();
   }
 
-  // Respect reduced motion - show static first command
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    el.textContent = commands[0];
+  function showBootLog(lines, instant, done) {
+    if (!logEl) { done(); return; }
+    if (instant) {
+      lines.forEach(function (line) {
+        var div = document.createElement('div');
+        div.textContent = line;
+        logEl.appendChild(div);
+      });
+      done();
+      return;
+    }
+    var i = 0;
+    (function next() {
+      if (i >= lines.length) { done(); return; }
+      var div = document.createElement('div');
+      div.textContent = lines[i];
+      logEl.appendChild(div);
+      i++;
+      setTimeout(next, 180 + Math.random() * 160);
+    })();
+  }
+
+  function finish() {
+    try { sessionStorage.setItem(SKIP_KEY, '1'); } catch (e) { /* private mode */ }
+  }
+
+  // Instant path: reduced motion, or already played this session
+  var played = false;
+  try { played = sessionStorage.getItem(SKIP_KEY) === '1'; } catch (e) { /* ignore */ }
+
+  if (reducedMotion) {
+    // Final state, no log noise
+    textEl.textContent = COMMAND;
     return;
   }
 
-  tick();
+  if (played) {
+    textEl.textContent = COMMAND;
+    return;
+  }
+
+  showBootLog(BOOT_LINES, false, function () {
+    typeCommand(finish);
+  });
 })();

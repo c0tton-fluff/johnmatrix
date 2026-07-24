@@ -21,3 +21,9 @@ node_modules/
 
 # Migration artifacts (one-off, not part of site)
 MIGRATION-MANIFEST.md
+
+# Hugo generated output
+resources/_gen/
+
+# Session artifacts
+.claude/

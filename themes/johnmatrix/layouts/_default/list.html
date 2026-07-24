@@ -9,6 +9,9 @@
   {{- .Content -}}
 
   {{- $pages := where .Pages "Kind" "page" -}}
+  {{- if and (gt (len $pages) 0) .Section -}}
+    <p class="shell-line"><span class="shell-prompt">root@johnmatrix:~$</span> ls ./{{ .Section }}/ | wc -l <span class="shell-out">→ {{ len $pages }}</span></p>
+  {{- end -}}
   {{- $hasLinks := gt (len (findRE "<a " .Content)) 0 -}}
 
   {{- if and (gt (len $pages) 0) (not $hasLinks) -}}

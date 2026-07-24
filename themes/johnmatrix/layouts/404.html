@@ -9,9 +9,16 @@
         <span class="t404-dim">-- bash --</span>
       </div>
       <div class="terminal-404-body">
+        <pre class="t404-ascii" aria-hidden="true">
+██╗  ██╗ ██████╗ ██╗  ██╗
+██║  ██║██╔═████╗██║  ██║
+███████║██║██╔██║███████║
+╚════██║████╔╝██║╚════██║
+     ██║╚██████╔╝     ██║
+     ╚═╝ ╚═════╝      ╚═╝</pre>
         <div><span class="t404-prompt">$</span> <span class="t404-cmd">curl {{ .Site.BaseURL }}{{ .RelPermalink }}</span></div>
         <div><span class="t404-err">404</span> <span class="t404-dim">-- not found -- resource does not exist or has been moved</span></div>
-        <div style="margin-top:1rem"><span class="t404-prompt">$</span> <span class="t404-dim">check the URL, or head back home.</span></div>
+        <div style="margin-top:1rem"><span class="t404-prompt">$</span> <span class="t404-dim">check the URL, head home, or press</span> <span class="t404-kbd">Cmd K</span> <span class="t404-dim">to search.</span></div>
         <a href="{{ .Site.BaseURL }}" class="t404-link">cd ~</a>
       </div>
     </div>
