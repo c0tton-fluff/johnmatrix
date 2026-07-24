@@ -1,5 +1,6 @@
 ---
 title: "Context Engineering: The Skill Nobody Named in 2024"
+description: "The discipline of managing what the model sees, remembers, and forgets."
 tags:
   - ai
   - agent
@@ -9,11 +10,11 @@ date: 2026-06-26
 aliases:
   - "/AI-Research/Context-Engineering"
 ---
-Prompt engineering is being quietly demoted. Not because prompts stopped mattering, but because the people building real agentic systems realised the prompt is the small part. The big part is everything *around* the model: the briefing docs, the skills, the connectors, the retrieval, the memory, and the way the agent finds exactly what it needs at each step without drowning in what it does not.
+Prompt engineering is being quietly demoted. The people building real agentic systems realised the prompt is the small part. The big part is everything *around* the model: the briefing docs, the skills, the connectors, the retrieval, the memory, and the way the agent finds exactly what it needs at each step without drowning in what it does not. Prompts still matter. They just aren't the thing that decides whether your agent holds up over a long task.
 
 That discipline now has a name. In June 2025, Andrej Karpathy publicly backed "context engineering" over "prompt engineering." Shopify's CEO Tobi Lutke defined it crisply: the art of providing all the context for the task to be plausibly solvable by the model. By late 2025 Anthropic's own engineering team had written it up as a first-class discipline. The term went from nonexistent to industry-standard in about a year.
 
-Here is what it actually means, why it emerged exactly now, and why a bigger context window did not make the problem go away.
+What it actually means -- and why a million-token window did not make the problem go away.
 
 ---
 
@@ -54,6 +55,20 @@ If you have used a long coding session and watched the model start contradicting
 - **Refinement** - actively pruning accumulated cruft so a long-running agent does not slowly poison its own window
 
 The common thread: a frontier model with a poorly engineered context window will lose to a smaller model with a clean, well-curated one. The model is rarely the bottleneck. The information environment is.
+
+Lance Martin's four-pillar taxonomy -- Write, Select, Compress, Isolate -- has become the field's shared vocabulary, and it maps onto the list above almost 1:1. If you read anyone else on this topic, that is the frame they are using.
+
+---
+
+## 2026: Three Things That Changed
+
+The discipline moved fast in the first half of 2026. Three developments worth knowing:
+
+**ACE -- context as a playbook, not a blob.** The Agentic Context Engineering (ACE) paper proposed treating context as an evolving, itemised playbook rather than a rewritten blob. Instead of dumping the whole history into the window every turn, you maintain a structured set of claims and instructions that the agent updates in place. It directly attacks the "context collapse" failure mode -- the window stops being a growing transcript and becomes a living document.
+
+**Automatic compaction shipped.** Anthropic productised context compaction in Claude Opus 4.6 -- the model itself summarises and compresses older context when the window fills, rather than the developer hand-managing it. It removes the most tedious part of the discipline for the common case, and it pushes the hard part (what to keep, what to compress) into the model's own judgment, which is not always right.
+
+**Cache-aware layout is worth 41-80%.** A February 2026 study ("Don't Break the Cache") measured agentic workloads and found that cache-aware context layout -- keeping stable prefixes intact so the prompt cache hits -- cut API costs 41-80% with no model change. Where you put the volatile tokens is not a cosmetic choice. It is the single biggest cost lever in a running agent.
 
 ---
 

@@ -24,7 +24,7 @@ Verify it's alive:
 
 ```bash
 curl -s $TARGET | grep -o '<title>.*</title>'
-# <title>MedNode — Patient Login</title>
+# <title>MedNode - Patient Login</title>
 ```
 
 ## Enumeration

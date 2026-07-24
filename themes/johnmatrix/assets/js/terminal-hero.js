@@ -68,7 +68,9 @@
   }
 
   if (played) {
-    textEl.textContent = COMMAND;
+    showBootLog(BOOT_LINES, true, function () {
+      textEl.textContent = COMMAND;
+    });
     return;
   }
 

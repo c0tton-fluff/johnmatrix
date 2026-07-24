@@ -2,7 +2,7 @@
 title: Brain Sharing
 aliases:
   - "/Brain-Sharing"
-description: "Guides, tools, and knowledge sharing from the field — MCP servers for Burp, Caido, SentinelOne and HackerOne, security tooling, and practical setup notes."
+description: "Guides, tools, and knowledge sharing from the field: MCP servers for Burp, Caido, SentinelOne and HackerOne, security tooling, and practical setup notes."
 ---
 Guides, tools, and knowledge sharing. Everything here is either open source or described well enough to build your own. The goal is practical - things that work, how to set them up, and why they exist.
 

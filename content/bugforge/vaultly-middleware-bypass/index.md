@@ -47,7 +47,7 @@ TARGET="https://lab-1783941016807-tzq1pe.labs-app.bugforge.io"
 HTTP/1.1 403 Forbidden
 Content-Type: text/plain; charset=utf-8
 
-Forbidden — Vaultly HQ staff only.
+Forbidden - Vaultly HQ staff only.
 ```
 
 Without a session it redirects (`303 -> /dashboard`); with a session it 403s. The gate is **enforced in middleware**: middleware decrypts `vaultly_session`, and only lets `role == staff` through to the `/admin` route handler. No user-registerable role is `staff`, so the console is unreachable by design.
@@ -104,7 +104,7 @@ curl -sk "$TARGET/admin" \
 ```
 HTTP/1.1 200 OK
 
-Vaultly HQ — Operations Console
+Vaultly HQ - Operations Console
 ...
 ```
 

@@ -1,5 +1,6 @@
 ---
 title: "How LLMs Are Actually Built: The Architecture Is the Part That Matters Least"
+description: "From tokenization to RLHF: how language models are actually built, and why the architecture matters least."
 tags:
   - ai
   - llm
@@ -9,9 +10,9 @@ date: 2026-06-26
 aliases:
   - "/AI-Research/How-LLMs-Are-Actually-Built"
 ---
-Ask most people how you build a model like Claude or GPT and they say "transformers," as if the secret is the neural network design. It isn't. The transformer architecture is published, standardised, and freely available. Every major lab uses roughly the same building blocks. If architecture were the moat, everyone would already have a frontier model.
+If architecture were the moat, everyone would already have a frontier model. The transformer is published, standardised, and freely available -- every major lab uses roughly the same building blocks. Ask most people how you build a model like Claude or GPT and they say "transformers," as if the neural network design is the secret. It isn't.
 
-The thing nobody tells you: in practice it is **data, evaluation, and systems** that make or break a model, not architectural tweaks. The best models are not just trained. They are engineered. That is why two labs starting from the same architecture produce wildly different models - the architecture is shared, and everything that actually matters is not.
+In practice it is **data, evaluation, and systems** that make or break a model, not architectural tweaks. The best models are not just trained. They are engineered. That is why two labs starting from the same architecture produce wildly different models - the architecture is shared, and everything that actually matters is not.
 
 Here is the full pipeline from raw internet text to an assistant that answers you, in five stages. The architecture is one paragraph of one of them.
 
@@ -69,6 +70,8 @@ SFT alone has three problems: it is bounded by the demonstrators' ability, it ca
 **RLHF** (reinforcement learning from human feedback) fixes this by optimising for preference instead of imitation. The model generates two answers, a human picks the better one, those preferences train a reward model, and the model is optimised against that reward. This is the step that turned a raw text predictor into something that feels like an assistant.
 
 **DPO** (Direct Preference Optimization, Rafailov et al., 2023) reaches comparable quality with a single supervised-style loss and no separate reward model or RL loop - the authors showed the optimal RLHF policy has a closed-form relationship to the reward, so you can collapse the whole thing into one classification objective. It is simpler and more stable to train, which is why much of the open-source community defaults to it.
+
+**RLVR** (reinforcement learning with verifiable rewards) is the 2026 addition and the one that built the reasoning models. The pattern: instead of human preferences, the reward comes from a programmatic check that can be run automatically and scored without a human in the loop -- a maths problem with a known answer, a unit test that passes or fails, a proof checker. This is how models learned to reason in long chains rather than just imitate reasoning style, and it is the direct ancestor of the agent-training loops in my other writing: the same "generate, gate deterministically, reinforce what passes" loop, applied to weights instead of to a running session.
 
 ---
 

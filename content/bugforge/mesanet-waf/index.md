@@ -304,7 +304,7 @@ curl -sk -b "$COOKIE" -X POST "$LAB/gateway" \
 
 ```json
 {
-  "preview": "MesaNet Clearance Registry — Issued Authorizations\nRESTRICTED: facility oversight only. Vetting reviewers are not cleared for this record.\nOversight authorization: bug{9ltqA1WLPcjql0S1ygsqKlgo2beib77x}"
+  "preview": "MesaNet Clearance Registry - Issued Authorizations\nRESTRICTED: facility oversight only. Vetting reviewers are not cleared for this record.\nOversight authorization: bug{9ltqA1WLPcjql0S1ygsqKlgo2beib77x}"
 }
 ```
 

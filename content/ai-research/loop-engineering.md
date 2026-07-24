@@ -1,5 +1,6 @@
 ---
 title: "Loop Engineering: Replacing Yourself as the Prompter (and the Security Tax Nobody Budgets For)"
+description: "The agentic loop pattern that turns a single prompt into a self-directed workflow - and the security tax it adds."
 tags:
   - ai
   - agent
@@ -15,6 +16,8 @@ For two years the workflow was: write a prompt, share context, read the output, 
 A loop is a small system that, on its own, finds the work, hands it to the agent, checks the result, records what happened, and decides the next move. You design that system once. It prompts the agent from then on. The leverage point moved from typing prompts to designing the loop that prompts.
 
 I build offensive tooling for a living, so I came at this from a specific angle: an unattended loop is also an unattended attack surface. Most write-ups skip that part. This one does not. But first, the honest version of the technique - including when *not* to use it.
+
+**2026 update.** The loop went from a meme to a product category in about six months. Anthropic shipped an official Claude Code "Ralph Wiggum" plugin that blocks the agent's exit and re-feeds the prompt until a completion condition is met. OpenAI built the loop into Codex as `/goal`. Steve Yegge's Gas Town -- "Kubernetes for agents" -- hit v1.0 coordinating 20-30 parallel coding agents. The loop is no longer a technique you build; it is infrastructure you buy. I wrote the full research-grade follow-up, current to July 2026, with the METR capability math and the orchestrator wave: [Loop Engineering, 2026](/ai-research/loop-engineering-2026/).
 
 ---
 
@@ -130,3 +133,4 @@ Build the loop. Stay the engineer.
 - OWASP GenAI Security Project, "Agentic AI - Threats and Mitigations" (17 February 2025) - https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/
 - Anthropic, Model Context Protocol - https://modelcontextprotocol.io/
 - Addy Osmani has written extensively on the loop-engineering framing; search his essays for the longer treatment.
+- [Loop Engineering, 2026: The Bash Loop That Ate Software Development](/ai-research/loop-engineering-2026/) -- the deep-dive follow-up to this article, current to July 2026

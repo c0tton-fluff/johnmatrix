@@ -1,5 +1,6 @@
 ---
 title: "MCP Permission Models Are Broken"
+description: "The Model Context Protocol's permission model is broken. Here's how to fix it before agents ship."
 tags:
   - ai
   - security
@@ -509,6 +510,16 @@ Security MCP servers need:
 - Audit trails (who did what when)
 
 None of this exists in the protocol. Every server implementer builds it from scratch, or doesn't build it at all.
+
+## 2026: The Protocol Starts Listening
+
+I wrote this in May 2026 saying these should be protocol primitives. Six months on, the ecosystem is moving -- not fast enough, but in the right direction.
+
+**What I got right.** The call for capability levels, scope parameters, and audit events is being heard. MCP capability negotiation and guardrail primitives are now appearing in framework discussions. The A2A (agent-to-agent) protocol shipped OAuth-based agent identity -- the first brick of negotiated, scoped agent-to-agent trust. The argument that security properties should be declared and negotiated, not implicit, is becoming the consensus position.
+
+**What is still broken.** Per-tool capability levels are still not in the MCP spec -- they live in per-server custom code, exactly where I put them. Action budgets (call limits, rate caps) are still hand-rolled. There is no standard audit schema, so every server's logs are a snowflake. And the hardest problem -- scope enforcement that survives an agent's own reasoning about why a boundary should relax -- is unchanged. The protocol can declare a capability level; it still cannot stop a persuasive agent from talking a host into granting a higher one.
+
+The gap closed on declaration. It did not close on enforcement. That is the next fight, and it is the same one I describe in the [containment work](/ai-research/agent-containment-failures-in-offensive-tool-use/): the execution layer has to be the one that says no, because the reasoning layer always has a reason to say yes.
 
 ## Conclusion
 

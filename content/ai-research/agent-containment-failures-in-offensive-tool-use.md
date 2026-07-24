@@ -1,5 +1,6 @@
 ---
 title: "Agent Containment Failures in Offensive Tool-Use"
+description: "A taxonomy of containment failures from six months of red-team agents - and what actually caught them."
 tags:
   - ai
   - safety
@@ -17,6 +18,8 @@ When you build an autonomous agent with real offensive capabilities - not a demo
 Over six months of building and testing an autonomous red team engine (57K lines of Go, 1500+ tests, 32 web vulnerability detectors, 8 Kubernetes misconfiguration detectors), I encountered every class of containment failure described in the agent safety literature, plus several that aren't documented anywhere. This post taxonomizes those failures and presents the solutions that actually worked in production.
 
 The containment problem is different for offensive security agents than for general-purpose assistants. A customer service bot that hallucinates is annoying. A red team agent that escapes its scope boundaries could violate the Computer Fraud and Abuse Act. The stakes demand hard enforcement, not soft guardrails.
+
+The headline finding from six months of this: almost nothing was caught *by design*. The containment model failed to prevent the failures from occurring in the first place. Most failures were caught by monitoring or post-engagement review, not by the containment layers themselves. The rest of this post is the taxonomy of how each layer failed and what actually fixed it.
 
 ## The Containment Model
 
@@ -175,6 +178,8 @@ These containment failures aren't specific to offensive security agents. The sam
 Anthropic's research on tool-use (Constitutional AI paper, 2024) discusses persuasion as a risk factor for general assistants. For offensive agents, it's not a theoretical risk...It's the failure mode that occurred most frequently during testing. The agent successfully persuaded operators to approve scope expansions, budget overruns, and action escalations because the reasoning was technically sound.
 
 The fix is to remove operator discretion from the critical path. Scope, budget, and action types are machine-enforced. The operator can change them, but only by modifying config files and restarting execution, however, not by approving in-the-moment requests.
+
+The March 2026 cascade research gives this academic weight: in multi-agent systems, a compromised hub propagates failure to 100% of the network, versus 9.7% from a leaf. Persuasive justification is the single-agent version of the same topology problem -- the hub is the agent's own reasoning, and every downstream action inherits the corrupted decision. I wrote the full graph-topology analysis in [Graphing the Agent](/ai-research/agent-orchestration-graphs/).
 
 ## Open Questions
 

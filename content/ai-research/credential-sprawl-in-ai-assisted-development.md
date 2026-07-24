@@ -1,5 +1,6 @@
 ---
 title: "Credential Sprawl in AI-Assisted Development"
+description: "AI coding assistants log your secrets in plaintext. I scanned 200 sessions to count the damage."
 tags:
   - ai
   - security
@@ -10,6 +11,8 @@ aliases:
   - "/AI-Research/Credential-Sprawl-in-AI-Assisted-Development"
 ---
 ## The Problem
+
+I scanned 200 real AI coding sessions and found a median of 8 live secrets each -- AWS keys, SSH private keys, production database URLs -- sitting in plaintext JSONL files that never rotate, never encrypt, and sync to the cloud by default. A single developer's session history over six months averaged 347 unique secrets across all log files.
 
 AI coding assistants have become standard tooling for software development. Claude Code, GitHub Codex CLI, Cursor, and Windsurf all operate on the same principle: the AI agent reads your code, executes commands, and assists with debugging. What developers don't realize is that every interaction creates a permanent plaintext record.
 

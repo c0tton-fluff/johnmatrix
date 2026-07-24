@@ -109,7 +109,7 @@ a {
 .page { max-width: 100%; padding: 0; }
 
 .center {
-  max-width: 760px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 5.5rem 1.5rem 5rem;
   box-sizing: border-box;
@@ -131,7 +131,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 200px;
   gap: 3rem;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 5.5rem 1.5rem 5rem;
   box-sizing: border-box;
@@ -139,7 +139,7 @@ a {
   min-height: 70vh;
 }
 
-.post-main { min-width: 0; max-width: 760px; }
+.post-main { min-width: 0; max-width: 840px; }
 
 @media (max-width: 1024px) {
   .post-layout { display: block; padding: 5.5rem 1.5rem 5rem; }
@@ -1968,6 +1968,27 @@ footer {
 @media (min-width: 720px) {
   .featured-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// =============================================================================
+// AI RESEARCH LIST - wider container (3.7)
+// =============================================================================
+
+.center-wide.ai-research-list {
+  max-width: 1400px;
+}
+
+@media (max-width: 600px) {
+  .ai-research-list .featured-card {
+    padding: 1.2rem 1.2rem 1.1rem;
+  }
+  .ai-research-list .featured-title {
+    font-size: 0.9rem;
+  }
+  .ai-research-list .featured-desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
   }
 }
 

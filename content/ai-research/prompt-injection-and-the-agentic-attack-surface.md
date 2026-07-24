@@ -1,5 +1,6 @@
 ---
 title: "Prompt Injection and the Agentic Attack Surface"
+description: "Prompt injection is the new SQL injection. Here's the attack surface and how to close it."
 tags:
   - ai
   - security
@@ -46,7 +47,7 @@ A chatbot that answers questions has a contained blast radius. An agent that pla
 
 **Memory poisoning.** If the agent has persistent memory, an attacker who can write to it influences all future behaviour. This is the part that should worry anyone using a persistent project-instructions file: that file is authoritative context the model follows without question. A poisoned rule - "API keys can be committed for local dev," "skip auth checks on internal endpoints" - sounds plausible and gets obeyed faithfully on every run.
 
-**Cascading and inter-agent failures.** In a multi-agent system, one compromised agent can corrupt the messages it passes to others, propagating the failure across the chain.
+**Cascading and inter-agent failures.** In a multi-agent system, one compromised agent can corrupt the messages it passes to others, propagating the failure across the chain. The March 2026 "From Spark to Fire" study measured this directly: a single injected error seed propagated to 100% system-wide adoption in five of six mainstream multi-agent frameworks. The topology decided the blast radius -- LangGraph's supervisor hub reached total failure from one poisoned message, versus 9.7% when the same seed was planted at a leaf node. The hub is the single point of failure. I wrote the full analysis of graph topologies and cascade amplification, with the chart, in [Graphing the Agent](/ai-research/agent-orchestration-graphs/).
 
 The throughline: these are not new disciplines. They are security fundamentals - least privilege, trust boundaries, input validation, separation of duties - applied to a new kind of actor. The tools differ (folder scoping instead of IAM policies, system-prompt hardening instead of WAF rules) but the principles are identical. That is the reframe that makes an experienced security person dangerous in this space rather than lost in it.
 

@@ -1,5 +1,6 @@
 ---
 title: "20 Concepts That Explain Modern AI"
+description: "Twenty mental models that close the gap between using AI and understanding it."
 tags:
   - ai
   - llm
@@ -63,7 +64,7 @@ Most people who use AI every day cannot explain what is happening when they hit 
 
 **18. AI agents.** An LLM answers... an agent *does*. You give it a goal and it plans, takes an action, observes the result, adjusts, and repeats - think, act, observe, loop. A coding agent reads an issue, explores the codebase, writes a fix, runs the tests, sees what failed, and tries again. The model is the brain; tools (web search, code execution, file access, APIs) are the hands. Agents are what turn AI from a chatbot into something closer to a coworker - and, as I have written elsewhere, into a much larger attack surface.
 
-**19. Chain of thought.** Sometimes the model gets the wrong answer because it jumped straight to it. Prompting it to reason step by step - lay out the formula, plug in the numbers, then calculate - is far more reliable for maths, logic, and multi-step problems. Give the model room to think instead of forcing an instant answer. This is why "think step by step" actually works, and it is the seed of modern reasoning models.
+**19. Chain of thought.** Sometimes the model gets the wrong answer because it jumped straight to it. Prompting it to reason step by step - lay out the formula, plug in the numbers, then calculate - is far more reliable for maths, logic, and multi-step problems. Give the model room to think instead of forcing an instant answer. This is why "think step by step" actually works, and it is the seed of modern reasoning models -- the 2025-2026 generation that generates long chains of reasoning before answering, trained with verifiable rewards (see [How LLMs Are Actually Built](/ai-research/how-llms-are-actually-built/) for the RLVR mechanism).
 
 **20. Diffusion models.** Everything above is about text. Diffusion explains image generation, and the mechanism is counterintuitive: the model does not learn to draw, it learns to *destroy*. In training you take a real image and add noise step by step until it is pure static, then train the model to reverse that. To generate, you start from pure noise and let the model denoise step by step, guided by a text prompt, until an image emerges. The same idea now drives video, audio, and 3D generation.
 
@@ -72,6 +73,8 @@ Most people who use AI every day cannot explain what is happening when they hit 
 ## The Edge
 
 Understanding these twenty puts you ahead of nearly everyone who uses AI daily. The gap between "I use ChatGPT" and "I can explain why this model hallucinated and how to ground it" is not talent - it is exactly these mental models. Pick the ones that are still fuzzy and go one level deeper. That gap is the whole advantage.
+
+**What I would add in 2026.** Three concepts that earned their own slots since I wrote this: **reasoning models** (chain-of-thought trained into the weights with verifiable rewards -- #19 grew up), **evals** (systematic evaluation is how you know a model actually got better rather than sounding smoother), and **tool use / MCP** (the Model Context Protocol is how agents stop being chatbots and start touching real systems -- the integration layer for everything in my [agent research](/ai-research/)). If I rewrite this list, temperature is the one that drops out to make room.
 
 ---
 
