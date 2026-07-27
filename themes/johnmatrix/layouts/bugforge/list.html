@@ -24,14 +24,14 @@
           {{- end -}}
         {{- end -}}
       {{- end -}}
-      {{- $sev := "" -}}
+      {{- $sev := "sev-low" -}}
       {{- with .Params.tags -}}
         {{- $t := lower (delimit . " ") -}}
-        {{- if or (strings.Contains $t "account-takeover") (strings.Contains $t "sqli") (strings.Contains $t "rce") -}}
+        {{- if or (strings.Contains $t "account-takeover") (strings.Contains $t "sqli") (strings.Contains $t "rce") (strings.Contains $t "auth-bypass") (strings.Contains $t "authorization-bypass") (strings.Contains $t "privilege-escalation") (strings.Contains $t "data-breach") (strings.Contains $t "ssti") (strings.Contains $t "template-injection") (strings.Contains $t "xxe") -}}
           {{- $sev = "sev-critical" -}}
-        {{- else if or (strings.Contains $t "ssrf") (strings.Contains $t "xss") (strings.Contains $t "broken-access-control") (strings.Contains $t "idor") -}}
+        {{- else if or (strings.Contains $t "ssrf") (strings.Contains $t "xss") (strings.Contains $t "broken-access-control") (strings.Contains $t "idor") (strings.Contains $t "prototype-pollution") (strings.Contains $t "mass-assignment") (strings.Contains $t "cspt") (strings.Contains $t "chain") (strings.Contains $t "cve-") -}}
           {{- $sev = "sev-high" -}}
-        {{- else if or (strings.Contains $t "open-redirect") (strings.Contains $t "business-logic") -}}
+        {{- else if or (strings.Contains $t "open-redirect") (strings.Contains $t "business-logic") (strings.Contains $t "race-condition") (strings.Contains $t "toctou") (strings.Contains $t "jwt") -}}
           {{- $sev = "sev-medium" -}}
         {{- end -}}
       {{- end -}}

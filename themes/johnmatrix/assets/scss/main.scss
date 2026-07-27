@@ -1941,6 +1941,7 @@ footer {
   &.sev-critical { border-left-color: $sev-critical; }
   &.sev-high     { border-left-color: $sev-high; }
   &.sev-medium   { border-left-color: $sev-medium; }
+  &.sev-low      { border-left-color: $sev-low; }
 }
 
 .featured-card, .bugforge-card {
