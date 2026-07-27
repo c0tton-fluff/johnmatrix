@@ -1936,12 +1936,12 @@ footer {
 // =============================================================================
 
 .bugforge-card {
-  border-left: 2px solid transparent;
+  border-left: 3px solid $border;
 
-  &.sev-critical { border-left-color: $sev-critical; }
-  &.sev-high     { border-left-color: $sev-high; }
-  &.sev-medium   { border-left-color: $sev-medium; }
-  &.sev-low      { border-left-color: $sev-low; }
+  &.sev-critical { border-left: 3px solid $sev-critical; }
+  &.sev-high     { border-left: 3px solid $sev-high; }
+  &.sev-medium   { border-left: 3px solid $sev-medium; }
+  &.sev-low      { border-left: 3px solid $sev-low; }
 }
 
 .featured-card, .bugforge-card {
