@@ -27,10 +27,12 @@
   }
 
   function closeSearch() {
+    if (!searchContainer.classList.contains('active')) return;
     searchContainer.classList.remove('active');
     searchContainer.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     setTimeout(function () { searchContainer.setAttribute('hidden', 'hidden'); }, 200);
+    searchBtn.focus();
   }
 
   function loadPagefind() {

@@ -1,5 +1,6 @@
 ---
 title: WordMess - wp2shell Batch Route Confusion
+cve: CVE-2026-63030
 tags:
   - bugforge
   - batch-route-confusion

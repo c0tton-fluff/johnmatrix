@@ -1,5 +1,6 @@
 ---
 title: Vaultly - Middleware Bypass
+cve: CVE-2025-29927
 tags:
   - bugforge
   - nextjs

@@ -13,14 +13,14 @@
     sudo: 'johnmatrix is not in the sudoers file. This incident will be reported. ...just kidding.'
   };
 
-  var overlay, termBody, termInput;
+  var overlay, termBody, termInput, lastFocus;
 
   function buildOverlay() {
     overlay = document.createElement('div');
     overlay.id = 'cli-overlay';
     overlay.setAttribute('hidden', 'hidden');
     overlay.innerHTML =
-      '<div id="cli-window">' +
+      '<div id="cli-window" role="dialog" aria-modal="true" aria-label="Terminal">' +
         '<div id="cli-bar">' +
           '<span class="cli-dot" style="background:#e74c3c"></span>' +
           '<span class="cli-dot" style="background:#f4d03f"></span>' +
@@ -75,15 +75,17 @@
 
   function openCli() {
     if (!overlay) buildOverlay();
+    lastFocus = document.activeElement;
     overlay.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
     termInput.focus();
   }
 
   function closeCli() {
-    if (!overlay) return;
+    if (!overlay || overlay.hasAttribute('hidden')) return;
     overlay.setAttribute('hidden', 'hidden');
     document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
   document.addEventListener('keydown', function (e) {

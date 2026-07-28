@@ -5,10 +5,13 @@
   var logEl = document.getElementById('boot-log');
   if (!textEl) return;
 
+  var countMeta = document.querySelector('meta[name="bugforge-count"]');
+  var writeupCount = (countMeta && countMeta.content) || '40';
+
   var BOOT_LINES = [
     '[  OK  ] Reached target Network.',
     '[  OK  ] Mounted /dev/brain.',
-    '[  OK  ] Loaded 40 writeups from /var/bugforge.',
+    '[  OK  ] Loaded ' + writeupCount + ' writeups from /var/bugforge.',
     '[  OK  ] Started phantom.service - offensive tooling daemon.',
     '[  OK  ] Reached target Multi-User System.'
   ];

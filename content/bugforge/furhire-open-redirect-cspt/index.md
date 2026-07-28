@@ -1,5 +1,6 @@
 ---
 title: FurHire - Open Redirect + CSPT to XSS + Token Replay
+cve: CVE-2025-4123
 tags:
   - bugforge
   - cspt

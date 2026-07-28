@@ -21,17 +21,30 @@
   var hamburger = document.getElementById('top-nav-hamburger');
   var mobileMenu = document.getElementById('mobile-menu');
   if (hamburger && mobileMenu) {
+    function closeMobileMenu(refocus) {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      if (refocus) hamburger.focus();
+    }
     hamburger.addEventListener('click', function () {
       var open = hamburger.classList.toggle('open');
       mobileMenu.classList.toggle('open', open);
       hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
     mobileMenu.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        hamburger.classList.remove('open');
-        mobileMenu.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', function () { closeMobileMenu(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && hamburger.classList.contains('open')) closeMobileMenu(true);
+    });
+  }
+
+  // ---- Platform-aware keyboard hints (Cmd on Apple, Ctrl elsewhere) ----
+  var isApple = /Mac|iPhone|iPad|iPod/.test((navigator.platform || '') + ' ' + (navigator.userAgent || ''));
+  if (!isApple) {
+    document.querySelectorAll('.search-kbd, .t404-kbd').forEach(function (el) {
+      el.textContent = el.textContent.replace('Cmd', 'Ctrl');
     });
   }
 
@@ -71,7 +84,7 @@
   }
 
   // ---- Staggered scroll reveal ----
-  var revealSel = '.cert-card, .section-li, .pub-row, .recent-card, .bugforge-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
+  var revealSel = '.cert-card, .section-li, .recent-card, .bugforge-card, .machine-card, h2, pre, .stats-header, .featured-card, .progress-item';
   var revealEls = document.querySelectorAll(revealSel);
   if (revealEls.length && 'IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
@@ -146,18 +159,23 @@
         var tag = btn.getAttribute('data-tag');
         filterBtns.forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
-        var items = document.querySelectorAll('.section-li, .writeup-card, .pub-row');
+        var items = document.querySelectorAll('.section-li, .writeup-card, .bugforge-card');
         items.forEach(function (item) {
           if (tag === 'all') { item.classList.remove('tag-hidden'); return; }
           var itemTags = (item.getAttribute('data-tags') || '').toLowerCase();
+          // Whole-tag, -suffix, or plural match (no raw substring: 'source-maps' must not match 'rce')
+          var tagHit = itemTags.split(',').some(function (t) {
+            return t === tag || t.slice(-(tag.length + 1)) === '-' + tag || t === tag + 's';
+          });
           var linkText = (item.querySelector('a') || {}).textContent || '';
           linkText = linkText.toLowerCase();
-          if (itemTags.indexOf(tag) !== -1 || linkText.indexOf(tag) !== -1) {
+          if (tagHit || linkText.indexOf(tag) !== -1) {
             item.classList.remove('tag-hidden');
           } else {
             item.classList.add('tag-hidden');
           }
         });
+        bfRefreshCount();
       });
     });
   }
@@ -220,29 +238,30 @@
   }
 
   // ---- BugForge search filter ----
+  // Count reflects BOTH the search box (.bugforge-hidden) and tag pills (.tag-hidden)
   var bfSearch = document.getElementById('bugforge-search');
   var bfGrid = document.getElementById('bugforge-grid');
   var bfCount = document.getElementById('bugforge-count');
   var bfNoResults = document.getElementById('bugforge-no-results');
+
+  function bfRefreshCount() {
+    if (!bfGrid) return;
+    var visible = bfGrid.querySelectorAll('.bugforge-card:not(.bugforge-hidden):not(.tag-hidden)').length;
+    if (bfCount) bfCount.textContent = visible + (visible === 1 ? ' writeup' : ' writeups');
+    if (bfNoResults) bfNoResults.hidden = visible > 0;
+  }
+
   if (bfSearch && bfGrid) {
     var bfCards = bfGrid.querySelectorAll('.bugforge-card');
-    var bfTotal = bfCards.length;
     bfSearch.addEventListener('input', function () {
       var q = bfSearch.value.trim().toLowerCase();
-      var visible = 0;
       bfCards.forEach(function (card) {
         var title = card.getAttribute('data-title') || '';
         var tags = card.getAttribute('data-tags') || '';
         var match = !q || title.indexOf(q) !== -1 || tags.indexOf(q) !== -1;
-        if (match) {
-          card.classList.remove('bugforge-hidden');
-          visible++;
-        } else {
-          card.classList.add('bugforge-hidden');
-        }
+        card.classList.toggle('bugforge-hidden', !match);
       });
-      if (bfCount) bfCount.textContent = visible + (visible === 1 ? ' writeup' : ' writeups');
-      if (bfNoResults) bfNoResults.hidden = visible > 0;
+      bfRefreshCount();
     });
   }
 })();

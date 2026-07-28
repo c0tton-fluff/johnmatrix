@@ -1,5 +1,6 @@
 {{ define "main" }}
 <section class="center-wide content list-content bugforge-list">
+  <h1 class="visually-hidden">{{ .Title }}</h1>
   {{- .Content -}}
 
   {{- $pages := where .Pages "Kind" "page" -}}
@@ -11,6 +12,8 @@
     <input type="search" class="bugforge-search" id="bugforge-search" placeholder="Search writeups..." autocomplete="off" aria-label="Search writeups" />
     <span class="bugforge-count" id="bugforge-count">{{ len $pages }} writeups</span>
   </div>
+
+  {{- partial "tag-filter.html" (dict "pages" $pages) -}}
 
   <div class="bugforge-grid" id="bugforge-grid">
     {{- range $pages -}}
@@ -25,19 +28,24 @@
         {{- end -}}
       {{- end -}}
       {{- $sev := "sev-low" -}}
+      {{- $sevLabel := "Low" -}}
       {{- with .Params.tags -}}
         {{- $t := lower (delimit . " ") -}}
         {{- if or (strings.Contains $t "account-takeover") (strings.Contains $t "sqli") (strings.Contains $t "rce") (strings.Contains $t "auth-bypass") (strings.Contains $t "authorization-bypass") (strings.Contains $t "privilege-escalation") (strings.Contains $t "data-breach") (strings.Contains $t "ssti") (strings.Contains $t "template-injection") (strings.Contains $t "xxe") -}}
           {{- $sev = "sev-critical" -}}
+          {{- $sevLabel = "Critical" -}}
         {{- else if or (strings.Contains $t "ssrf") (strings.Contains $t "xss") (strings.Contains $t "broken-access-control") (strings.Contains $t "idor") (strings.Contains $t "prototype-pollution") (strings.Contains $t "mass-assignment") (strings.Contains $t "cspt") (strings.Contains $t "chain") (strings.Contains $t "cve-") -}}
           {{- $sev = "sev-high" -}}
+          {{- $sevLabel = "High" -}}
         {{- else if or (strings.Contains $t "open-redirect") (strings.Contains $t "business-logic") (strings.Contains $t "race-condition") (strings.Contains $t "toctou") (strings.Contains $t "jwt") -}}
           {{- $sev = "sev-medium" -}}
+          {{- $sevLabel = "Medium" -}}
         {{- end -}}
       {{- end -}}
       <a href="{{ .RelPermalink }}" class="bugforge-card reveal {{ $sev }}" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
         <span class="bugforge-card-title">{{ .Title }}</span>
         <span class="bugforge-card-tags">{{ delimit $tagDisplay " · " }}</span>
+        <span class="visually-hidden">Severity: {{ $sevLabel }}</span>
         <span class="bugforge-card-arrow" aria-hidden="true">&#8594;</span>
       </a>
     {{- end -}}

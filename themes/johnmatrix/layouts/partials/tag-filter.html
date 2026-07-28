@@ -1,21 +1,42 @@
 {{- $pages := .pages -}}
-{{- $vulnTags := slice "idor" "xss" "sqli" "xxe" "ssrf" "rce" "bac" "business-logic" "auth-bypass" "lfi" "deserialization" "prototype-pollution" "mass-assignment" "websocket" "cspt" -}}
+{{- $vulnTags := slice
+  (dict "tag" "broken-access-control" "label" "BAC")
+  (dict "tag" "idor" "label" "IDOR")
+  (dict "tag" "xss" "label" "XSS")
+  (dict "tag" "sqli" "label" "SQLi")
+  (dict "tag" "xxe" "label" "XXE")
+  (dict "tag" "ssrf" "label" "SSRF")
+  (dict "tag" "rce" "label" "RCE")
+  (dict "tag" "business-logic" "label" "Business Logic")
+  (dict "tag" "auth-bypass" "label" "Auth Bypass")
+  (dict "tag" "account-takeover" "label" "Account Takeover")
+  (dict "tag" "prototype-pollution" "label" "Prototype Pollution")
+  (dict "tag" "mass-assignment" "label" "Mass Assignment")
+  (dict "tag" "race-condition" "label" "Race Condition")
+  (dict "tag" "websocket" "label" "WebSocket")
+  (dict "tag" "cspt" "label" "CSPT")
+-}}
 {{- $available := slice -}}
 {{- range $pages -}}
   {{- with .Params.tags -}}
     {{- range . -}}
       {{- $t := lower . -}}
-      {{- if and (in $vulnTags $t) (not (in $available $t)) -}}
-        {{- $available = $available | append $t -}}
+      {{- range $vulnTags -}}
+        {{- /* whole-tag, suffix (stored-xss -> xss), or plural (websockets -> websocket) - no raw substring (source-maps != rce) */ -}}
+        {{- if and (or (eq $t .tag) (strings.HasSuffix $t (print "-" .tag)) (eq $t (print .tag "s"))) (not (in $available .tag)) -}}
+          {{- $available = $available | append .tag -}}
+        {{- end -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- if gt (len $available) 0 -}}
-<div class="tag-filter">
+<div class="tag-filter" role="group" aria-label="Filter by vulnerability class">
   <button class="tag-filter-btn active" data-tag="all" type="button">All</button>
-  {{- range sort $available -}}
-    <button class="tag-filter-btn" data-tag="{{ . }}" type="button">{{ upper . }}</button>
+  {{- range $vulnTags -}}
+    {{- if in $available .tag -}}
+    <button class="tag-filter-btn" data-tag="{{ .tag }}" type="button">{{ .label }}</button>
+    {{- end -}}
   {{- end -}}
 </div>
 {{- end -}}
