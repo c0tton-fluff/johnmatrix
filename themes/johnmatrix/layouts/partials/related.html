@@ -1,0 +1,15 @@
+{{- $related := .Site.RegularPages.Related . -}}
+{{- $related = where $related "Section" .Section -}}
+{{- $related = first 4 $related -}}
+{{- if gt (len $related) 0 -}}
+<hr>
+<h2 class="section-title">Related</h2>
+<ul class="related-list">
+  {{- range $related -}}
+  <li class="related-row reveal">
+    <span class="related-date">{{ .Date.Format "2006-01-02" }}</span>
+    <a class="related-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+  </li>
+  {{- end -}}
+</ul>
+{{- end -}}

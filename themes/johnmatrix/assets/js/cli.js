@@ -43,6 +43,8 @@
     termInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') runCommand(termInput.value);
       if (e.key === 'Escape') closeCli();
+      // Focus trap: the input is the only focusable element in the dialog
+      if (e.key === 'Tab') { e.preventDefault(); termInput.focus(); }
     });
     print('johnmatrix shell v2.6 - type "help"');
   }

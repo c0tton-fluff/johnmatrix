@@ -65,6 +65,20 @@
     }
   });
 
+  // ---- Focus trap: keep Tab cycling inside the dialog while open ----
+  searchContainer.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var focusables = searchContainer.querySelectorAll('input, button, a[href], [tabindex]');
+    var visible = Array.prototype.filter.call(focusables, function (el) {
+      return el.offsetParent !== null && !el.disabled;
+    });
+    if (!visible.length) return;
+    var first = visible[0];
+    var last = visible[visible.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
   // ---- Command palette mode: input starting with ">" ----
   var commandResults = document.getElementById('command-results');
   if (!commandResults || !searchInput) return;

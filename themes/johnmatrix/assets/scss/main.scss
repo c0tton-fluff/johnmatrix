@@ -533,6 +533,16 @@ hr {
   padding-right: 1.5rem;
 }
 
+.bugforge-card-sev {
+  font-family: $header-font;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  &.sev-critical { color: $sev-critical; }
+  &.sev-high { color: $sev-high; }
+  &.sev-medium { color: $sev-medium; }
+  &.sev-low { color: $sev-low; }
+}
+
 .bugforge-card-tags {
   font-family: $header-font;
   font-size: 0.76rem;
@@ -853,11 +863,19 @@ hr {
   border-bottom: 1px solid $border;
   padding: 0.5rem 1.5rem 1rem;
   flex-direction: column;
+  // Always display:flex so the open/close transition actually plays;
+  // visibility (not display) gates it - hidden elements are also unfocusable
+  display: flex;
+  visibility: hidden;
   opacity: 0;
   transform: translateY(-8px);
-  transition: opacity 0.2s $ease, transform 0.2s $ease;
-  display: none;
-  &.open { display: flex; opacity: 1; transform: translateY(0); }
+  transition: opacity 0.2s $ease, transform 0.2s $ease, visibility 0s linear 0.2s;
+  &.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s $ease, transform 0.2s $ease;
+  }
 }
 
 .mobile-menu-link {
@@ -1878,6 +1896,110 @@ footer {
   font-family: $code-font;
   font-size: 0.84rem;
   caret-color: $accent;
+}
+
+// =============================================================================
+// AUTHOR CALLOUT (PortSwigger article anatomy)
+// =============================================================================
+
+.author-callout {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.1rem;
+  margin: 0 0 1.5rem;
+  border: 1px solid $border;
+  border-radius: $radius;
+  background: $surface;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $surface-2;
+  border: 1px solid $border-strong;
+  border-radius: $radius-sm;
+  font-family: $code-font;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $accent;
+}
+
+.author-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.author-name {
+  font-family: $body-font;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $text;
+}
+
+.author-role {
+  font-family: $body-font;
+  font-size: 0.75rem;
+  color: $text-faint;
+}
+
+.author-link {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: $header-font;
+  font-size: 0.72rem;
+  color: $text-muted;
+  text-decoration: none;
+  transition: color 150ms $ease;
+  &:hover { color: $accent; }
+}
+
+// =============================================================================
+// RELATED POSTS (bottom of single)
+// =============================================================================
+
+.related-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.related-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid $border;
+  &:last-child { border-bottom: none; }
+}
+
+.related-date {
+  font-family: $code-font;
+  font-size: 0.78rem;
+  color: $text-faint;
+  flex-shrink: 0;
+}
+
+.related-title {
+  color: $text;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 150ms $ease;
+  &:hover { color: $accent-hover; }
+}
+
+@media (max-width: 560px) {
+  .related-title { white-space: normal; }
 }
 
 // =============================================================================

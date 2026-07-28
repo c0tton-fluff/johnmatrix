@@ -49,6 +49,17 @@ paginate = 50
 [taxonomies]
   tag = "tags"
 
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "date"
+    weight = 10
+
 [[menu.main]]
   name = "Home"
   url = "/"

@@ -44,6 +44,7 @@
       {{- end -}}
       <a href="{{ .RelPermalink }}" class="bugforge-card reveal {{ $sev }}" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
         <span class="bugforge-card-title">{{ .Title }}</span>
+        <span class="bugforge-card-sev {{ $sev }}" aria-hidden="true">&#9679; {{ $sevLabel }}</span>
         <span class="bugforge-card-tags">{{ delimit $tagDisplay " · " }}</span>
         <span class="visually-hidden">Severity: {{ $sevLabel }}</span>
         <span class="bugforge-card-arrow" aria-hidden="true">&#8594;</span>
