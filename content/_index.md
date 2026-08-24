@@ -14,6 +14,14 @@ title: Keep Learning & Be Useful
 
 ---
 
+## About
+
+johnmatrix.org is the personal site of a purple teamer working where offensive security meets AI. The rule here is simple: break it, understand it, write it down. Nine GIAC certifications, a BSc in Applied Cybersecurity, and a habit of building tooling that does not exist yet.
+
+The work splits three ways. BugForge collects writeups from exploit challenges - broken access control, IDOR, XSS, SQLi, and business-logic flaws - each documented from recon through impact to remediation. AI Research covers offensive AI and LLM security: prompt injection, agent abuse, and the collision of machine intelligence with tradecraft. Brain Sharing is field knowledge - guides, setups, and methodology, shared so the next person skips the tuition.
+
+---
+
 ## Featured
 
 <div class="featured-grid">

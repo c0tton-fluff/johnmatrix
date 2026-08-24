@@ -38,6 +38,9 @@ jobs:
       - name: Build Hugo
         run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
+      - name: Verify agentic readiness
+        run: bash scripts/verify-agentic.sh public
+
       - name: Build Pagefind index
         run: npx pagefind --site public
 

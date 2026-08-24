@@ -1,0 +1,26 @@
+{{- if .IsHome -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": {{ print .Site.BaseURL "#person" | jsonify | safeJS }},
+      "name": {{ .Site.Title | jsonify | safeJS }},
+      "url": {{ .Site.BaseURL | jsonify | safeJS }},
+      "description": {{ .Site.Params.description | jsonify | safeJS }},
+      "jobTitle": "Purple Teamer",
+      "knowsAbout": ["AI security", "offensive security", "penetration testing", "LLM security"],
+      "sameAs": [{{ .Site.Params.github | jsonify | safeJS }}]
+    },
+    {
+      "@type": "WebSite",
+      "name": {{ .Site.Title | jsonify | safeJS }},
+      "url": {{ .Site.BaseURL | jsonify | safeJS }},
+      "description": {{ .Site.Params.description | jsonify | safeJS }},
+      "author": { "@id": {{ print .Site.BaseURL "#person" | jsonify | safeJS }} }
+    }
+  ]
+}
+</script>
+{{- end -}}

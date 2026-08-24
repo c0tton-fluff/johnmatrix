@@ -28,6 +28,7 @@
 
 {{- partial "fonts.html" . -}}
 {{- partial "seo.html" . -}}
+{{- partial "jsonld-home.html" . -}}
 
 {{- $css := resources.Get "scss/main.scss" | css.Sass | minify -}}
 <style>{{ $css.Content | safeCSS }}</style>
