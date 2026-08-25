@@ -28,7 +28,7 @@ The work splits three ways. BugForge collects writeups from exploit challenges -
   <a href="/bugforge/" class="featured-card">
     <span class="featured-icon">&#9881;</span>
     <div class="featured-body">
-      <span class="featured-title">BugForge</span>
+      <h3 class="featured-title">BugForge</h3>
       <span class="featured-desc">Writeups from BugForge challenges -- BAC, IDOR, XSS, SQLi, business logic.</span>
     </div>
     <span class="featured-arrow">&#8594;</span>
@@ -36,7 +36,7 @@ The work splits three ways. BugForge collects writeups from exploit challenges -
   <a href="/ai-research/" class="featured-card">
     <span class="featured-icon">&#9883;</span>
     <div class="featured-body">
-      <span class="featured-title">AI Research</span>
+      <h3 class="featured-title">AI Research</h3>
       <span class="featured-desc">Offensive AI, LLM security research, and the intersection of hacking and machine intelligence.</span>
     </div>
     <span class="featured-arrow">&#8594;</span>
@@ -44,7 +44,7 @@ The work splits three ways. BugForge collects writeups from exploit challenges -
   <a href="/brain-sharing/" class="featured-card">
     <span class="featured-icon">&#9889;</span>
     <div class="featured-body">
-      <span class="featured-title">Brain Sharing</span>
+      <h3 class="featured-title">Brain Sharing</h3>
       <span class="featured-desc">Guides, setups, and knowledge sharing from the field.</span>
     </div>
     <span class="featured-arrow">&#8594;</span>

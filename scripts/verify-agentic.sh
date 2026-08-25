@@ -191,5 +191,23 @@ for href in ("/contact/", "/privacy/"):
     if not re.search(r'href=["\']?' + re.escape(href) + r'["\'\s>]', html, re.I):
         fail(f"homepage missing footer link to {href}")
 
+# --- 9. llms.txt discovery links + homepage heading depth (T9) ---
+# 9a. 404 page recovery nav links to /llms.txt (nav-scoped, quote-agnostic)
+nav404 = re.search(r'<nav[^>]*t404-recovery[^>]*>(.*?)</nav>', html404, re.S | re.I)
+if not nav404:
+    fail("404 page missing t404-recovery nav")
+if "/llms.txt" not in nav404.group(1):
+    fail("404 page missing link to /llms.txt")
+
+# 9b. homepage footer links to /llms.txt (quote-agnostic href)
+if not re.search(r'href=["\']?/llms\.txt["\'\s>]', html, re.I):
+    fail("homepage missing footer link to /llms.txt")
+
+# 9c. homepage has >= 3 <h3> elements whose class includes featured-title
+#     (quote-agnostic: minified HTML strips attribute quotes / reorders attrs)
+h3_featured = re.findall(r'<h3[^>]*featured-title', html, re.I)
+if len(h3_featured) < 3:
+    fail(f"homepage has {len(h3_featured)} <h3 class=featured-title> cards (< 3)")
+
 print("agentic verification OK")
 PYEOF
