@@ -142,5 +142,54 @@ for href in ("/", "/bugforge/", "/ai-research/", "/brain-sharing/", "/tags/", "/
 if not (root / "arnie-404.png").exists():
     fail("404 page image /arnie-404.png missing from site root (drop static/arnie-404.png and rebuild)")
 
+# --- 6. llms.txt: agent-readable site index (llmstxt.org format) ---
+llms = root / "llms.txt"
+if not llms.exists():
+    fail("llms.txt missing from site root")
+llms_text = llms.read_text(encoding="utf-8")
+
+non_empty_lines = [ln for ln in llms_text.splitlines() if ln.strip()]
+if not non_empty_lines:
+    fail("llms.txt is empty")
+if non_empty_lines[0].strip() != "# johnmatrix":
+    fail(f"llms.txt first non-empty line != '# johnmatrix' (got {non_empty_lines[0].strip()!r})")
+if not any(ln.lstrip().startswith(">") for ln in llms_text.splitlines()):
+    fail("llms.txt missing a blockquote line (starts with '>')")
+if not re.search(r'^##\s+when to use\b', llms_text, re.I | re.M):
+    fail("llms.txt missing '## When to use' heading")
+
+def has_md_link(path):
+    # markdown link [text](url) whose url contains the path
+    return re.search(r'\[[^\]]*\]\([^)]*' + re.escape(path) + r'[^)]*\)', llms_text) is not None
+
+for path in ("/bugforge/", "/ai-research/", "/brain-sharing/"):
+    if not has_md_link(path):
+        fail(f"llms.txt missing markdown link to {path}")
+
+# --- 7. /contact/ and /privacy/: exist with >= 500 visible chars ---
+def visible_text(html):
+    body = re.sub(r'<script[^>]*>.*?</script>', ' ', html, flags=re.S | re.I)
+    body = re.sub(r'<style[^>]*>.*?</style>', ' ', body, flags=re.S | re.I)
+    text = re.sub(r'<[^>]+>', ' ', body)
+    return re.sub(r'\s+', ' ', text).strip()
+
+for page in ("contact", "privacy"):
+    p = root / page / "index.html"
+    if not p.exists():
+        fail(f"{page}/index.html missing")
+    vt = visible_text(p.read_text(encoding="utf-8"))
+    if len(vt) < 500:
+        fail(f"{page}/index.html visible text too short: {len(vt)} chars (< 500)")
+
+# --- 7b. No published email on the contact page (site policy) ---
+contact_html = (root / "contact" / "index.html").read_text(encoding="utf-8")
+if "mailto:" in contact_html:
+    fail("contact page contains a mailto: link (no email published)")
+
+# --- 8. Homepage footer links to /contact/ and /privacy/ (quote-agnostic) ---
+for href in ("/contact/", "/privacy/"):
+    if not re.search(r'href=["\']?' + re.escape(href) + r'["\'\s>]', html, re.I):
+        fail(f"homepage missing footer link to {href}")
+
 print("agentic verification OK")
 PYEOF

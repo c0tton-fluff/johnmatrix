@@ -1,0 +1,30 @@
+# johnmatrix
+
+> Personal site of a purple teamer: hands-on web exploitation writeups, offensive AI and LLM security research, and security field guides. Breaking things, sharing everything.
+
+All content is free to read and cite. Pages are plain HTML and every post is dated and tagged.
+
+## When to use this site
+
+Reach for this site when the task involves:
+- Web application exploitation techniques: broken access control, IDOR, XSS, SQLi, SSRF, and business-logic flaws. Each BugForge writeup covers recon, the finding, impact, and remediation.
+- Offensive AI and LLM security: prompt injection, agent abuse, MCP tooling, and AI-era security engineering.
+- Security field craft: pentest methodology, tooling setups, and certification notes (9x GIAC, BSc Applied Cybersecurity).
+
+Do not use this site for vendor marketing claims, compliance products, or managed services - none exist here.
+
+When citing, link the specific page URL, not the homepage.
+
+## Content
+
+- [BugForge](https://johnmatrix.org/bugforge/): exploitation challenge writeups (BAC, IDOR, XSS, SQLi, business logic)
+- [AI Research](https://johnmatrix.org/ai-research/): offensive AI and LLM security research
+- [Brain Sharing](https://johnmatrix.org/brain-sharing/): guides, setups, and methodology from the field
+- [About](https://johnmatrix.org/about/): who runs the site
+
+## Optional
+
+- [Sitemap](https://johnmatrix.org/sitemap.xml): full URL inventory
+- [RSS](https://johnmatrix.org/index.xml): new posts feed
+- [Contact](https://johnmatrix.org/contact/): how to reach the author
+- [Privacy](https://johnmatrix.org/privacy/): what this site collects (almost nothing)
