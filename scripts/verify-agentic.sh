@@ -115,9 +115,32 @@ for s in walk_strings(bf_data):
     if is_double_encoded(s):
         fail(f"bugforge article JSON-LD double-encoded string value: {s!r}")
 
-# --- 5. 404.html exists ---
-if not (root / "404.html").exists():
+# --- 5. 404 page: choppa gag + agent recovery nav ---
+p404 = root / "404.html"
+if not p404.exists():
     fail("404.html missing")
+html404 = p404.read_text(encoding="utf-8")
+
+# 5a. <img> tag whose src is /arnie-404.png (quote-agnostic - minified HTML strips quotes)
+if not re.search(r'<img[^>]*\bsrc=["\']?/arnie-404\.png["\']?[^>]*>', html404, re.I):
+    fail("404 page missing image /arnie-404.png")
+
+# 5b. literal choppa gag text
+if "Get to the choppa" not in html404:
+    fail("404 page missing 'Get to the choppa' text")
+
+# 5c. agent recovery links (quote-agnostic href)
+def has_href(href):
+    # href followed by optional quote, then a delimiter so "/" does not match "/bugforge/"
+    return re.search(r'href=["\']?' + re.escape(href) + r'["\'\s>]', html404, re.I) is not None
+
+for href in ("/", "/bugforge/", "/ai-research/", "/brain-sharing/", "/tags/", "/sitemap.xml"):
+    if not has_href(href):
+        fail(f"404 page missing recovery link to {href}")
+
+# 5d. arnie-404.png exists as a file (gates pushing without the image)
+if not (root / "arnie-404.png").exists():
+    fail("404 page image /arnie-404.png missing from site root (drop static/arnie-404.png and rebuild)")
 
 print("agentic verification OK")
 PYEOF

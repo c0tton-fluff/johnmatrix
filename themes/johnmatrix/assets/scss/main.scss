@@ -2101,3 +2101,47 @@ footer {
   border-radius: 4px;
   padding: 0.1rem 0.4rem;
 }
+
+// =============================================================================
+// 404 CHOPPA + RECOVERY (agent-friendly 404)
+// =============================================================================
+
+.t404-choppa {
+  margin: 1.5rem 0 0;
+  text-align: center;
+
+  img {
+    width: 80%;
+    max-width: 320px;
+    height: auto;
+    border: 1px solid $border;
+    border-radius: $radius;
+  }
+
+  figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    color: $text-muted;
+  }
+}
+
+.t404-recovery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 1.2rem;
+  font-size: 0.78rem;
+
+  a {
+    color: $text-muted;
+    text-decoration: none;
+    border-bottom: 1px solid $border-strong;
+    transition: color 150ms $ease, border-color 150ms $ease;
+
+    &:hover {
+      color: $accent;
+      border-color: $accent;
+    }
+  }
+}
