@@ -42,7 +42,7 @@
           {{- $sevLabel = "Medium" -}}
         {{- end -}}
       {{- end -}}
-      <a href="{{ .RelPermalink }}" class="bugforge-card reveal {{ $sev }}" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}">
+      <a href="{{ .RelPermalink }}" class="bugforge-card reveal {{ $sev }}" data-tags="{{ $tagStr }}" data-title="{{ .Title | lower }}" style="view-transition-name: vt-{{ anchorize (partial "slug.html" .) }}">
         <span class="bugforge-card-title">{{ .Title }}</span>
         <span class="bugforge-card-sev {{ $sev }}" aria-hidden="true">&#9679; {{ $sevLabel }}</span>
         <span class="bugforge-card-tags">{{ delimit $tagDisplay " · " }}</span>

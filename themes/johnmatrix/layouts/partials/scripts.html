@@ -1,13 +1,18 @@
-{{- $main := resources.Get "js/main.js" | minify | fingerprint -}}
+{{- /* TypeScript sources, transpiled + bundled by Hugo's built-in esbuild (js.Build).
+       No npm / node_modules: the static-only pipeline is unchanged. SRI integrity is
+       still produced by the trailing `fingerprint`, so CSP script-src 'self' holds. */ -}}
+{{- $opts := dict "minify" true "target" "es2018" -}}
+
+{{- $main := resources.Get "js/main.ts" | js.Build $opts | fingerprint -}}
 <script defer src="{{ $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}"></script>
 
 {{- if .IsHome -}}
-  {{- $hero := resources.Get "js/terminal-hero.js" | minify | fingerprint -}}
+  {{- $hero := resources.Get "js/terminal-hero.ts" | js.Build $opts | fingerprint -}}
   <script defer src="{{ $hero.RelPermalink }}" integrity="{{ $hero.Data.Integrity }}"></script>
 {{- end -}}
 
-{{- $search := resources.Get "js/search.js" | minify | fingerprint -}}
+{{- $search := resources.Get "js/search.ts" | js.Build $opts | fingerprint -}}
 <script defer src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
 
-{{- $cli := resources.Get "js/cli.js" | minify | fingerprint -}}
+{{- $cli := resources.Get "js/cli.ts" | js.Build $opts | fingerprint -}}
 <script defer src="{{ $cli.RelPermalink }}" integrity="{{ $cli.Data.Integrity }}"></script>

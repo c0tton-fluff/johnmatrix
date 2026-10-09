@@ -1723,10 +1723,23 @@ footer {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  // Shared-element morph: a BugForge card (list) and the post title (single)
+  // carry the same `view-transition-name` (set inline, see bugforge/list.html
+  // and _default/single.html), so the clicked card expands into the article
+  // title on navigation. Named elements fall back to the root cross-fade when
+  // off-screen or unmatched.
+  ::view-transition-group(*) {
+    animation-duration: 320ms;
+    animation-timing-function: $ease-out;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root),
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
+  }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .terminal-cursor, .reading-progress, .status-dot { animation: none !important; }
   .progress-fill { transition: none !important; }

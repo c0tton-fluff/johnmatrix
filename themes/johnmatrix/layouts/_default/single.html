@@ -5,7 +5,7 @@
 <div class="post-layout">
   <article class="post-main single-content">
     {{- if not (eq .Title "") -}}
-      <h1 class="article-title">{{ .Title }}</h1>
+      <h1 class="article-title" style="view-transition-name: vt-{{ anchorize (partial "slug.html" .) }}">{{ .Title }}</h1>
     {{- end -}}
 
     {{- with .Params.cve -}}
@@ -53,7 +53,7 @@
 {{- else -}}
 <article class="center single-content">
   {{- if not (eq .Title "") -}}
-    <h1 class="article-title">{{ .Title }}</h1>
+    <h1 class="article-title" style="view-transition-name: vt-{{ anchorize (partial "slug.html" .) }}">{{ .Title }}</h1>
   {{- end -}}
 
   {{- with .Params.cve -}}
