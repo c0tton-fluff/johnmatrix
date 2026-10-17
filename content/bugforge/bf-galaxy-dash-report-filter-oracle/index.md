@@ -31,7 +31,7 @@ Register needs `username`, `email`, `password`, `org_name`:
 ```bash
 curl -sk -X POST "$TARGET/api/register" \
   -H 'Content-Type: application/json' \
-  -d '{"username":"mike1","email":"mike1@lab.test","password":"pass1234","org_name":"mikeorg"}'
+  -d '{"username":"myself","email":"myself@lab.test","password":"pass1234","org_name":"myorg"}'
 # -> {"token":"<JWT>","user":{"id":5,"role":"org_admin","organizationId":4,...}}
 ```
 
